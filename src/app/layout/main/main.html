@@ -1,4 +1,5 @@
-<div class="container" *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news'">
+<div class="container"
+  *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news'">
   <nav class="navbar navbar-expand-lg navbar-light bg-white  bottom-nav fixed-top">
     <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
       <div class="nav-logo d-flex align-items-center" routerLink="/">
@@ -30,11 +31,11 @@
             <li class="nav-item mx-2" [class.active]="activeSection === 'product'">
               <a class="nav-link nav-label" (click)="goToSection('product')">PRODUCT</a>
             </li>
-            <li class="nav-item mx-2" >
-              <a class="nav-link nav-label"  routerLink="/news">NEWS & MEDIA</a>
+            <li class="nav-item mx-2">
+              <a class="nav-link nav-label" routerLink="/news">NEWS & MEDIA</a>
             </li>
-            <li class="nav-item mx-2" >
-              <a class="nav-link nav-label"  routerLink="/contact">CONTACT</a>
+            <li class="nav-item mx-2">
+              <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
             </li>
 
           </ul>
@@ -77,15 +78,17 @@
               going to study in Australia.
             </p>
           </div>
-          <div class="footer-contact d-flex gap-md-4">
+          <div class="footer-contact d-flex gap-md-3 flex-column text-left">
             <div class="">
 
-              <a href="tel:+912240996484">T. +91 22 4099 6484 </a>
+              <a href="tel:+912240996484">T. +91 2240996484 (9:30am to 6:30pm)</a>
             </div>
-            <span> | </span>
-            <div class="">
 
-              <a href="mailto:info@nivicap.com"> E. info@nivicap.com</a>
+            <div class="d-flex flex-column flex-md-row gap-0 gap-md-2">
+              <a href="tel:+918655854651"> M. 8655854651</a>
+
+              <span class="d-none d-md-inline">  |  </span>
+              <a href="mailto:sales@nivicap.com"> E. sales@nivicap.com</a>
             </div>
           </div>
         </div>
@@ -94,17 +97,17 @@
         <div class="col-lg-4 col-md-6 col-12">
           <div class="quick-links-gap">
             <h6 class="quick-links-title quick-footer-contact footer-contact">Quick Links</h6>
-            <ul class="quick-links-list  ">
+            <ul class="quick-links-list  quick-links-list-web">
               <li><a class="text-normal" routerLink="/">HOME</a></li>
               <li><a class="text-normal" (click)="goToSection('about')">ABOUT</a></li>
               <li><a class="text-normal" (click)="goToSection('features')">FEATURES</a></li>
               <li><a class="text-normal" (click)="goToSection('product')">PRODUCTS</a></li>
-               <li><a class="text-normal" routerLink="/news" >NEWS & MEDIA</a></li>
-              <li><a class="text-normal" routerLink="/contact" >CONTACT US</a></li>
+              <li><a class="text-normal" routerLink="/news">NEWS & MEDIA</a></li>
+              <li><a class="text-normal" routerLink="/contact">CONTACT US</a></li>
             </ul>
           </div>
 
-          <div class="d-flex footer-app-buttons mt-4 mt-lg-0 ">
+          <div class="d-flex footer-app-buttons mt-3 mt-lg-0 ">
 
             <a href="https://nivicap.com/"><img class="footer-link-img" src="assets/images/appleapp.svg"> </a>
             <a href="https://nivicap.com/"><img class="footer-link-img" src="assets/images/googleapp.svg"> </a>

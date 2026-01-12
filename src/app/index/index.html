@@ -2,29 +2,149 @@
 
   <!-- Hero Section -->
   <section id="home" class="hero-section">
-    <!-- Accessible alt text for background image -->
-    <span class="sr-only">Brand Ambassador Justin Langer showcasing Nivicap App</span>
 
     <div class=" hero-content">
-      <div class="common-container header-container">
+      <div class="common-container1 header-container">
         <div class="row gap-md-4 home-text">
 
-          <h1 class="display-header pb-md-1">
-            Education Loans<br> for Studying in <br>Australia.
-          </h1>
-          <p class="text-common sub-head pb-md-3">
-            Pursue your dream confidently with loans and supporting services designed specifically for Indian
-            students going to Australia. 
-          </p>
-          <!-- <div class="row ">
-            <div class="col"><button class="btn btn-danger btn-lg px-5">Get Started</button></div>
-          </div> -->
+
+          <div class="testimonial-overlay-loan">
+
+            <form #loancontactForm="ngForm" (ngSubmit)="submitLoanForm(loancontactForm)" id="loancontactForm"
+              *ngIf="!showsuccess">
+
+              <div class="formdata1 loanform">
+                <div class="row loanheadgap d-flex justify-content-center text-left">
+                  <p class="loanhead"> Education Loans for Studying in Australia.</p>
+                  <p class="loanform-subtext">Pursue your dream with:<br class="d-none d-sm-block">
+                    100% financing | Student-friendly interest rates | Lower interest rates on balance transfer of
+                    existing loans.</p>
+                </div>
+                <div class="row justify-content-center">
+
+
+                  <div class="row g-3">
+                    <div class="col-md-6 col-sm-12 loan-mt-4 ">
+                      <div class="nav-label label-text">Full Name<sup>*</sup></div>
+
+                      <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$"
+                        class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
+
+                      <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
+                        <small *ngIf="name.errors?.['required']">Full name is required.</small>
+                        <small *ngIf="name.errors?.['pattern']">Only letters, numbers & spaces allowed.</small>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 loan-mt-4 col-sm-12">
+                      <div class="nav-label label-text">Email address<sup>*</sup></div>
+                      <input type="email" name="email" ngModel required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        class="form-control form-control-lg feature-subtext" placeholder="Email Address"
+                        #email="ngModel">
+                      <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
+                        <small *ngIf="email.errors?.['required']">Email address is required.</small>
+                        <small *ngIf="email.errors?.['pattern']">Enter a valid email address.</small>
+                      </div>
+                    </div>
+
+                    <div class="col-12 loan-mt-4 col-sm-12">
+                      <div class="nav-label label-text">Phone number<sup>*</sup></div>
+
+                      <div class="phone-wrapper d-flex align-items-center">
+
+                        <!-- Country Selector -->
+                        <div class="country-box d-flex align-items-center">
+                          <img src="https://flagcdn.com/w20/in.webp" class="flag-icon" alt="flag">
+                          <select class="country-select">
+                            <option value="+91" class="text-normal">+91</option>
+
+                          </select>
+                        </div>
+
+                        <!-- Mobile Number Input -->
+                        <input type="tel" name="phone" ngModel required pattern="^[6-9][0-9]{9}$"
+                          class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number" maxlength="10"
+                          #phone="ngModel">
+                      </div>
+                      <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
+                        <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
+                        <small *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit number.</small>
+                      </div>
+                    </div>
+
+
+
+                    <div class="col-12 loan-mt-4 col-sm-12">
+                      <div class="nav-label label-text">Loan Amount Required (₹)<sup>*</sup></div>
+                      <input type="text" name="loanAmount" [(ngModel)]="loanAmount" required
+                        class="form-control form-control-lg feature-subtext" (input)="formatAmount()"
+                        placeholder="30,00,000" #loanAmountctrl="ngModel">
+                      <div class="text-danger mt-1" *ngIf="loanAmountctrl.invalid && loanAmountctrl.touched">
+                        <small>Your amount is required.</small>
+                      </div>
+                      <div class="text-danger mt-1" *ngIf="amountError">
+                        <small>Loan amount cannot be greater than ₹45,00,000.</small>
+                      </div>
+
+                    </div>
+
+                    <div class="col-12 col-sm-12 loan-mt-4">
+                      <div class="form-check loan-form-check d-flex">
+
+                        <input type="checkbox" id="agreeCheck" class="form-check-input"
+                          (change)="onAgreeChange($event)" />
+
+                        <label class="form-check-label consent-text feature-subtext" for="agreeCheck">
+                          I consent to being contacted by team NiviCap and their lending partners. I also understand my
+                          information will be used safely as per the Privacy Policy.
+                          Nivi Capital is not a bank and does not hold a banking or lending license. All lending
+                          products are underwritten by our lending partners.
+                        </label>
+                      </div>
+                    </div>
+
+
+
+                    <div class="col-12 col-sm-12 text-center loan-mt-4 ">
+
+                      <button type="submit" class="btn btn-danger btn-lg verifybtn d-flex justify-content-center"
+                        [disabled]="loancontactForm.invalid || !isAgreed || amountError">
+                        Submit
+                      </button>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+
+
+
+            <div class=" loan-success-box text-center" *ngIf="showsuccess">
+              <div class="card  service-card-success">
+                <div class="card-body d-flex flex-column gap-3">
+                  <div class="service-icon1"><img src="assets/images/tick-circle.svg" height="117" width="117"
+                      alt="product1" class="success-tick-icon">
+                  </div>
+
+                  <h4 class="loanhead">Application Received!</h4>
+                  <div class="product-info1">
+                    <p class="text-normal">Thank you for applying.Our loan specialist will contact you within 24 hours
+                      via phone or WhatsApp to understand your education loan requirements and guide you through the
+                      next steps.</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
       <div class="container">
         <div class=" nav-bottom d-flex justify-content-center align-items-center">
-          <nav class="navbar navbar-expand-lg navbar-light bg-white  bottom-nav"
-            [ngClass]="{ 'fixed-top': isScrolled }">
+          <nav class="navbar navbar-expand-lg navbar-light bg-white  bottom-nav fixed-top">
             <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
               <div class="nav-logo d-flex align-items-center">
                 <img src="assets/images/logo.svg" alt="logo" class="logo" width="41" height="50">
@@ -53,7 +173,7 @@
                     <li class="nav-item mx-2" [class.active]="activeSection === 'product'">
                       <a class="nav-link nav-label" (click)="scrollToSection('product')">PRODUCT</a>
                     </li>
-                     <li class="nav-item mx-2">
+                    <li class="nav-item mx-2">
                       <a class="nav-link nav-label" routerLink="/news">NEWS & MEDIA</a>
                     </li>
                     <li class="nav-item mx-2">
@@ -134,172 +254,6 @@
     </div>
   </section>
 
-  <!-- Testimonial loan form -->
-  <section class="Testimonial-loan product-img-box product-img-box-loan testimonial-section-loan Testimonial-mob-loan">
-    <!-- Accessible alt text for background image -->
-    <span class="sr-only">Brand ambassador Justin Langer welcoming you to Australia</span>
-    <img class="footer-hero-img" src="assets/images/loanformbgmob.png" alt="Student loan banner" />
-    <div class="testimonial-wrapper-loan1">
-
-
-
-      <div class="testimonial-overlay-loan">
-        <!-- <div class="d-flex"><img class="vector" src="assets/images/Vector1.svg" alt="Quote start">
-
-
-          <div class="img-text">
-            No bouncers, googlies, or yorkers. It's a straight bat with NiviCap!
-            <img class="vector-end" src="assets/images/Vector2.svg" alt="Quote end">
-          </div> -->
-        <!-- </div> -->
-        <form #loancontactForm="ngForm" (ngSubmit)="submitLoanForm(loancontactForm)" id="loancontactForm" *ngIf="!showsuccess">
-
-          <div class="formdata1 loanform">
-            <div class="row loanheadgap d-flex justify-content-center text-center">
-              <p class="loanhead"> Education Loan Application</p>
-              <p class="feature-subtext">Start your journey to study australia with our<br class="d-none d-sm-block">
-                hassel-free loan process</p>
-            </div>
-            <div class="row justify-content-center">
-
-
-              <div class="row g-3">
-                <div class="col-md-6 col-sm-12 loan-mt-4 ">
-                  <div class="nav-label">Full Name<sup>*</sup></div>
-
-                  <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$"
-                    class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
-
-                  <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
-                    <small *ngIf="name.errors?.['required']">Full name is required.</small>
-                    <small *ngIf="name.errors?.['pattern']">Only letters, numbers & spaces allowed.</small>
-                  </div>
-                </div>
-
-                <div class="col-md-6 loan-mt-4 col-sm-12">
-                  <div class="nav-label">Email address<sup>*</sup></div>
-                  <input type="email" name="email" ngModel required class="form-control form-control-lg feature-subtext"
-                    placeholder="Email Address" #email="ngModel">
-                </div>
-
-                <div class="col-12 loan-mt-4 col-sm-12">
-                  <div class="nav-label">Phone number<sup>*</sup></div>
-
-                  <div class="phone-wrapper d-flex align-items-center">
-
-                    <!-- Country Selector -->
-                    <div class="country-box d-flex align-items-center">
-                      <img src="https://flagcdn.com/w20/in.webp" class="flag-icon" alt="flag">
-                      <select class="country-select">
-                        <option value="+91" class="text-normal">+91</option>
-
-                      </select>
-                    </div>
-
-                    <!-- Mobile Number Input -->
-                    <input type="tel" name="phone" ngModel required pattern="^[0-9]{10}$"
-                      class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number"
-                      #phone="ngModel">
-                  </div>
-                  <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
-                    <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
-                    <small *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit number.</small>
-                  </div>
-                </div>
-
-                <div class="col-md-6 loan-mt-4 col-sm-12">
-                  <div class="nav-label">Preferred Country of Study<sup>*</sup></div>
-                  <input type="text" name="country" ngModel required class="form-control form-control-lg feature-subtext"
-                    placeholder="Australia" #country="ngModel">
-                  <div class="text-danger mt-1" *ngIf="country.invalid && country.touched">
-                    <small>Your Country is required.</small>
-                  </div>
-                </div>
-
-                <div class="col-md-6 loan-mt-4 col-sm-12">
-                  <div class="nav-label">Loan Amount Required (₹)<sup>*</sup></div>
-                  <input type="text" name="loanAmount"  [(ngModel)]="loanAmount" required class="form-control form-control-lg feature-subtext" (input)="formatAmount()"
-                    placeholder="30,00,000" #loanAmountctrl="ngModel">
-                  <div class="text-danger mt-1" *ngIf="loanAmountctrl.invalid && loanAmountctrl.touched">
-                    <small>Your amount is required.</small>
-                  </div>
-                </div>
-
-                <div class="col-12 col-sm-12 loan-mt-4">
-                  <div class="form-check loan-form-check d-flex">
-
-                    <input type="checkbox" id="agreeCheck" class="form-check-input" (change)="onAgreeChange($event)" />
-
-                    <label class="form-check-label consent-text feature-subtext" for="agreeCheck">
-                      I agree to be contacted via phone call, WhatsApp, or email by the loan team for application
-                      updates.
-                      I understand that my information will be used only for processing my loan request.
-                    </label>
-                  </div>
-                </div>
-
-                <!-- OTP SECTION -->
-
-                <!-- SEND OTP BUTTON (shown before OTP section) -->
-                <div class="col-12 text-center loan-mt-4" *ngIf="!showOtp">
-                  <button type="button" class="btn btn-danger btn-lg verifybtn d-flex justify-content-center"
-                    [disabled]="loancontactForm.invalid || !isAgreed" (click)="sendOtptouser(loancontactForm)">
-                    Send OTP
-                  </button>
-                </div>
-
-                <div class="col-12 col-sm-12 loan-mt-4 text-center" *ngIf="showOtp">
-                  <div class="otp-title mb-3 text-common">Enter Code</div>
-
-                  <div class="otp-inputs d-flex justify-content-center">
-                    <input *ngFor="let box of otpBoxes; let i = index" type="text" maxlength="1" class="otp-box"
-                      [(ngModel)]="otp[i]" name="otp{{i}}" (input)="moveToNext($event, i)"
-                      (keydown.backspace)="moveToPrev($event, i)" required />
-                  </div>
-
-                  <div class="resend-text mt-3 text-normal">
-                    Resend OTP in <span class="text-primary">00:{{ timer }}</span>
-                  </div>
-                </div>
-
-            <!-- Verify Button -->
-
-
-
-                <div class="col-12 col-sm-12 text-center loan-mt-4 " *ngIf="showOtp">
-                 
-                  <button type="button" class="btn btn-danger btn-lg verifybtn d-flex justify-content-center" [disabled]="otp.join('').length !== 6"
-                    (click)="verify_Otp(loancontactForm)">
-                    Verify OTP
-                  </button>
-
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </form>
-
-
-      
-           <div class=" loan-success-box text-center" *ngIf="showsuccess">
-            <div class="card  service-card-success">
-              <div class="card-body d-flex flex-column gap-3">
-                <div class="service-icon1"><img src="assets/images/tick-circle.svg" height="117" width="117" alt="product1">
-                </div>
-               
-                  <h4 class="loanhead">Application Received!</h4>
-                   <div class="product-info1">
-                  <p class="text-normal">{{successmsg}}</p>
-                </div>
-              </div>
-          
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
 
   <!-- Transforming Industries Section -->
   <section id="features" class="features py-3 py-md-5">
@@ -478,9 +432,9 @@
     </div>
   </section>
 
-<!-- Testimonial -->
+  <!-- Testimonial -->
   <section class="Testimonial product-img-box testimonial-section">
-     <!-- Accessible alt text for background image -->
+    <!-- Accessible alt text for background image -->
     <span class="sr-only">Brand ambassador Justin Langer welcoming you to Australia</span>
 
     <div class="testimonial-wrapper">

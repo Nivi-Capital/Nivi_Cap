@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { Component, HostListener } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, HostListener, NgZone, ChangeDetectorRef } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Main } from '../service/main';
 
@@ -10,11 +10,13 @@ import { Main } from '../service/main';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule, RouterLink],
   templateUrl: './index.html',
-  styleUrl: './index.css',
+  styleUrls: ['./index.css'],
 })
 export class Index {
   isScrolled = false;
   activeSection: string = 'home';
+  private observer?: IntersectionObserver;
+  private timerInterval?: number;
 
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
@@ -23,35 +25,45 @@ export class Index {
   }
 
   loanAmount: string = '';
+  amountError = false;
 
-  showOtp: boolean = false;
-  otpBoxes = Array(6);
-  otp: string[] = ['', '', '', '', '', ''];
-  timer = 60;
   isAgreed: boolean = false;
-  otpSent = false;
+ 
 
   showsuccess: boolean = false;
   successmsg: any;
 
-  constructor(private http: HttpClient, private main: Main) { }
+  constructor(private http: HttpClient, private main: Main, private ngZone: NgZone, private cdr: ChangeDetectorRef) { }
 
   ngAfterViewInit() {
     if (window.location.pathname !== '/') return;
 
     const sections = document.querySelectorAll("section");
-
-    const observer = new IntersectionObserver((entries) => {
+    this.observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          this.activeSection = entry.target.id;
+          this.ngZone.run(() => {
+            this.activeSection = entry.target.id;
+            this.cdr.detectChanges();
+          });
         }
       });
     }, {
       threshold: 0.6 // 60% of section visible → active
     });
 
-    sections.forEach(section => observer.observe(section));
+    sections.forEach(section => this.observer?.observe(section));
+  }
+
+  ngOnDestroy(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = undefined;
+    }
+    if (this.timerInterval !== undefined) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = undefined;
+    }
   }
 
 
@@ -77,6 +89,7 @@ export class Index {
     value = value.replace(/\D/g, '');
 
     this.loanAmount = this.formatIndian(value);
+    this.validateAmount();
   }
 
   formatIndian(x: string): string {
@@ -91,93 +104,37 @@ export class Index {
     this.isAgreed = event.target.checked;
   }
 
-  sendOtptouser(form: any) {
-    console.log(form)
-    this.startTimer()
-
-    if (form.invalid || !this.isAgreed) return;
-
-    // Call your OTP API here
-    const inputobj = {
-      "mobileNumber": form.value.phone,
 
 
-    }
-    this.main.sendOTP(inputobj).subscribe({
-      next: (res) => {
-        console.log("send otp---", res.message)
-        this.showOtp = true;
-      }
-    })
+  validateAmount() {
+    const numericValue = Number(this.loanAmount.toString().replace(/,/g, ''));
+    this.amountError = numericValue > 4500000;
   }
 
-  verify_Otp(form: any) {
-    const code = this.otp.join('');
-    if (code.length !== 6) return;
-    let otp = form.value.otp0 + form.value.otp1 + form.value.otp2 + form.value.otp3 + form.value.otp4 + form.value.otp5
+  submitLoanForm(data: NgForm) {
+    if (!data || data.invalid || this.amountError) return;
+
     const inputobj = {
-      "mobileNumber": form.value.phone,
-      "otp": otp
-    }
-
-    this.main.verifyOTP(inputobj).subscribe({
-      next: (res) => {
-        console.log("verify otp---", res.message)
-
-        this.submitLoanForm(form.value)
-      }
-    })
-  }
-
-
-  submitLoanForm(data: any) {
-    console.log("submit form---", data)
-    const inputobj = {
-      "fullName": data.name,
-      "mobileNumber": data.phone,
-      "email": data.email,
-      "loanAmount": data.loanAmount,
-      "preferredCountry": data.country
-
-    }
+      fullName: data.value.name,
+      mobileNumber: data.value.phone,
+      email: data.value.email,
+      loanAmount: data.value.loanAmount,
+      source:"WEBSITE"
+    };
 
     this.main.submitLead(inputobj).subscribe({
       next: (res) => {
         this.showsuccess = true;
-        this.successmsg = res.message
-        console.log("submit lead---", res.message)
-
-      }
-    })
-
-    this.showsuccess = false;
+        this.successmsg = res.message;
+        data.resetForm();
+        setTimeout(() => {
+          this.showsuccess = false;
+        }, 2000);
+      },
+      error: (err) => console.error('submit lead error', err)
+    });
   }
 
 
-  startTimer() {
-    this.timer = 60;
-    const interval = setInterval(() => {
-      if (this.timer > 0) {
-        this.timer--;
-      } else {
-        clearInterval(interval);
-      }
-    }, 1000);
-  }
 
-
-  moveToNext(event: any, index: number) {
-    const input = event.target;
-    if (input.value && index < 5) {
-      const next = input.nextElementSibling;
-      next?.focus();
-    }
-  }
-
-  moveToPrev(event: any, index: number) {
-    if (!this.otp[index] && index > 0) {
-      const prev = event.target.previousElementSibling;
-      prev?.focus();
-    }
-  }
 }

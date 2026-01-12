@@ -16,14 +16,14 @@
           You focus on experiencing, learning, and growing! </p>
       </div>
 
-      <form #contactForm="ngForm" (ngSubmit)="submitForm(contactForm)" id="contactForm">
+      <form #contactForm="ngForm" (ngSubmit)="submitcontactForm(contactForm)" id="contactForm">
 
         <div class="formdata">
           <div class="row justify-content-center">
 
             <div class="row g-4">
               <div class=" col-md-6 col-sm-12 ">
-                <div class="nav-label">Full Name<sup>*</sup></div>
+                <div class="nav-label label-text">Full Name<sup>*</sup></div>
 
                 <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$"
                   class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
@@ -35,7 +35,7 @@
               </div>
 
               <div class="col-md-6 col-sm-12">
-                <div class="nav-label">Phone number<sup>*</sup></div>
+                <div class="nav-label label-text">Phone number<sup>*</sup></div>
 
                 <div class="phone-wrapper d-flex align-items-center">
 
@@ -49,8 +49,8 @@
                   </div>
 
                   <!-- Mobile Number Input -->
-                  <input type="number" name="phone" ngModel required pattern="^[0-9]{10}$"
-                    class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number" #phone="ngModel">
+                  <input type="number" name="phone" ngModel required pattern="^[6-9][0-9]{9}$"
+                    class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number" #phone="ngModel" maxlength="10">
                 </div>
                 <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
                   <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
@@ -59,12 +59,16 @@
               </div>
 
               <div class="col-md-6 mt-4 col-sm-12">
-                <div class="nav-label">Email address<sup>*</sup></div>
-                <input type="email" name="email" ngModel required class="form-control form-control-lg feature-subtext"
+                <div class="nav-label label-text">Email address<sup>*</sup></div>
+                <input type="email" name="email" ngModel required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" class="form-control form-control-lg feature-subtext"
                   placeholder="Email Address" #email="ngModel">
+                <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
+                  <small *ngIf="email.errors?.['required']">Email address is required.</small>
+                  <small *ngIf="email.errors?.['pattern']">Enter a valid email address.</small>
+                </div>
               </div>
               <div class="col-md-6 mt-4 col-sm-12">
-                <div class="nav-label">Your query<sup>*</sup></div>
+                <div class="nav-label label-text">Your query<sup>*</sup></div>
                 <input type="text" name="query" ngModel required class="form-control form-control-lg feature-subtext"
                   placeholder="Enter your Query" #query="ngModel">
                 <div class="text-danger mt-1" *ngIf="query.invalid && query.touched">
@@ -72,7 +76,7 @@
                 </div>
               </div>
               <div class="col-12 mt-4 col-sm-12">
-                <div class="nav-label">Subject<sup>*</sup></div>
+                <div class="nav-label label-text">Subject<sup>*</sup></div>
                 <input type="text" name="subject" ngModel class="form-control form-control-lg feature-subtext"
                   placeholder="Add Subject" #subject="ngModel">
                 <div class="text-danger mt-1" *ngIf="subject.invalid && subject.touched">
@@ -80,7 +84,7 @@
                 </div>
               </div>
               <div class="col-12 mt-4 col-sm-12">
-                <div class="nav-label">Message<sup>*</sup></div>
+                <div class="nav-label label-text">Message<sup>*</sup></div>
                 <textarea name="message" ngModel required class="form-control form-control-lg feature-subtext" rows="5"
                   placeholder="Tell us how we can help you. Please provide as much detail as possible."
                   #message="ngModel"></textarea>
@@ -89,13 +93,31 @@
                 </div>
               </div>
               <div class="col-12 col-sm-12 text-center mt-5">
-                <button type="submit" class="btn btn-danger btn-lg submitbtn" [disabled]="contactForm.invalid">Submit
-                  Inquiry</button>
+                <button type="submit" class="btn btn-danger btn-lg submitbtn" [disabled]="contactForm.invalid || isSubmitting">
+                  {{ isSubmitting ? 'Sending...' : 'Submit Inquiry' }}
+                </button>
               </div>
 
             </div>
           </div>
         </div>
       </form>
+
+      
     </div>
+    <div class=" contact-success-box text-center d-flex justify-content-center" *ngIf="showsuccessbox">
+              <div class="card  contact-card-success">
+                <div class="card-body d-flex flex-column gap-3">
+                  <div class="service-icon1"><img src="assets/images/tick-circle.svg" height="117" width="117"
+                      alt="product1" class="success-tick-icon">
+                  </div>
+
+                  <h4 class="loanhead">Application Received!</h4>
+                  <div class="product-info1">
+                    <p class="text-normal">{{msgsuccess}}</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
   </section>

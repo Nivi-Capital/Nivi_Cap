@@ -19,7 +19,6 @@ export class News implements OnInit {
 
   ngOnInit() {
     this.newsList = newsData;
-    console.log(this.newsList)
      this.newsList.sort((a, b) => {
     return this.parseDate(b.Date).getTime() - this.parseDate(a.Date).getTime();
   });

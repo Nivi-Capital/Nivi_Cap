@@ -310,6 +310,8 @@ body {
 .footer-contact {
   color: #4a5568;
   font-size: 14px;
+  line-height: 23px!important;
+  text-align: left;
 
 }
 
@@ -350,7 +352,12 @@ body {
   display: flex;
   justify-content: space-between;
 }
-
+.quick-links-list-web{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;   
+  
+}
 
 .quick-links-list a {
   text-decoration: none;
@@ -793,7 +800,10 @@ body {
     white-space: nowrap;
   }
 
-
+.footer-contact {
+    font-size: 20px;
+    line-height: 20px;
+  }
 
   .footer-link-img {
     width: 128px;
@@ -1009,7 +1019,7 @@ body {
   }
 
   .footer-contact {
-    font-size: 13px;
+    font-size: 15px;
     line-height: 20px;
   }
 
@@ -1282,8 +1292,8 @@ body {
   }
 
   .footer-contact {
-    font-size: 13px;
-    line-height: 20px;
+    font-size: 15px;
+    line-height: 23px;
   }
 
   .quick-links-gap {
@@ -1299,7 +1309,12 @@ body {
     margin: 0;
     list-style: none;
   }
-
+.quick-links-list-web{
+   display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;   
+  
+}
 
   .quick-links-list li {
     width: 30%;
