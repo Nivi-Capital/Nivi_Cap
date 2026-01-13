@@ -25,7 +25,7 @@ export class Index {
   }
 
   loanAmount: string = '';
-  amountError = false;
+  amountError = "";
 
   isAgreed: boolean = false;
  
@@ -108,7 +108,19 @@ export class Index {
 
   validateAmount() {
     const numericValue = Number(this.loanAmount.toString().replace(/,/g, ''));
-    this.amountError = numericValue > 4500000;
+    // this.amountError = 100000 > numericValue || numericValue > 4500000;
+     if (!numericValue) {
+    this.amountError = '';
+    return;
+  }
+
+  if (numericValue < 100000) {
+    this.amountError = 'min';
+  } else if (numericValue > 4500000) {
+    this.amountError = 'max';
+  } else {
+    this.amountError = '';
+  }
   }
 
   submitLoanForm(data: NgForm) {
@@ -134,6 +146,39 @@ export class Index {
       error: (err) => console.error('submit lead error', err)
     });
   }
+
+
+
+restrictInput(event: KeyboardEvent, type: 'text' | 'number') {
+  const key = event.key;
+
+  // Allow control keys
+  const allowedKeys = [
+    'Backspace',
+    'Tab',
+    'ArrowLeft',
+    'ArrowRight',
+    'Delete'
+  ];
+
+  if (allowedKeys.includes(key)) {
+    return;
+  }
+
+  if (type === 'text') {
+    // Allow alphabets and space only
+    if (!/^[A-Za-z ]$/.test(key)) {
+      event.preventDefault();
+    }
+  }
+
+  if (type === 'number') {
+    // Allow digits only
+    if (!/^[0-9]$/.test(key)) {
+      event.preventDefault();
+    }
+  }
+}
 
 
 

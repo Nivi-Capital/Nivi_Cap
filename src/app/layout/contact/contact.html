@@ -25,7 +25,7 @@
               <div class=" col-md-6 col-sm-12 ">
                 <div class="nav-label label-text">Full Name<sup>*</sup></div>
 
-                <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$"
+                <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$" (keydown)="restrictInput($event, 'text')" minlength="2"
                   class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
 
                 <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
@@ -42,14 +42,11 @@
                   <!-- Country Selector -->
                   <div class="country-box d-flex align-items-center">
                     <img src="https://flagcdn.com/w20/in.webp" class="flag-icon" alt="flag">
-                    <select class="country-select">
-                      <option value="+91" class="text-normal">+91</option>
-
-                    </select>
+                    <span>+91</span>
                   </div>
 
                   <!-- Mobile Number Input -->
-                  <input type="number" name="phone" ngModel required pattern="^[6-9][0-9]{9}$"
+                  <input type="tel" name="phone" ngModel required pattern="^[6-9][0-9]{9}$" (keydown)="restrictInput($event, 'number')"
                     class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number" #phone="ngModel" maxlength="10">
                 </div>
                 <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
@@ -78,7 +75,7 @@
               <div class="col-12 mt-4 col-sm-12">
                 <div class="nav-label label-text">Subject<sup>*</sup></div>
                 <input type="text" name="subject" ngModel class="form-control form-control-lg feature-subtext"
-                  placeholder="Add Subject" #subject="ngModel">
+                  placeholder="Add Subject" #subject="ngModel" required>
                 <div class="text-danger mt-1" *ngIf="subject.invalid && subject.touched">
                   <small>Subject is required.</small>
                 </div>

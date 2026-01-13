@@ -27,23 +27,39 @@
                     <div class="col-md-6 col-sm-12 loan-mt-4 ">
                       <div class="nav-label label-text">Full Name<sup>*</sup></div>
 
-                      <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$"
-                        class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
+                      <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$" minlength="2"
+                        maxlength="75" class="form-control form-control-lg feature-subtext" placeholder="Your Name"
+                        #name="ngModel" (keydown)="restrictInput($event, 'text')">
 
                       <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
                         <small *ngIf="name.errors?.['required']">Full name is required.</small>
-                        <small *ngIf="name.errors?.['pattern']">Only letters, numbers & spaces allowed.</small>
+                        <small *ngIf="name.errors?.['pattern']">Only letters & spaces allowed.</small>
+                        <small *ngIf="name.errors?.['minlength']">
+                          Full name must be at least 2 characters long.
+                        </small>
+
+                        <small *ngIf="name.errors?.['maxlength']">
+                          Full name cannot exceed 75 characters.
+                        </small>
                       </div>
                     </div>
 
                     <div class="col-md-6 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Email address<sup>*</sup></div>
-                      <input type="email" name="email" ngModel required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                      <input type="email" name="email" ngModel required minlength="10" maxlength="45"
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                         class="form-control form-control-lg feature-subtext" placeholder="Email Address"
                         #email="ngModel">
                       <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
                         <small *ngIf="email.errors?.['required']">Email address is required.</small>
                         <small *ngIf="email.errors?.['pattern']">Enter a valid email address.</small>
+                        <small *ngIf="email.errors?.['minlength']">
+                          Email must be at least 10 characters long.
+                        </small>
+
+                        <small *ngIf="email.errors?.['maxlength']">
+                          Email cannot exceed 45 characters.
+                        </small>
                       </div>
                     </div>
 
@@ -55,16 +71,14 @@
                         <!-- Country Selector -->
                         <div class="country-box d-flex align-items-center">
                           <img src="https://flagcdn.com/w20/in.webp" class="flag-icon" alt="flag">
-                          <select class="country-select">
-                            <option value="+91" class="text-normal">+91</option>
+                          <span>+91</span>
 
-                          </select>
                         </div>
 
                         <!-- Mobile Number Input -->
                         <input type="tel" name="phone" ngModel required pattern="^[6-9][0-9]{9}$"
-                          class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number" maxlength="10"
-                          #phone="ngModel">
+                          class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number"
+                          maxlength="10" #phone="ngModel" (keydown)="restrictInput($event, 'number')">
                       </div>
                       <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
                         <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
@@ -76,13 +90,18 @@
 
                     <div class="col-12 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Loan Amount Required (₹)<sup>*</sup></div>
-                      <input type="text" name="loanAmount" [(ngModel)]="loanAmount" required
+                      <input type="text" name="loanAmount" [(ngModel)]="loanAmount" required maxlength="9"
                         class="form-control form-control-lg feature-subtext" (input)="formatAmount()"
-                        placeholder="30,00,000" #loanAmountctrl="ngModel">
+                        placeholder="Enter Amount" #loanAmountctrl="ngModel"
+                        (keydown)="restrictInput($event, 'number')">
                       <div class="text-danger mt-1" *ngIf="loanAmountctrl.invalid && loanAmountctrl.touched">
                         <small>Your amount is required.</small>
                       </div>
-                      <div class="text-danger mt-1" *ngIf="amountError">
+                      <div class="text-danger mt-1" *ngIf="amountError === 'min'">
+                        <small>Loan amount cannot be less than ₹1,00,000.</small>
+                      </div>
+
+                      <div class="text-danger mt-1" *ngIf="amountError === 'max'">
                         <small>Loan amount cannot be greater than ₹45,00,000.</small>
                       </div>
 
@@ -96,7 +115,8 @@
 
                         <label class="form-check-label consent-text feature-subtext" for="agreeCheck">
                           I consent to being contacted by team NiviCap and their lending partners. I also understand my
-                          information will be used safely as per the Privacy Policy.
+                          information will be used safely as per the <span><a href="/privacy-policy"
+                              target="_blank">Privacy Policy</a></span>.
                           Nivi Capital is not a bank and does not hold a banking or lending license. All lending
                           products are underwritten by our lending partners.
                         </label>
@@ -321,7 +341,7 @@
 
           <!-- Center Column - Phone Mockup -->
           <div class="col-lg-4 text-center d-flex justify-content-center order-1 order-lg-2">
-            <img class="mob-hook" src="assets/opt_images/mobile.webp" alt="App screen 1">
+            <img class="mob-hook" src="assets/opt_images/mobile.webp" alt="App screen 1" >
 
           </div>
 
@@ -530,7 +550,7 @@
                 </p>
 
                 <div class="app-buttons on-card">
-                  <a href="https://nivicap.com/"><img src="assets/images/appleapp.svg" alt="appleapp"> </a>
+                  <a href="https://nivicap.com/"><img src="assets/images/appleapp.svg" alt="appleapp" width="41" height="50"> </a>
                   <a href="https://nivicap.com/"><img src="assets/images/googleapp.svg" alt="googleapp"> </a>
                 </div>
               </div>

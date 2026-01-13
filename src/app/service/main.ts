@@ -26,4 +26,36 @@ export class Main {
       payload,
     );
   }
+
+
+  restrictInput(event: KeyboardEvent, type: 'text' | 'number') {
+  const key = event.key;
+
+  // Allow control keys
+  const allowedKeys = [
+    'Backspace',
+    'Tab',
+    'ArrowLeft',
+    'ArrowRight',
+    'Delete'
+  ];
+
+  if (allowedKeys.includes(key)) {
+    return;
+  }
+
+  if (type === 'text') {
+    // Allow alphabets and space only
+    if (!/^[A-Za-z ]$/.test(key)) {
+      event.preventDefault();
+    }
+  }
+
+  if (type === 'number') {
+    // Allow digits only
+    if (!/^[0-9]$/.test(key)) {
+      event.preventDefault();
+    }
+  }
+}
 }
