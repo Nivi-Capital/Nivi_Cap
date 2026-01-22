@@ -4,6 +4,9 @@ import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Main } from '../../service/main';
 
+type FormStatusType = 'form' | 'loading' | 'success' | 'error';
+
+
 @Component({
   selector: 'app-contact',
   imports: [CommonModule,HttpClientModule,FormsModule],
@@ -13,9 +16,13 @@ import { Main } from '../../service/main';
 export class Contact {
   isSubmitting :boolean= false;
   showsuccessbox:boolean=false;
-  msgsuccess:any;
+  showError:boolean=false;
+  msgtoshow:any;
+ status!: FormStatusType;
 
-  constructor(private http:HttpClient,private main:Main){}
+  constructor(private http:HttpClient,public main:Main){
+    // this.status = 'form';
+  }
 
 submitForm(form: NgForm) {
     if (!form.valid) {
@@ -69,7 +76,7 @@ submitForm(form: NgForm) {
 
     this.main.submitContact(inputobj).subscribe({
       next: (res) => {
-        this.msgsuccess = res.message;
+        this.msgtoshow = res.message;
         this.showsuccessbox = true;
        
          data.resetForm();
@@ -80,40 +87,39 @@ submitForm(form: NgForm) {
         
         
       },
-      error: (err) => {console.error('submit lead error', err),
-        this.isSubmitting = false; }
+      error: (err) => {
+        console.error('submit lead error', err),
+        this.isSubmitting = false;
+         this.status = 'error';
+        // this.msgtoshow = err.error.message;
+        this.msgtoshow = err.error?.message || 'Something went wrong. Please try again.';
+
+        this.showError = true;
+        // setTimeout(() => {
+        //   this.showError = false;
+        //   this.status = 'form';
+
+        // }, 5000);
+
+       }
     });
   }
 
-restrictInput(event: KeyboardEvent, type: 'text' | 'number') {
-  const key = event.key;
-
-  // Allow control keys
-  const allowedKeys = [
-    'Backspace',
-    'Tab',
-    'ArrowLeft',
-    'ArrowRight',
-    'Delete'
-  ];
-
-  if (allowedKeys.includes(key)) {
-    return;
+ isLoading(): boolean {
+    return this.status === 'loading';
   }
 
-  if (type === 'text') {
-    // Allow alphabets and space only
-    if (!/^[A-Za-z ]$/.test(key)) {
-      event.preventDefault();
-    }
+  isForm(): boolean {
+    return this.status === 'form';
   }
 
-  if (type === 'number') {
-    // Allow digits only
-    if (!/^[0-9]$/.test(key)) {
-      event.preventDefault();
-    }
+  isSuccess(): boolean {
+    return this.status === 'success';
   }
-}}
+
+  isError(): boolean {
+    return this.status === 'error';
+  }
+}
 
 

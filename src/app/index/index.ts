@@ -5,6 +5,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Main } from '../service/main';
 
+type FormStatusType = 'form' | 'loading' | 'success' | 'error';
+
 @Component({
   selector: 'app-index',
   standalone: true,
@@ -12,6 +14,7 @@ import { Main } from '../service/main';
   templateUrl: './index.html',
   styleUrls: ['./index.css'],
 })
+
 export class Index {
   isScrolled = false;
   activeSection: string = 'home';
@@ -28,12 +31,16 @@ export class Index {
   amountError = "";
 
   isAgreed: boolean = false;
- 
 
   showsuccess: boolean = false;
-  successmsg: any;
+  showError: boolean = false;
+  pleasecheck: boolean = true;
+  status!: FormStatusType;
+  msgtoshow = "";
 
-  constructor(private http: HttpClient, private main: Main, private ngZone: NgZone, private cdr: ChangeDetectorRef) { }
+  constructor(private http: HttpClient, public main: Main, private ngZone: NgZone, private cdr: ChangeDetectorRef) {
+    this.status = 'form';
+  }
 
   ngAfterViewInit() {
     if (window.location.pathname !== '/') return;
@@ -55,16 +62,7 @@ export class Index {
     sections.forEach(section => this.observer?.observe(section));
   }
 
-  ngOnDestroy(): void {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = undefined;
-    }
-    if (this.timerInterval !== undefined) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = undefined;
-    }
-  }
+
 
 
   // Scroll to a specific section
@@ -102,28 +100,34 @@ export class Index {
   //loan form
   onAgreeChange(event: any) {
     this.isAgreed = event.target.checked;
+    const checked = (event.target as HTMLInputElement).checked;
+  // this.pleasecheck = !checked;
   }
-
+ 
 
 
   validateAmount() {
     const numericValue = Number(this.loanAmount.toString().replace(/,/g, ''));
     // this.amountError = 100000 > numericValue || numericValue > 4500000;
-     if (!numericValue) {
-    this.amountError = '';
-    return;
-  }
+    if (!numericValue) {
+      this.amountError = '';
+      return;
+    }
 
-  if (numericValue < 100000) {
-    this.amountError = 'min';
-  } else if (numericValue > 4500000) {
-    this.amountError = 'max';
-  } else {
-    this.amountError = '';
-  }
+    if (numericValue < 100000) {
+      this.amountError = 'min';
+    } else if (numericValue > 10000000) {
+      this.amountError = 'max';
+    } else {
+      this.amountError = '';
+    }
   }
 
   submitLoanForm(data: NgForm) {
+    if (this.status === 'loading') return; // prevent double submit
+
+    this.status = 'loading';
+
     if (!data || data.invalid || this.amountError) return;
 
     const inputobj = {
@@ -131,55 +135,65 @@ export class Index {
       mobileNumber: data.value.phone,
       email: data.value.email,
       loanAmount: data.value.loanAmount,
-      source:"WEBSITE"
+      source: "WEBSITE"
     };
 
     this.main.submitLead(inputobj).subscribe({
       next: (res) => {
+        this.status = 'success';
         this.showsuccess = true;
-        this.successmsg = res.message;
+        this.msgtoshow = res.message;
         data.resetForm();
         setTimeout(() => {
+          this.status = 'form';
           this.showsuccess = false;
-        }, 2000);
+        }, 10000);
       },
-      error: (err) => console.error('submit lead error', err)
+      error: (err) => {
+        this.status = 'error';
+        // this.msgtoshow = err.error.message;
+        this.msgtoshow = err.error?.message || 'Something went wrong. Please try again.';
+
+        this.showError = true;
+        setTimeout(() => {
+          this.showError = false;
+          this.status = 'form';
+
+        }, 5000);
+      }
+
     });
   }
 
 
 
-restrictInput(event: KeyboardEvent, type: 'text' | 'number') {
-  const key = event.key;
 
-  // Allow control keys
-  const allowedKeys = [
-    'Backspace',
-    'Tab',
-    'ArrowLeft',
-    'ArrowRight',
-    'Delete'
-  ];
 
-  if (allowedKeys.includes(key)) {
-    return;
-  }
-
-  if (type === 'text') {
-    // Allow alphabets and space only
-    if (!/^[A-Za-z ]$/.test(key)) {
-      event.preventDefault();
+  ngOnDestroy(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = undefined;
+    }
+    if (this.timerInterval !== undefined) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = undefined;
     }
   }
 
-  if (type === 'number') {
-    // Allow digits only
-    if (!/^[0-9]$/.test(key)) {
-      event.preventDefault();
-    }
+  // Helper methods for template type checking
+  isLoading(): boolean {
+    return this.status === 'loading';
   }
-}
 
+  isForm(): boolean {
+    return this.status === 'form';
+  }
 
+  isSuccess(): boolean {
+    return this.status === 'success';
+  }
 
+  isError(): boolean {
+    return this.status === 'error';
+  }
 }

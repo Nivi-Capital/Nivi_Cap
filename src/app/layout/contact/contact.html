@@ -1,120 +1,144 @@
-
-  <!-- Contact Section -->
-  <section id="contact" class="">
-    <div class="container py-md-5">
-      <div class="text-center mt-5 mb-3 mb-md-5 sectiontab">
-        <div class="selected-tab mt-5 d-flex align-items-center">
-          <div><h2 class=" selectedtab selectedtab-label">Contact Us</h2></div>
-
-
-          <h3 class="selectedtab-head-text">
-            Get in Touch for an Easy <span style="color: #F8192A;font-weight: 700;">Australia Journey!</span>
-          </h3>
+<!-- Contact Section -->
+<section id="contact" class="">
+  <div class="container py-md-5">
+    <div class="text-center mt-5 mb-3 mb-md-5 sectiontab">
+      <div class="selected-tab mt-5 d-flex align-items-center">
+        <div>
+          <h2 class=" selectedtab selectedtab-label">Contact Us</h2>
         </div>
-        <p class="text-common">
-          Don’t worry about finances, we’ve got your back. <br class="d-none d-sm-block">
-          You focus on experiencing, learning, and growing! </p>
+
+
+        <h3 class="selectedtab-head-text">
+          Get in Touch for an Easy <span style="color: #F8192A;font-weight: 700;">Australia Journey!</span>
+        </h3>
       </div>
+      <p class="text-common">
+        Don’t worry about finances, we’ve got your back. <br class="d-none d-sm-block">
+        You focus on experiencing, learning, and growing! </p>
+    </div>
 
-      <form #contactForm="ngForm" (ngSubmit)="submitcontactForm(contactForm)" id="contactForm">
+    <form #contactForm="ngForm" (ngSubmit)="submitcontactForm(contactForm)" id="contactForm">
 
-        <div class="formdata">
-          <div class="row justify-content-center">
+      <div class="formdata">
+        <div class="row justify-content-center">
 
-            <div class="row g-4">
-              <div class=" col-md-6 col-sm-12 ">
-                <div class="nav-label label-text">Full Name<sup>*</sup></div>
+          <div class="row g-4">
+            <div class=" col-md-6 col-sm-12 ">
+              <div class="nav-label label-text">Full Name<sup>*</sup></div>
 
-                <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$" (keydown)="restrictInput($event, 'text')" minlength="2"
-                  class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
+              <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$"
+                (input)="main.restrictInput($event, 'text')" minlength="2"
+                class="form-control form-control-lg feature-subtext" placeholder="Your Name" #name="ngModel">
 
-                <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
-                  <small *ngIf="name.errors?.['required']">Full name is required.</small>
-                  <small *ngIf="name.errors?.['pattern']">Only letters, numbers & spaces allowed.</small>
-                </div>
+              <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
+                <small *ngIf="name.errors?.['required']">Full name is required.</small>
+                <small *ngIf="name.errors?.['pattern']">Only letters, numbers & spaces allowed.</small>
               </div>
-
-              <div class="col-md-6 col-sm-12">
-                <div class="nav-label label-text">Phone number<sup>*</sup></div>
-
-                <div class="phone-wrapper d-flex align-items-center">
-
-                  <!-- Country Selector -->
-                  <div class="country-box d-flex align-items-center">
-                    <img src="https://flagcdn.com/w20/in.webp" class="flag-icon" alt="flag">
-                    <span>+91</span>
-                  </div>
-
-                  <!-- Mobile Number Input -->
-                  <input type="tel" name="phone" ngModel required pattern="^[6-9][0-9]{9}$" (keydown)="restrictInput($event, 'number')"
-                    class="form-control mobile-input feature-subtext" placeholder="Enter Mobile number" #phone="ngModel" maxlength="10">
-                </div>
-                <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
-                  <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
-                  <small *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit number.</small>
-                </div>
-              </div>
-
-              <div class="col-md-6 mt-4 col-sm-12">
-                <div class="nav-label label-text">Email address<sup>*</sup></div>
-                <input type="email" name="email" ngModel required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" class="form-control form-control-lg feature-subtext"
-                  placeholder="Email Address" #email="ngModel">
-                <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
-                  <small *ngIf="email.errors?.['required']">Email address is required.</small>
-                  <small *ngIf="email.errors?.['pattern']">Enter a valid email address.</small>
-                </div>
-              </div>
-              <div class="col-md-6 mt-4 col-sm-12">
-                <div class="nav-label label-text">Your query<sup>*</sup></div>
-                <input type="text" name="query" ngModel required class="form-control form-control-lg feature-subtext"
-                  placeholder="Enter your Query" #query="ngModel">
-                <div class="text-danger mt-1" *ngIf="query.invalid && query.touched">
-                  <small>Your query is required.</small>
-                </div>
-              </div>
-              <div class="col-12 mt-4 col-sm-12">
-                <div class="nav-label label-text">Subject<sup>*</sup></div>
-                <input type="text" name="subject" ngModel class="form-control form-control-lg feature-subtext"
-                  placeholder="Add Subject" #subject="ngModel" required>
-                <div class="text-danger mt-1" *ngIf="subject.invalid && subject.touched">
-                  <small>Subject is required.</small>
-                </div>
-              </div>
-              <div class="col-12 mt-4 col-sm-12">
-                <div class="nav-label label-text">Message<sup>*</sup></div>
-                <textarea name="message" ngModel required class="form-control form-control-lg feature-subtext" rows="5"
-                  placeholder="Tell us how we can help you. Please provide as much detail as possible."
-                  #message="ngModel"></textarea>
-                <div class="text-danger mt-1" *ngIf="message.invalid && message.touched">
-                  <small>Message is required.</small>
-                </div>
-              </div>
-              <div class="col-12 col-sm-12 text-center mt-5">
-                <button type="submit" class="btn btn-danger btn-lg submitbtn" [disabled]="contactForm.invalid || isSubmitting">
-                  {{ isSubmitting ? 'Sending...' : 'Submit Inquiry' }}
-                </button>
-              </div>
-
             </div>
+
+            <div class="col-md-6 col-sm-12">
+              <div class="nav-label label-text">Phone number<sup class="position-static">*</sup></div>
+
+              <div class="phone-wrapper d-flex align-items-center">
+
+                <!-- Country Selector -->
+                <div class="country-box d-flex align-items-center">
+                  <img src="https://flagcdn.com/w20/in.webp" class="flag-icon" alt="flag">
+                  <span>+91</span>
+                </div>
+
+                <!-- Mobile Number Input -->
+                <input type="tel" name="phone" ngModel required pattern="^[6-9][0-9]{9}$"
+                  (input)="main.restrictInput($event, 'number')" class="form-control mobile-input feature-subtext"
+                  placeholder="Enter Mobile number" #phone="ngModel" maxlength="10">
+              </div>
+              <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
+                <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
+                <small *ngIf="phone.errors?.['pattern']">Enter a valid 10-digit number.</small>
+              </div>
+            </div>
+
+            <div class="col-md-6 mt-4 col-sm-12">
+              <div class="nav-label label-text">Email address<sup class="position-static">*</sup></div>
+              <input type="email" name="email" ngModel required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                class="form-control form-control-lg feature-subtext" placeholder="Email Address" #email="ngModel">
+              <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
+                <small *ngIf="email.errors?.['required']">Email address is required.</small>
+                <small *ngIf="email.errors?.['pattern']">Enter a valid email address.</small>
+              </div>
+            </div>
+            <div class="col-md-6 mt-4 col-sm-12">
+              <div class="nav-label label-text">Your query<sup class="position-static">*</sup></div>
+              <input type="text" name="query" ngModel required class="form-control form-control-lg feature-subtext"
+                placeholder="Enter your Query" #query="ngModel">
+              <div class="text-danger mt-1" *ngIf="query.invalid && query.touched">
+                <small>Your query is required.</small>
+              </div>
+            </div>
+            <div class="col-12 mt-4 col-sm-12">
+              <div class="nav-label label-text">Subject<sup class="position-static">*</sup></div>
+              <input type="text" name="subject" ngModel class="form-control form-control-lg feature-subtext"
+                placeholder="Add Subject" #subject="ngModel" required>
+              <div class="text-danger mt-1" *ngIf="subject.invalid && subject.touched">
+                <small>Subject is required.</small>
+              </div>
+            </div>
+            <div class="col-12 mt-4 col-sm-12">
+              <div class="nav-label label-text">Message<sup class="position-static">*</sup></div>
+              <textarea name="message" ngModel required class="form-control form-control-lg feature-subtext" rows="5"
+                placeholder="Tell us how we can help you. Please provide as much detail as possible."
+                #message="ngModel"></textarea>
+              <div class="text-danger mt-1" *ngIf="message.invalid && message.touched">
+                <small>Message is required.</small>
+              </div>
+            </div>
+            <div class="col-12 col-sm-12 text-center mt-5">
+              <button type="submit" class="btn btn-danger btn-lg submitbtn"
+                [disabled]="contactForm.invalid || isSubmitting">
+                {{ isSubmitting ? 'Sending...' : 'Submit Inquiry' }}
+              </button>
+            </div>
+
           </div>
         </div>
-      </form>
+      </div>
+    </form>
 
-      
+
+  </div>
+
+  <div class="loader-overlay" *ngIf="isLoading()">
+    <div class="spinner-container">
+      <div class="spinner-border spinner-lg" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+
+      <p class="loader-text mt-3">Processing your application...</p>
     </div>
-    <div class=" contact-success-box text-center d-flex justify-content-center" *ngIf="showsuccessbox">
-              <div class="card  contact-card-success">
-                <div class="card-body d-flex flex-column gap-3">
-                  <div class="service-icon1"><img src="assets/images/tick-circle.svg" height="117" width="117"
-                      alt="product1" class="success-tick-icon">
-                  </div>
+  </div>
+  <div class=" contact-success-box text-center d-flex justify-content-center" *ngIf="showsuccessbox">
+    <div class="card  contact-card-success">
+      <div class="card-body d-flex flex-column gap-3">
+        <div class="service-icon1"><img src="assets/images/tick-circle.svg" hei ght="117" width="117" alt="product1"
+            class="success-tick-icon">
+        </div>
 
-                  <h4 class="loanhead">Application Received!</h4>
-                  <div class="product-info1">
-                    <p class="text-normal">{{msgsuccess}}</p>
-                  </div>
-                </div>
+        <h4 class="loanhead">Application Received!</h4>
+        <div class="product-info1">
+          <p class="text-normal">{{msgtoshow}}</p>
+        </div>
+      </div>
 
-              </div>
-            </div>
-  </section>
+    </div>
+  </div>
+  <!-- <div class=" loan-success-box text-center" *ngIf="isError()">
+    <div class="card  service-card-success">
+      <div class="card-body d-flex flex-column gap-3">
+        <div class="product-info1">
+          <p class="text-normal">{{msgtoshow}}</p>
+        </div>
+      </div>
+
+    </div>
+  </div> -->
+</section>
