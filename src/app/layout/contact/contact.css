@@ -87,7 +87,7 @@
 
 /* loan success popup */
 
-.contact-success-box {
+.contact-success-box, .loan-success-box {
   width: 500px;
   position: fixed;
   top: 50%;
@@ -172,7 +172,7 @@
     line-height: 20px;
   }
 
-  .contact-success-box {
+  .contact-success-box,.loan-success-box  {
     width: 400px;
     height: auto;
 
@@ -191,7 +191,7 @@
     padding: 30px;
   }
 
-  .contact-success-box {
+  .contact-success-box,.loan-success-box  {
     width: 250px;
     height: auto;
 

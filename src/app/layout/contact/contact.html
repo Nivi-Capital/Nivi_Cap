@@ -107,7 +107,7 @@
 
   </div>
 
-  <div class="loader-overlay" *ngIf="isLoading()">
+  <div class="loader-overlay" *ngIf="isSubmitting">
     <div class="spinner-container">
       <div class="spinner-border spinner-lg" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -116,7 +116,7 @@
       <p class="loader-text mt-3">Processing your application...</p>
     </div>
   </div>
-  <div class=" contact-success-box text-center d-flex justify-content-center" *ngIf="showsuccessbox">
+  <div class=" contact-success-box text-center d-flex justify-content-center" *ngIf="status === 'success'">
     <div class="card  contact-card-success">
       <div class="card-body d-flex flex-column gap-3">
         <div class="service-icon1"><img src="assets/images/tick-circle.svg" hei ght="117" width="117" alt="product1"
@@ -131,14 +131,17 @@
 
     </div>
   </div>
-  <!-- <div class=" loan-success-box text-center" *ngIf="isError()">
+  <div class="loan-success-box text-center d-flex justify-content-center" *ngIf="status === 'error'">
     <div class="card  service-card-success">
       <div class="card-body d-flex flex-column gap-3">
+         <div class="service-icon1"><img src="assets/images/danger.svg" height="117" width="117" alt="product1"
+            class="success-tick-icon">
+        </div>
         <div class="product-info1">
           <p class="text-normal">{{msgtoshow}}</p>
         </div>
       </div>
 
     </div>
-  </div> -->
+  </div>
 </section>

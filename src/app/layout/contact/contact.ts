@@ -3,6 +3,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Main } from '../../service/main';
+import { finalize, take } from 'rxjs/operators';
+
 
 type FormStatusType = 'form' | 'loading' | 'success' | 'error';
 
@@ -15,16 +17,20 @@ type FormStatusType = 'form' | 'loading' | 'success' | 'error';
 })
 export class Contact {
   isSubmitting :boolean= false;
-  showsuccessbox:boolean=false;
-  showError:boolean=false;
-  msgtoshow:any;
- status!: FormStatusType;
+  // showsuccessbox:boolean=false;
+  // showError:boolean=false;
+//   msgtoshow:any;
+//  status!: FormStatusType;
+
+status: FormStatusType = 'form';
+msgtoshow: string = '';
+
 
   constructor(private http:HttpClient,public main:Main){
     // this.status = 'form';
   }
 
-submitForm(form: NgForm) {
+submitForm1(form: NgForm) {
     if (!form.valid) {
       alert("Please fill all required fields!");
       return;
@@ -58,11 +64,13 @@ submitForm(form: NgForm) {
 
 
   submitcontactForm(data: NgForm) {
+    
     if (this.isSubmitting || data.invalid) {
     return;
   }
 
   this.isSubmitting = true; 
+ this.status = 'loading';
 
     const inputobj = {
       fullName: data.value.name,
@@ -74,52 +82,39 @@ submitForm(form: NgForm) {
       source:"WEBSITE"
     };
 
-    this.main.submitContact(inputobj).subscribe({
+    this.main
+    .submitContact(inputobj)
+    .pipe(
+      take(1), 
+      finalize(() => {
+        this.isSubmitting = false; 
+      })
+    )
+    .subscribe({
       next: (res) => {
         this.msgtoshow = res.message;
-        this.showsuccessbox = true;
-       
-         data.resetForm();
+        this.status = 'success';
+        data.resetForm();
+
         setTimeout(() => {
-          this.showsuccessbox = false;
-           this.isSubmitting = false;
+          this.status = 'form';
         }, 2000);
-        
-        
       },
       error: (err) => {
-        console.error('submit lead error', err),
-        this.isSubmitting = false;
-         this.status = 'error';
-        // this.msgtoshow = err.error.message;
-        this.msgtoshow = err.error?.message || 'Something went wrong. Please try again.';
+        console.error('submit lead error', err);
 
-        this.showError = true;
-        // setTimeout(() => {
-        //   this.showError = false;
-        //   this.status = 'form';
+        this.msgtoshow =
+          err.error?.message || 'Something went wrong. Please try again.';
 
-        // }, 5000);
+        this.status = 'error';
 
-       }
+        setTimeout(() => {
+          this.status = 'form';
+        }, 5000);
+      }
     });
   }
 
- isLoading(): boolean {
-    return this.status === 'loading';
-  }
-
-  isForm(): boolean {
-    return this.status === 'form';
-  }
-
-  isSuccess(): boolean {
-    return this.status === 'success';
-  }
-
-  isError(): boolean {
-    return this.status === 'error';
-  }
 }
 
 

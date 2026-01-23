@@ -48,21 +48,22 @@
 
                     <div class="col-md-6 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Email address<sup class="position-static">*</sup></div>
-                      <input type="email" name="email" ngModel required minlength="10" maxlength="40"
+                      <input type="email" name="email" ngModel required minlength="10" maxlength="60"
                         pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                         class="form-control form-control-lg feature-subtext" placeholder="Email Address"
                         #email="ngModel">
+              
                       <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
                         <small *ngIf="email.errors?.['required']">Email address is required.</small>
                         <small *ngIf="email.errors?.['pattern']">Please enter a valid email address</small>
                         <small *ngIf="email.errors?.['minlength']">
-                          Please enter a valid email address.
+                          <!-- Please enter a valid email address. -->
                         </small>
-
                         <small *ngIf="email.errors?.['maxlength']">
                           Please enter a valid email address.
                         </small>
                       </div>
+                      
                     </div>
 
                     <div class="col-12 loan-mt-4 col-sm-12">

@@ -17,6 +17,7 @@ export class Main {
   constructor(public http: HttpClient) { }
 
   submitContact(payload: any) : Observable<any>{
+    
     return this.http.post<any>(
       `${this.baseUrl}/contact/submit`,
       payload,
