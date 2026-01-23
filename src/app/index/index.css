@@ -454,7 +454,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-image: url("../../assets/opt_images/loanformbg.webp"); */
   background-size: cover;
   background-position: center;
   overflow: hidden;

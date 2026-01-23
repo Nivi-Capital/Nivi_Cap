@@ -34,33 +34,33 @@
                         #name="ngModel" (input)="main.restrictInput($event, 'text')">
 
                       <div class="text-danger mt-1" *ngIf="name.invalid && name.touched">
-                        <small *ngIf="name.errors?.['required']">Full name is required.</small>
-                        <small *ngIf="name.errors?.['pattern']">Only letters & spaces allowed.</small>
+                        <small *ngIf="name.errors?.['required']">Full name is required</small>
+                        <small *ngIf="name.errors?.['pattern']">Only letters & spaces allowed</small>
                         <small *ngIf="name.errors?.['minlength']">
-                          Please enter a valid name.
+                          Please enter a valid name
                         </small>
 
                         <small *ngIf="name.errors?.['maxlength']">
-                          Please enter a valid name.
+                          Please enter a valid name
                         </small>
                       </div>
                     </div>
 
                     <div class="col-md-6 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Email address<sup class="position-static">*</sup></div>
-                      <input type="email" name="email" ngModel required minlength="10" maxlength="60"
+                      <input type="email" name="email" ngModel required minlength="10" maxlength="40"
                         pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                         class="form-control form-control-lg feature-subtext" placeholder="Email Address"
                         #email="ngModel">
               
                       <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
-                        <small *ngIf="email.errors?.['required']">Email address is required.</small>
-                        <small *ngIf="email.errors?.['pattern']">Please enter a valid email address</small>
+                        <small *ngIf="email.errors?.['required']">Email address is required</small>
+                        <small *ngIf="email.errors?.['pattern' ] && !email.errors?.['minlength']">Please enter a valid email address</small>
                         <small *ngIf="email.errors?.['minlength']">
-                          <!-- Please enter a valid email address. -->
+                          Please enter a valid email address between 10 and 40 characters
                         </small>
                         <small *ngIf="email.errors?.['maxlength']">
-                          Please enter a valid email address.
+                          Please enter a valid email address
                         </small>
                       </div>
                       
@@ -86,8 +86,8 @@
                           maxlength="10" #phone="ngModel" (input)="main.restrictInput($event, 'number')">
                       </div>
                       <div class="text-danger mt-1" *ngIf="phone.invalid && phone.touched">
-                        <small *ngIf="phone.errors?.['required']">Phone number is required.</small>
-                        <small *ngIf="phone.errors?.['pattern']">Please enter a valid 10-digit phone number.</small>
+                        <small *ngIf="phone.errors?.['required']">Phone number is required</small>
+                        <small *ngIf="phone.errors?.['pattern']">Please enter a valid 10-digit phone number</small>
                       </div>
                     </div>
 
@@ -102,11 +102,11 @@
                         <small>Loan amount is required.</small>
                       </div>
                       <div class="text-danger mt-1" *ngIf="amountError === 'min'">
-                        <small>Loan amount cannot be less than ₹1,00,000.</small>
+                        <small>Loan amount cannot be less than ₹1,00,000</small>
                       </div>
 
                       <div class="text-danger mt-1" *ngIf="amountError === 'max'">
-                        <small>Loan amount cannot be greater than ₹1,00,00,000.</small>
+                        <small>Loan amount cannot be greater than ₹1,00,00,000</small>
                       </div>
 
                     </div>
