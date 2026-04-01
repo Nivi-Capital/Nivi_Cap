@@ -17,16 +17,21 @@
 
               <div class="formdata1 loanform">
                 <div class="row loanheadgap d-flex justify-content-center text-left">
-                  <p class="loanhead"> Education Loans for Studying in Australia.</p>
-                  <p class="loanform-subtext">Pursue your dream with:<br class="d-none d-sm-block">
+                  <!-- <p class="loanhead"> Education Loans for Studying in Australia.</p>
+                    <p class="loanform-subtext">Pursue your dream with:<br class="d-none d-sm-block">
                     100% financing | Student-friendly interest rates | Lower interest rates on balance transfer of
-                    existing loans.</p>
+                    existing loans.</p> -->
+                  <p class="loanhead">Apply for an Education loan</p>
+                  <P class="loanform-subtext d-none d-sm-block">100% financing | Student-friendly interest rates | No
+                    collateral | Easy
+                    process </P>
+
                 </div>
                 <div class="row justify-content-center">
 
 
                   <div class="row g-3">
-                    <div class="col-md-6 col-sm-12 loan-mt-4 ">
+                    <div class="col-lg-12 col-sm-12 loan-mt-4 ">
                       <div class="nav-label label-text">Full Name<sup class="position-static">*</sup></div>
 
                       <input type="text" name="name" ngModel required pattern="^[A-Za-z ]+$" minlength="2"
@@ -46,27 +51,9 @@
                       </div>
                     </div>
 
-                    <div class="col-md-6 loan-mt-4 col-sm-12">
-                      <div class="nav-label label-text">Email address<sup class="position-static">*</sup></div>
-                      <input type="email" name="email" ngModel required minlength="10" maxlength="40"
-                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-                        class="form-control form-control-lg feature-subtext" placeholder="Email Address"
-                        #email="ngModel">
-              
-                      <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
-                        <small *ngIf="email.errors?.['required']">Email address is required</small>
-                        <small *ngIf="email.errors?.['pattern' ] && !email.errors?.['minlength']">Please enter a valid email address</small>
-                        <small *ngIf="email.errors?.['minlength']">
-                          Please enter a valid email address between 10 and 40 characters
-                        </small>
-                        <small *ngIf="email.errors?.['maxlength']">
-                          Please enter a valid email address
-                        </small>
-                      </div>
-                      
-                    </div>
 
-                    <div class="col-12 loan-mt-4 col-sm-12">
+
+                    <div class="col-lg-6 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Phone number<sup class="position-static">*</sup></div>
 
                       <div class="phone-wrapper d-flex align-items-center">
@@ -91,18 +78,51 @@
                       </div>
                     </div>
 
+                    <div class="col-lg-6 loan-mt-4 col-sm-12">
+                      <div class="nav-label label-text">Email address<sup class="position-static">*</sup></div>
+                      <input type="email" name="email" ngModel required minlength="10" maxlength="40"
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        class="form-control form-control-lg feature-subtext" placeholder="Email Address"
+                        #email="ngModel">
 
+                      <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
+                        <small *ngIf="email.errors?.['required']">Email address is required</small>
+                        <small *ngIf="email.errors?.['pattern' ] && !email.errors?.['minlength']">Please enter a valid
+                          email address</small>
+                        <small *ngIf="email.errors?.['minlength']">
+                          Please enter a valid email address between 10 and 40 characters
+                        </small>
+                        <small *ngIf="email.errors?.['maxlength']">
+                          Please enter a valid email address
+                        </small>
+                      </div>
 
-                    <div class="col-12 loan-mt-4 col-sm-12">
+                    </div>
+
+                    <!-- loan type -->
+                    <div class="col-lg-6 loan-mt-4 col-sm-12">
+                      <div class="nav-label label-text">Loan Type<sup class="position-static">*</sup></div>
+                      <select class="form-control form-control-lg feature-subtext feature-subtext-dropdown"
+                        name="loanType" required [(ngModel)]="selectedLoanType">
+                        <option value="">Select Loan Type</option>
+                        <option *ngFor="let item of dataList; trackBy: trackByCode" [value]="item.name">
+                          {{item.name}}
+                        </option>
+                      </select>
+                    </div>
+
+                    <!-- loan amount -->
+                    <div class="col-lg-6 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Loan Amount Required (₹)<sup class="">*</sup></div>
                       <input type="text" name="loanAmount" [(ngModel)]="loanAmount" required maxlength="11"
                         class="form-control form-control-lg feature-subtext" (input)="formatAmount()"
-                        placeholder="Enter Amount" #loanAmountctrl="ngModel" (input)="main.restrictInput($event, 'number')">
+                        placeholder="Enter Amount" #loanAmountctrl="ngModel"
+                        (input)="main.restrictInput($event, 'number')">
                       <div class="text-danger mt-1" *ngIf="loanAmountctrl.invalid && loanAmountctrl.touched">
                         <small>Loan amount is required.</small>
                       </div>
                       <div class="text-danger mt-1" *ngIf="amountError === 'min'">
-                        <small>Loan amount cannot be less than ₹1,00,000</small>
+                        <small>Loan amount cannot be less than ₹10,00,000</small>
                       </div>
 
                       <div class="text-danger mt-1" *ngIf="amountError === 'max'">
@@ -111,33 +131,76 @@
 
                     </div>
 
-                    <div class="col-12 col-sm-12 loan-mt-4">
-                      <div class="form-check loan-form-check d-flex">
+                    <!-- pincode -->
+                    <div class="col-lg-4 loan-mt-4 col-sm-12 position-relative">
+                      <div class="nav-label label-text mb-2">Pincode<sup class="position-static">*</sup></div>
 
-                        <input type="checkbox" id="agreeCheck" class="form-check-input" (change)="onAgreeChange($event)"
-                          name="agree" ngModel required #agree="ngModel" />
+                      <input type="text" class="form-control form-control-lg feature-subtext pincode-input"
+                        placeholder="Enter Pincode" maxlength="6" [(ngModel)]="displayPincodeValue"
+                        (input)="onPincodeInput($event)" (keyup.enter)="searchPincodes()" name="pincodeInput"
+                        #pincodeInputRef>
 
-                        <label class="form-check-label consent-text feature-subtext" for="agreeCheck">
-                          I consent to being contacted by team NiviCap and their lending partners. I also understand my
-                          information will be used safely as per the <span><a href="/privacy-policy"
-                              target="_blank">Privacy Policy</a></span>.
-                          Nivi Capital is not a bank and does not hold a banking or lending license. All lending
-                          products are underwritten by our lending partners.
-                        </label>
+                      <div *ngIf="pincodeList.length > 0" class="pincode-dropdown-overlay">
+
+                        <select #pincodeSelectRef class="pincode-dropdown-open" [size]="pincodeList.length + 1"
+                          [(ngModel)]="selectedPincode" (change)="onPincodeSelect($event)" (focus)="onDropdownFocus()">
+
+                          <option *ngFor="let item of pincodeList; trackBy: trackByPincode" [value]="item.officename">
+                            {{item.pincode}} - {{item.officename}}
+                          </option>
+                        </select>
                       </div>
-                      <div class="text-danger mt-1" *ngIf="  agree.invalid && (agree.touched || loancontactForm.submitted)">
-                        <small>Please agree to the terms to proceed.</small>
+
+                      <div class="legal-subhead subhead-text" *ngIf="displayofficename">
+                        {{displayofficename}}
+                      </div>
+
+                      <div *ngIf="pincodeError" class="text-danger mt-1">
+                        {{pincodeError}}
                       </div>
                     </div>
 
 
 
+                    <!-- year of intake -->
+                    <div class="col-lg-4 loan-mt-4 col-sm-12 ">
+                      <div class="nav-label label-text">Year Of Intake<sup class="position-static">*</sup></div>
+                      <div class="pincode-dropdown-overlay position-relative">
+                        <select class="form-control form-control-lg feature-subtext feature-subtext-dropdown "
+                          name="yearOfIntake" required [(ngModel)]="selectedYearOfIntake" (change)="onYearChange()">
+                          <option value="0">Select Year</option>
+                          <option *ngFor="let year of yearList; trackBy: trackByYear" [value]="year">
+                            {{year}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                    
+                    
+                    <!-- month of intake -->
+                    <div class="col-lg-4 loan-mt-4 col-sm-12">
+                      <div class="nav-label label-text">Month Of Intake<sup class="position-static">*</sup></div>
+                      <div class="pincode-dropdown-overlay position-relative">
+
+                        <select class="form-select form-select-lg feature-subtext feature-subtext-dropdown"
+                          name="monthOfIntake" required [(ngModel)]="monthofIntakeSelected">
+                          <option value="">Select Month</option>
+                          <option *ngFor="let item of monthofIntakeList; trackBy: trackByCode" [value]="item.code">
+                            {{item.name}}
+                          </option>
+
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- submit -->
                     <div class="col-12 col-sm-12 text-center loan-mt-4 ">
 
 
                       <button type="submit"
                         class="btn btn-danger btn-lg verifybtn d-flex justify-content-center align-items-center"
-                        [disabled]="loancontactForm.invalid || amountError || isLoading()">
+                        [disabled]="loancontactForm.invalid || amountError || isLoading() ">
 
                         <ng-container *ngIf="!isLoading(); else loadingTpl">
                           <span>Submit</span>
@@ -150,11 +213,41 @@
                       </button>
 
                     </div>
+                    <!-- consent -->
+                    <div class="col-12 col-sm-12 loan-mt-4">
+                      <div class="form-check loan-form-check d-flex">
+
+                        <input type="checkbox" id="agreeCheck" class="form-check-input" (change)="onAgreeChange($event)"
+                          name="agree" ngModel required #agree="ngModel" />
+
+                        <label class="form-check-label consent-text feature-subtext" for="agreeCheck1">
+                          I consent to being contacted by team NiviCap and their lending partners. I also understand
+                          my information will be used safely as per the
+                          <span><a href="/privacy-policy" target="_blank">Privacy Policy</a></span>.<span
+                            (click)="toggleExpand(true)" *ngIf="!isExpanded"><b>Read more</b></span>
+
+                          <span *ngIf="isExpanded" class="expanded-content">
+                            Nivi Capital is not a bank and does not hold a banking or lending license.
+                            All lending products are underwritten by our lending partners.
+                            <span (click)="toggleExpand(false)"><b>Read less</b></span>
+                          </span>
+                        </label>
+
+
+
+
+                      </div>
+                      <div class="text-danger mt-1" *ngIf="  agree.invalid && ( loancontactForm.submitted)">
+                        <small>Please agree to the terms to proceed.</small>
+                      </div>
+                    </div>
+
 
                   </div>
                 </div>
               </div>
             </form>
+
 
 
             <!-- Loading Overlay -->
@@ -585,8 +678,7 @@
                 </p>
 
                 <div class="app-buttons on-card">
-                  <a href="https://nivicap.com/"><img src="assets/images/appleapp.svg" alt="appleapp" width="41"
-                      height="50"> </a>
+                  <a href="https://nivicap.com/"><img src="assets/images/appleapp.svg" alt="appleapp"> </a>
                   <a href="https://nivicap.com/"><img src="assets/images/googleapp.svg" alt="googleapp"> </a>
                 </div>
               </div>
