@@ -144,6 +144,17 @@
   line-height: 22px;
   letter-spacing: 0.16px;
 }
+.consent-text{
+   @extend .text-common;
+  color: #25262F;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.14px;
+  font-weight: 400;
+
+
+
+}
 .loanform-subtext {
   @extend .text-common;
   color: #666771;

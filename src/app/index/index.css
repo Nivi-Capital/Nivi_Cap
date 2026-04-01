@@ -467,7 +467,7 @@ body {
   top: 50%;
   /* right: 10%; */
   transform: translateY(-50%);
-  max-width: 700px;
+  max-width: 747px;
 
 }
 
@@ -3188,14 +3188,15 @@ body {
   background: white;
   border: 1px solid #ced4da;
   border-radius: 0.375rem;
-  max-height: 250px;
+  /* max-height: 250px; */
   overflow: hidden;
+  width: stretch!important;
 }
 
 .pincode-dropdown-open {
   width: 100%;
   height: auto;
-  max-height: 250px !important;
+  /* max-height: 250px !important; */
   overflow-y: auto !important;
   border: none !important;
   outline: none !important;

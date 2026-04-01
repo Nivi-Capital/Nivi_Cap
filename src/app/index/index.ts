@@ -103,6 +103,8 @@ selectedPincodeDisplay: string = '';
     // this.selectedYearOfIntake = currentYear;
   }
   onYearChange() {
+     this.monthofIntakeList = []; 
+      this.monthofIntakeSelected = '';
     if (this.selectedYearOfIntake > 0) {
       this.generateMonthList();
     } else {
@@ -251,7 +253,8 @@ selectedPincodeDisplay: string = '';
       yearOfIntake: data.value.yearOfIntake,
       monthOfIntake: data.value.monthOfIntake,
       consent: this.isAgreed === true ? 1 : 0,
-      pinCodeMasterId: this.pincodeID,
+      pinCodeMasterId: this.pincodeID?? '',
+      pinCode: data.value.pincodeInput,
 
       // source: "WEBSITE"   //live
       source: "CAMPAIGN"      //
@@ -266,6 +269,10 @@ selectedPincodeDisplay: string = '';
         this.msgtoshow = res.message;
         data.resetForm();
         this.loanAmount = '';
+        this.selectedLoanType='';
+        this.selectedYearOfIntake=0;
+        this.monthofIntakeSelected='';
+        this.clearPincodeSelection();
         setTimeout(() => {
           this.status = 'form';
           this.showsuccess = false;
@@ -299,8 +306,11 @@ selectedPincodeDisplay: string = '';
 
   async searchPincodes() {
     if (this.pincodeInput.length !== 6 || this.isPincodeLoading) {
+      this.displayofficename = '';
+      this.pincodeID = '';
       return;
     }
+
 
     this.isPincodeLoading = true;
     this.pincodeError = '';
@@ -314,7 +324,10 @@ selectedPincodeDisplay: string = '';
          setTimeout(() => {
         this.openPincodeDropdown();
       }, 50);
-
+      if(this.pincodeList.length === 0) {
+        this.displayofficename = '';
+        this.pincodeID = '';
+      }
       },
       error: (err) => {
         this.isPincodeLoading = false;

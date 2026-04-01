@@ -65,9 +65,9 @@ ngAfterViewInit() {
 
  isContentPage() {
     return (
-      this.router.url === '/terms-condition' ||
-      this.router.url === '/privacy-policy' ||
-      this.router.url === '/news'
+      this.router.url === '/testUAT/terms-condition' ||
+      this.router.url === '/testUAT/privacy-policy' ||
+      this.router.url === '/testUAT/news'
     );
   }
 

@@ -137,8 +137,8 @@
 
                       <input type="text" class="form-control form-control-lg feature-subtext pincode-input"
                         placeholder="Enter Pincode" maxlength="6" [(ngModel)]="displayPincodeValue"
-                        (input)="onPincodeInput($event)" (keyup.enter)="searchPincodes()" name="pincodeInput"
-                        #pincodeInputRef>
+                        (input)="onPincodeInput($event);main.restrictInput($event, 'number')" (keyup.enter)="searchPincodes()" name="pincodeInput"
+                        #pincodeInputRef >
 
                       <div *ngIf="pincodeList.length > 0" class="pincode-dropdown-overlay">
 
@@ -165,7 +165,7 @@
                     <!-- year of intake -->
                     <div class="col-lg-4 loan-mt-4 col-sm-12 ">
                       <div class="nav-label label-text">Year Of Intake<sup class="position-static">*</sup></div>
-                      <div class="pincode-dropdown-overlay position-relative">
+                      <div class="pincode-dropdown-overlay1 position-relative">
                         <select class="form-control form-control-lg feature-subtext feature-subtext-dropdown "
                           name="yearOfIntake" required [(ngModel)]="selectedYearOfIntake" (change)="onYearChange()">
                           <option value="0">Select Year</option>
@@ -181,7 +181,7 @@
                     <!-- month of intake -->
                     <div class="col-lg-4 loan-mt-4 col-sm-12">
                       <div class="nav-label label-text">Month Of Intake<sup class="position-static">*</sup></div>
-                      <div class="pincode-dropdown-overlay position-relative">
+                      <div class="pincode-dropdown-overlay1 position-relative">
 
                         <select class="form-select form-select-lg feature-subtext feature-subtext-dropdown"
                           name="monthOfIntake" required [(ngModel)]="monthofIntakeSelected">
@@ -200,7 +200,7 @@
 
                       <button type="submit"
                         class="btn btn-danger btn-lg verifybtn d-flex justify-content-center align-items-center"
-                        [disabled]="loancontactForm.invalid || amountError || isLoading() ">
+                        [disabled]="loancontactForm.invalid || amountError || isLoading() || !(pincodeInput.length === 6) ">
 
                         <ng-container *ngIf="!isLoading(); else loadingTpl">
                           <span>Submit</span>
@@ -220,14 +220,15 @@
                         <input type="checkbox" id="agreeCheck" class="form-check-input" (change)="onAgreeChange($event)"
                           name="agree" ngModel required #agree="ngModel" />
 
-                        <label class="form-check-label consent-text feature-subtext" for="agreeCheck1">
+                        <label class="form-check-label consent-text feature-subtext1" for="agreeCheck1">
                           I consent to being contacted by team NiviCap and their lending partners. I also understand
                           my information will be used safely as per the
-                          <span><a href="/privacy-policy" target="_blank">Privacy Policy</a></span>.<span
+                          <span><a href="/testUAT/privacy-policy" target="_blank">Privacy Policy</a></span>. Nivi Capital 
+                          <span
                             (click)="toggleExpand(true)" *ngIf="!isExpanded"><b>Read more</b></span>
 
                           <span *ngIf="isExpanded" class="expanded-content">
-                            Nivi Capital is not a bank and does not hold a banking or lending license.
+                           is not a bank and does not hold a banking or lending license.
                             All lending products are underwritten by our lending partners.
                             <span (click)="toggleExpand(false)"><b>Read less</b></span>
                           </span>
