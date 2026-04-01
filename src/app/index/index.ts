@@ -251,7 +251,7 @@ selectedPincodeDisplay: string = '';
       yearOfIntake: data.value.yearOfIntake,
       monthOfIntake: data.value.monthOfIntake,
       consent: this.isAgreed === true ? 1 : 0,
-      // pinCodeMasterId: this.pincodeID,
+      pinCodeMasterId: this.pincodeID,
 
       // source: "WEBSITE"   //live
       source: "CAMPAIGN"      //
@@ -310,7 +310,6 @@ selectedPincodeDisplay: string = '';
       next: (res) => {
         console.log(res);
         this.pincodeList = res;
-        // this.pincodeID = res?.[0]?.id || '';
         this.isPincodeLoading = false;
          setTimeout(() => {
         this.openPincodeDropdown();
@@ -370,6 +369,7 @@ onPincodeSelect(selectedValue: any): void {
     // this.displayPincodeValue = `${selectedItem.pincode} - ${selectedItem.officename}`;
         this.displayPincodeValue = `${selectedItem.pincode}`;
         this.displayofficename = `${selectedItem.officename}`;
+        this.pincodeID = selectedItem.id;
 
     this.pincodeID = selectedItem.id || '';
   }
