@@ -146,7 +146,7 @@
                           [(ngModel)]="selectedPincode" (change)="onPincodeSelect($event)" (focus)="onDropdownFocus()">
 
                           <option *ngFor="let item of pincodeList; trackBy: trackByPincode" [value]="item.officename">
-                            {{item.pincode}} - {{item.officename}}
+                            {{item.officename}}
                           </option>
                         </select>
                       </div>

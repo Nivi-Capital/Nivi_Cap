@@ -106,7 +106,7 @@ selectedPincodeDisplay: string = '';
     if (this.selectedYearOfIntake > 0) {
       this.generateMonthList();
     } else {
-      this.monthofIntakeList = []; // Clear months when no year selected
+      this.monthofIntakeList = []; 
       this.monthofIntakeSelected = '';
     }
   }
@@ -323,20 +323,7 @@ selectedPincodeDisplay: string = '';
     });
   }
 
-  openPincodeDropdown1() {
-    if (this.pincodeSelectRef && this.pincodeList.length > 0) {
-      // Focus and trigger dropdown open
-      this.pincodeSelectRef.nativeElement.focus();
-
-      // Programmatically open dropdown (works in most browsers)
-      const event = new MouseEvent('mousedown', {
-        bubbles: true,
-        cancelable: true,
-        view: window
-      });
-      this.pincodeSelectRef.nativeElement.dispatchEvent(event);
-    }
-  }
+ 
 
  openPincodeDropdown() {
   if (this.pincodeSelectRef && this.pincodeList.length > 0) {
@@ -399,13 +386,6 @@ clearPincodeSelection() {
     return item.code;
   }
 
-  // Clear pincode data
-  clearPincode() {
-    this.pincodeInput = '';
-    this.pincodeList = [];
-    this.selectedPincode = '';
-    this.pincodeError = '';
-  }
 
   toggleExpand(autoCheck: boolean = false) {
     this.isExpanded = !this.isExpanded;
