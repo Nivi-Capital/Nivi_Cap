@@ -29,9 +29,7 @@
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ],
-            "outputPath": "dist/static",
-            "baseHref": "/testUAT/",
-            "deployUrl": "/testUAT/"
+            "outputPath": "dist/static"
 
 
           },

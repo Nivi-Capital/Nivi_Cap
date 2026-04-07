@@ -4,6 +4,7 @@ import { Component, HostListener, NgZone, ChangeDetectorRef, OnInit, ElementRef,
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Main } from '../service/main';
+import { environment } from '../../environments/environment.prod';
 
 type FormStatusType = 'form' | 'loading' | 'success' | 'error';
 
@@ -30,7 +31,7 @@ export class Index implements OnInit {
   loanAmount: string = '';
   amountError = "";
 
-  isAgreed: boolean = false;
+  isAgreed: boolean = true;
 
   showsuccess: boolean = false;
   showError: boolean = false;
@@ -256,8 +257,9 @@ selectedPincodeDisplay: string = '';
       pinCodeMasterId: this.pincodeID?? '',
       pinCode: data.value.pincodeInput,
 
-      // source: "WEBSITE"   //live
-      source: "CAMPAIGN"      //
+        source: "WEBSITE"   //live
+        // source: "CAMPAIGN"      //testUAT
+      // source: environment.checkenv   
     };
 
     console.log(inputobj);
@@ -272,6 +274,7 @@ selectedPincodeDisplay: string = '';
         this.selectedLoanType='';
         this.selectedYearOfIntake=0;
         this.monthofIntakeSelected='';
+         this.displayofficename = '';
         this.clearPincodeSelection();
         setTimeout(() => {
           this.status = 'form';
@@ -342,9 +345,8 @@ selectedPincodeDisplay: string = '';
   if (this.pincodeSelectRef && this.pincodeList.length > 0) {
     const select = this.pincodeSelectRef.nativeElement;
     
-    // Set height to 250px
-    select.style.height = '250px';
-    select.style.maxHeight = '250px';
+    select.style.height = 'auto';
+    select.style.maxHeight = 'auto';
     select.style.overflowY = 'auto';
     
     // Show all options

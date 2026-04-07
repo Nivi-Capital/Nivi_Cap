@@ -218,7 +218,7 @@
                       <div class="form-check loan-form-check d-flex">
 
                         <input type="checkbox" id="agreeCheck" class="form-check-input" (change)="onAgreeChange($event)"
-                          name="agree" ngModel required #agree="ngModel" />
+                          name="agree" [(ngModel)]="isAgreed" required #agree="ngModel" />
 
                         <label class="form-check-label consent-text feature-subtext1" for="agreeCheck1">
                           I consent to being contacted by team NiviCap and their lending partners. I also understand
@@ -380,19 +380,19 @@
         <div class="row align-items-center g-md-4">
           <div class="col-lg-4 col-md-12 col-12 p-lg-3 ">
             <div class="image-card">
-              <img src="assets/opt_images/about1.webp" loading="lazy" alt="Office">
+              <img src="assets/images/1.jpg" loading="lazy" alt="Office">
             </div>
           </div>
 
           <div class="col-lg-4 col-md-12 col-12 p-lg-3 ">
             <div class="image-card ">
-              <img src="assets/opt_images/about2.webp" loading="lazy" alt="Workspace">
+              <img src="assets/images/2.jpg" loading="lazy" alt="Workspace">
             </div>
           </div>
 
           <div class="col-lg-4 col-md-12 col-12 p-lg-3 ">
             <div class="image-card">
-              <img src="assets/opt_images/about3.webp" loading="lazy" alt="Office">
+              <img src="assets/images/3.jpg" loading="lazy" alt="Office">
             </div>
           </div>
         </div>
