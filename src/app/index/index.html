@@ -137,8 +137,8 @@
 
                       <input type="text" class="form-control form-control-lg feature-subtext pincode-input"
                         placeholder="Enter Pincode" maxlength="6" [(ngModel)]="displayPincodeValue"
-                        (input)="onPincodeInput($event);main.restrictInput($event, 'number')" (keyup.enter)="searchPincodes()" name="pincodeInput"
-                        #pincodeInputRef >
+                        (input)="onPincodeInput($event);main.restrictInput($event, 'number')"
+                        (keyup.enter)="searchPincodes()" name="pincodeInput" #pincodeInputRef>
 
                       <div *ngIf="pincodeList.length > 0" class="pincode-dropdown-overlay">
 
@@ -223,12 +223,11 @@
                         <label class="form-check-label consent-text feature-subtext1" for="agreeCheck1">
                           I consent to being contacted by team NiviCap and their lending partners. I also understand
                           my information will be used safely as per the
-                          <span><a href="/testUAT/privacy-policy" target="_blank">Privacy Policy</a></span>. Nivi Capital 
-                          <span
-                            (click)="toggleExpand(true)" *ngIf="!isExpanded"><b>Read more</b></span>
+                          <span><a href="/privacy-policy" target="_blank">Privacy Policy</a></span>. Nivi Capital
+                          <span (click)="toggleExpand(true)" *ngIf="!isExpanded"><b>Read more</b></span>
 
                           <span *ngIf="isExpanded" class="expanded-content">
-                           is not a bank and does not hold a banking or lending license.
+                            is not a bank and does not hold a banking or lending license.
                             All lending products are underwritten by our lending partners.
                             <span (click)="toggleExpand(false)"><b>Read less</b></span>
                           </span>
@@ -310,23 +309,43 @@
                 <div class="right-bar">
 
                   <ul class="navbar-nav align-items-center justify-content-center mb-2 mb-lg-0 ">
-                    <li class="nav-item mx-2" [class.active]="activeSection === 'home'">
+                    <li class="nav-item mx-2" [class.active]="router.url === '/' && activeSection === 'home'">
                       <a class="nav-link nav-label " (click)="scrollToSection('home')">HOME</a>
                     </li>
-                    <li class="nav-item mx-2" [class.active]="activeSection === 'about'">
+                    <li class="nav-item mx-2" [class.active]="router.url === '/' && activeSection === 'about'">
                       <a class="nav-link nav-label" (click)="scrollToSection('about')">ABOUT US</a>
                     </li>
-                    <li class="nav-item mx-2" [class.active]="activeSection === 'features'">
+                    <li class="nav-item mx-2" [class.active]="router.url === '/' && activeSection === 'features'">
                       <a class="nav-link nav-label" (click)="scrollToSection('features')">FEATURES</a>
                     </li>
-                    <li class="nav-item mx-2" [class.active]="activeSection === 'product'">
+                    <li class="nav-item mx-2" [class.active]="router.url === '/' && activeSection === 'product'">
                       <a class="nav-link nav-label" (click)="scrollToSection('product')">PRODUCT</a>
                     </li>
-                    <li class="nav-item mx-2">
+                    <!-- <li class="nav-item mx-2">
                       <a class="nav-link nav-label" routerLink="/news">NEWS & MEDIA</a>
+                    </li>
+                     <li class="nav-item mx-2">
+                      <a class="nav-link nav-label" routerLink="/career">CAREER</a>
                     </li>
                     <li class="nav-item mx-2">
                       <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
+                    </li> -->
+                    <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      <a class="nav-link nav-label" routerLink="/news" (click)="clearActiveSection()">
+                        NEWS & MEDIA
+                      </a>
+                    </li>
+
+                    <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      <a class="nav-link nav-label" routerLink="/career" (click)="clearActiveSection()">
+                        CAREER
+                      </a>
+                    </li>
+
+                    <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                      <a class="nav-link nav-label" routerLink="/contact" (click)="clearActiveSection()">
+                        CONTACT
+                      </a>
                     </li>
 
                   </ul>

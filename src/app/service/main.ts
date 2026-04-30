@@ -11,8 +11,8 @@ export class Main {
   
   //  private baseUrl = "https://nivione-uat.nivicap.com/nivicapstage/api/public/leads" 
   status: string | undefined;
-  //  private baseUrl = "http://192.168.5.46:8081/nivicapstage/api/public/leads"
-  private baseUrl = environment.apiBaseUrl;
+   private baseUrl = "http://192.168.5.46:8080/nivicapstage/api/public/leads"
+  // private baseUrl = environment.apiBaseUrl;
 
   constructor(public http: HttpClient) { }
 
@@ -31,6 +31,13 @@ export class Main {
     );
   }
 
+   submitResume(payload: any) : Observable<any>{
+    
+    return this.http.post<any>(
+      `${this.baseUrl}/submit-cv`,
+      payload,
+    );
+  }
   checkPincode(data:any) : Observable<any>{
     return this.http.get<any>(
       `${this.baseUrl}/getByPincode?pincode=${data}`

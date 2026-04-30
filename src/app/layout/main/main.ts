@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, HostListener } from '@angular/core';
-import { RouterOutlet,Router, RouterLink, NavigationEnd } from '@angular/router';
+import { ChangeDetectorRef, Component, HostListener, NgZone } from '@angular/core';
+import { RouterOutlet,Router, RouterLink, NavigationEnd, RouterModule } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 
 @Component({
   selector: 'app-main',
-  imports: [RouterOutlet,CommonModule,RouterLink],
+  imports: [RouterOutlet,CommonModule,RouterLink,RouterModule],
   standalone:true,
   templateUrl: './main.html',
   styleUrl: './main.css',
@@ -18,10 +18,11 @@ isScrolled = false;
 activeSection: string = '';
 isNavbarCollapsed = true;
 isNavbarOpen = false;
+  private observer?: IntersectionObserver;
 
 
   
-constructor(private http:HttpClient,public router: Router){
+constructor(private http:HttpClient,public router: Router,private ngZone: NgZone,private cdr: ChangeDetectorRef){
     this.router.events
   .pipe(filter(event => event instanceof NavigationEnd))
   .subscribe(() => {
@@ -41,13 +42,29 @@ constructor(private http:HttpClient,public router: Router){
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
   });
+  this.router.events.subscribe(() => {
+
+    if (this.router.url !== '/') {
+      this.activeSection = '';
+      this.destroyObserver();
+    }
+    if (this.router.url === '/') {
+      setTimeout(() => this.initObserver(), 0);
+    }
+
+  });
+
 
 }
+clearActiveSection() {
+  this.activeSection = '';
+}
+
 toggleNavbar() {
     this.isNavbarCollapsed = !this.isNavbarCollapsed;
   }
   
-ngAfterViewInit() {
+ngAfterViewInit123() {
   const sections = document.querySelectorAll("section");
 
   const observer = new IntersectionObserver((entries) => {
@@ -65,9 +82,9 @@ ngAfterViewInit() {
 
  isContentPage() {
     return (
-      this.router.url === '/testUAT/terms-condition' ||
-      this.router.url === '/testUAT/privacy-policy' ||
-      this.router.url === '/testUAT/news'
+      this.router.url === '/terms-condition' ||
+      this.router.url === '/privacy-policy' ||
+      this.router.url === '/news'
     );
   }
 
@@ -94,6 +111,34 @@ ngAfterViewInit() {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+ private initObserver(): void {
+  if (this.observer || this.router.url !== '/') return;
+
+  const sections = document.querySelectorAll('#home, #about, #features, #product');
+
+  this.observer = new IntersectionObserver(entries => {
+    // HARD exit if not on home (extra safety)
+    if (this.router.url !== '/') return;
+
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        this.ngZone.run(() => {
+          this.activeSection = entry.target.id;
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }, { threshold: 0.6 });
+
+  sections.forEach(section => this.observer!.observe(section));
+}
+
+private destroyObserver(): void {
+  if (this.observer) {
+    this.observer.disconnect();
+    this.observer = undefined;
+  }
+}
 
 ngOnDestroy() {
     this.isNavbarOpen = false;

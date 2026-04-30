@@ -1,5 +1,5 @@
 <div class="container"
-  *ngIf="router.url === '/testUAT/terms-condition' || router.url === '/testUAT/privacy-policy' || router.url === '/testUAT/contact' || router.url === '/testUAT/news'">
+  *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news' || router.url === '/career'">
   <nav class="navbar navbar-expand-lg navbar-light bg-white  bottom-nav fixed-top">
     <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
       <div class="nav-logo d-flex align-items-center" routerLink="/">
@@ -19,24 +19,59 @@
 
 
           <ul class="navbar-nav align-items-center justify-content-center mb-2 mb-lg-0 ">
-            <li class="nav-item mx-2" [class.active]="activeSection === 'home'">
+            <li class="nav-item mx-2" [class.active]=" activeSection === 'home'">
               <a class="nav-link nav-label " (click)="goToSection('home')">HOME</a>
             </li>
-            <li class="nav-item mx-2" [class.active]="activeSection === 'about'">
+            <li class="nav-item mx-2" [class.active]=" activeSection === 'about'">
               <a class="nav-link nav-label" (click)="goToSection('about')">ABOUT US</a>
             </li>
-            <li class="nav-item mx-2" [class.active]="activeSection === 'features'">
+            <li class="nav-item mx-2" [class.active]=" activeSection === 'features'">
               <a class="nav-link nav-label" (click)="goToSection('features')">FEATURES</a>
             </li>
-            <li class="nav-item mx-2" [class.active]="activeSection === 'product'">
+            <li class="nav-item mx-2" [class.active]=" activeSection === 'product'">
               <a class="nav-link nav-label" (click)="goToSection('product')">PRODUCT</a>
             </li>
-            <li class="nav-item mx-2">
+            <!-- <li class="nav-item mx-2">
               <a class="nav-link nav-label" routerLink="/news">NEWS & MEDIA</a>
             </li>
             <li class="nav-item mx-2">
-              <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
+              <a class="nav-link nav-label" routerLink="/career">CAREER</a>
             </li>
+            <li class="nav-item mx-2">
+              <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
+            </li> -->
+           <li class="nav-item mx-2"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">
+  <a class="nav-link nav-label"
+     routerLink="/news"
+     (click)="clearActiveSection()">
+    NEWS & MEDIA
+  </a>
+</li>
+
+<li class="nav-item mx-2"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">
+  <a class="nav-link nav-label"
+     routerLink="/career"
+     (click)="clearActiveSection()">
+    CAREER
+  </a>
+</li>
+
+<li class="nav-item mx-2"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">
+  <a class="nav-link nav-label"
+     routerLink="/contact"
+     (click)="clearActiveSection()">
+    CONTACT
+  </a>
+</li>
+
+
+
 
           </ul>
           <!-- <div class="btn d-none d-lg-block d-flex justify-content-end p-0">
@@ -87,7 +122,7 @@
             <div class="d-flex flex-column flex-md-row gap-0 gap-md-2">
               <a href="tel:+918655854651"> M. 8655854651</a>
 
-              <span class="d-none d-md-inline">  |  </span>
+              <span class="d-none d-md-inline"> | </span>
               <a href="mailto:sales@nivicap.com"> E. sales@nivicap.com</a>
             </div>
           </div>
@@ -103,14 +138,17 @@
               <li><a class="text-normal" (click)="goToSection('features')">FEATURES</a></li>
               <li><a class="text-normal" (click)="goToSection('product')">PRODUCTS</a></li>
               <li><a class="text-normal" routerLink="/news">NEWS & MEDIA</a></li>
+              <li><a class="text-normal" routerLink="/career">CAREER</a></li>
               <li><a class="text-normal" routerLink="/contact">CONTACT US</a></li>
             </ul>
           </div>
 
           <div class="d-flex footer-app-buttons mt-3 mt-lg-0 ">
 
-            <a href="https://nivicap.com/"><img class="footer-link-img" src="assets/images/appleapp.svg" width="41" height="50"> </a>
-            <a href="https://nivicap.com/"><img class="footer-link-img" src="assets/images/googleapp.svg" width="41" height="50"> </a>
+            <a href="https://nivicap.com/"><img class="footer-link-img" src="assets/images/appleapp.svg" width="41"
+                height="50"> </a>
+            <a href="https://nivicap.com/"><img class="footer-link-img" src="assets/images/googleapp.svg" width="41"
+                height="50"> </a>
 
           </div>
         </div>
@@ -189,8 +227,8 @@
           </div>
           <div class="col-md-4 mb-2 mb-md-0">
             <div class="footer-links justify-content-md-end">
-              <a class="selectedtab-label" routerLink="/testUAT/terms-condition">Terms of Service</a>
-              <a class="selectedtab-label" routerLink="/testUAT/privacy-policy">Privacy Policy</a>
+              <a class="selectedtab-label" routerLink="/terms-condition">Terms of Service</a>
+              <a class="selectedtab-label" routerLink="/privacy-policy">Privacy Policy</a>
               <!-- <a class="selectedtab-label" href="#cookies">Cookies</a> -->
             </div>
           </div>

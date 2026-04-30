@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component, HostListener, NgZone, ChangeDetectorRef, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { Main } from '../service/main';
 import { environment } from '../../environments/environment.prod';
 
@@ -11,7 +11,7 @@ type FormStatusType = 'form' | 'loading' | 'success' | 'error';
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, RouterLink],
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterLink,RouterModule],
   templateUrl: './index.html',
   styleUrls: ['./index.css'],
 })
@@ -79,8 +79,23 @@ displayofficename: string = '';
 selectedPincodeDisplay: string = '';
 
 
-  constructor(private http: HttpClient, public main: Main, private ngZone: NgZone, private cdr: ChangeDetectorRef) {
+  constructor(private http: HttpClient, public main: Main, private ngZone: NgZone, private cdr: ChangeDetectorRef,public router: Router) {
     this.status = 'form';
+    
+
+this.router.events.subscribe(() => {
+
+    if (this.router.url !== '/') {
+      this.activeSection = '';
+      this.destroyObserver();
+    }
+    if (this.router.url === '/') {
+      setTimeout(() => this.initObserver(), 0);
+    }
+
+  });
+
+
   }
   ngOnInit(): void {
     this.displayPincodeValue = '';
@@ -92,6 +107,10 @@ selectedPincodeDisplay: string = '';
 
 
   }
+
+  clearActiveSection() {
+  this.activeSection = '';
+}
 
   generateYearList() {
     const currentYear = new Date().getFullYear();
@@ -155,25 +174,7 @@ selectedPincodeDisplay: string = '';
     return year;
   }
 
-  ngAfterViewInit() {
-    if (window.location.pathname !== '/') return;
 
-    const sections = document.querySelectorAll("section");
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          this.ngZone.run(() => {
-            this.activeSection = entry.target.id;
-            this.cdr.detectChanges();
-          });
-        }
-      });
-    }, {
-      threshold: 0.6 // 60% of section visible → active
-    });
-
-    sections.forEach(section => this.observer?.observe(section));
-  }
 
 
 
@@ -181,6 +182,13 @@ selectedPincodeDisplay: string = '';
   // Scroll to a specific section
   scrollToSection(sectionId: string): void {
     this.activeSection = sectionId;
+    
+this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+    this.activeSection = sectionId;
+    // scroll logic here
+  });
+
+
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -442,4 +450,34 @@ clearPincodeSelection() {
   isError(): boolean {
     return this.status === 'error';
   }
+
+  private initObserver(): void {
+  if (this.observer || this.router.url !== '/') return;
+
+  const sections = document.querySelectorAll('#home, #about, #features, #product');
+
+  this.observer = new IntersectionObserver(entries => {
+    // HARD exit if not on home (extra safety)
+    if (this.router.url !== '/') return;
+
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        this.ngZone.run(() => {
+          this.activeSection = entry.target.id;
+          this.cdr.detectChanges();
+        });
+      }
+    });
+  }, { threshold: 0.6 });
+
+  sections.forEach(section => this.observer!.observe(section));
+}
+
+private destroyObserver(): void {
+  if (this.observer) {
+    this.observer.disconnect();
+    this.observer = undefined;
+  }
+}
+
 }
