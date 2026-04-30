@@ -90,7 +90,7 @@
                 <!-- Modal -->
                 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered  modal-lg">
+                    <div class="modal-dialog modal-dialog-centered  modal-lg ">
                         <div class="modal-content">
                             <button class="modal-close-btn" (click)="closeModal()" data-bs-dismiss="modal">
                                 <svg width="44" height="44" viewBox="0 0 48 48">
@@ -107,7 +107,7 @@
                             <div class="modal-body">
 
                                 <form #applicationForm="ngForm" (ngSubmit)="submitResumeForm(applicationForm)"
-                                    id="applicationForm" class="p-4">
+                                    id="applicationForm" class="p-0 p-lg-4">
 
                                     <div class="formdata">
                                         <div class="row justify-content-center">
@@ -174,7 +174,7 @@
 
                                                 </div>
 
-                                                <div class=" col-md-4 col-sm-12 ">
+                                                <div class=" col-md-12 col-sm-12 d-flex justify-content-center">
                                                     <button type="submit" class="btn btn-danger btn-lg submitbtn"
                                                         [disabled]="applicationForm.invalid || !selectedFile() || isSubmitting">
                                                         {{ isSubmitting ? 'Sending...' : 'Submit' }}

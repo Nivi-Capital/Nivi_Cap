@@ -90,6 +90,7 @@ export class Career {
       <li>Understanding of security best practices, data privacy, and regulatory compliance in financial systems. </li>
       <li>Experience working with high-traffic, high-availability systems. </li>
       <li>Prior experience in a fintech, banking, NBFC, or payments domain. </li>
+      <li>Immediate joiners preferred. </li>
 </ul>`,
       description: 'We are looking for an expert to manage our global inventory systems and optimize supply chain flow.'
     },
@@ -130,6 +131,7 @@ export class Career {
 <li>AWS/Azure/GCP </li>
 <li>DevOps, Docker, Kubernetes </li>
 <li>Experience working closely with CTO/leadership</li>
+ <li>Immediate joiners preferred. </li>
 </ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work@nivicap.com'
     },
@@ -174,6 +176,7 @@ export class Career {
 <li>Experience scaling fintech products </li>
 <li>Exposure to cloud, data, and API-driven systems</li>
 <li>Digital Lending & FinTech Domain Expertise, Risk & Compliance Awareness, Strategic Thinking & Execution Excellence.</li>
+ <li>Immediate joiners preferred. </li>
 </ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     },
@@ -217,6 +220,7 @@ export class Career {
 <li>AWS/Azure/GCP exposure </li>
 <li>OCI certifications (Architect, Operations, Security) </li>
 <li>Experience with Exadata / Autonomous Database</li>
+ <li>Immediate joiners preferred. </li>
 </ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     },
@@ -267,6 +271,7 @@ export class Career {
 <li>Knowledge of DevOps pipelines and cloud governance </li>
 <li>Experience with KYC, bureau APIs, payment gateways </li>
 <li>Strong communication and decision-making skills </li>
+ <li>Immediate joiners preferred. </li>
 </ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     },
@@ -318,6 +323,7 @@ export class Career {
 <li>Knowledge of DevOps pipelines and cloud governance </li>
 <li>Experience with KYC, bureau APIs, payment gateways </li>
 <li>Strong communication and decision-making skills </li>
+ <li>Immediate joiners preferred. </li>
 </ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     },
@@ -359,7 +365,7 @@ export class Career {
 <li>Experience with performance testing and security testing </li>
 <li>Strong analytical, communication, and leadership skills </li>
 </ul>`,
-      Preferred: ``,
+      Preferred: `<ul> <li>Immediate joiners preferred. </li></ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     }
   ]);
