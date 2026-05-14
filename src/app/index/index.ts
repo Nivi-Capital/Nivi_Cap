@@ -77,7 +77,7 @@ export class Index implements OnInit {
 displayPincodeValue: string = '';
 displayofficename: string = '';
 selectedPincodeDisplay: string = '';
-
+fireTrackingPixel: boolean = false;
 
   constructor(private http: HttpClient, public main: Main, private ngZone: NgZone, private cdr: ChangeDetectorRef,public router: Router) {
     this.status = 'form';
@@ -265,8 +265,8 @@ this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
       pinCodeMasterId: this.pincodeID?? '',
       pinCode: data.value.pincodeInput,
 
-        source: "WEBSITE"   //live
-        // source: "CAMPAIGN"      //testUAT
+      //  source: "WEBSITE"   //live
+         source: "CAMPAIGN"      //testUAT
       // source: environment.checkenv   
     };
 
@@ -275,6 +275,7 @@ this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
     this.main.submitLead(inputobj).subscribe({
       next: (res) => {
         this.status = 'success';
+        this.fireTrackingPixel = true;
         this.showsuccess = true;
         this.msgtoshow = res.message;
         data.resetForm();

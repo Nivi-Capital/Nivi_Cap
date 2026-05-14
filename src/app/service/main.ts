@@ -11,8 +11,8 @@ export class Main {
   
   //  private baseUrl = "https://nivione-uat.nivicap.com/nivicapstage/api/public/leads" 
   status: string | undefined;
-   private baseUrl = "http://192.168.5.46:8080/nivicapstage/api/public/leads"
-  // private baseUrl = environment.apiBaseUrl;
+  //  private baseUrl = "http://192.168.5.46:8080/nivicapstage/api/public/leads"
+  private baseUrl = environment.apiBaseUrl;
 
   constructor(public http: HttpClient) { }
 
