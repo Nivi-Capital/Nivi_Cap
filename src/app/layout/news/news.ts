@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import newsData from '../../../assets/jsonData/publication.json'
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-news',
@@ -16,7 +17,9 @@ export class News implements OnInit {
   pageSize = 10;
   totalPages = 19;   
   visiblePages: (number | string)[] = [];
-
+selectedHtml = '';
+selectedNews:any
+constructor(private http: HttpClient) {}
   ngOnInit() {
     this.newsList = newsData;
      this.newsList.sort((a, b) => {
@@ -78,8 +81,17 @@ parseDate(dateStr: string): Date {
     }
   }
 
-  openNews(url: string): void {
+  openNews1(url: string): void {
   window.open(url, '_blank');
 }
 
+
+
+
+openNews(item: any) {
+
+  const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
+
+  window.open(url, '_blank');
+}
 }

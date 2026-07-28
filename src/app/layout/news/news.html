@@ -15,20 +15,20 @@
 
 
                 <div class="news-list">
-                    <div class="news-item" *ngFor="let item of pagedNews" (click)="openNews(item.URL)">
+                    <div class="news-item" *ngFor="let item of pagedNews" (click)="openNews(item)">
                         <div class="news-title_">
                             <h4 class="news-title feature-head">{{ item.Link }}</h4>
 
                         </div>
-                      
+
                         <div class="w-100 d-flex justify-content-between">
                             <!-- <div class="news-source feature-subtext">{{ item.SrNo }}--{{ item.Publication }}</div> -->
-                              <div class="news-source feature-subtext">{{ item.Publication }}</div>
+                            <div class="news-source feature-subtext">{{ item.Publication }}</div>
                             <div class="date feature-subtext">Posted at: {{ item.Date }}</div>
                         </div>
                     </div>
                 </div>
-
+               
 
                 <div class="pagination-container" *ngIf="totalPages > 1">
                     <button class="pg-btn arrow" (click)="previousPage()" [disabled]="currentPage === 1">
