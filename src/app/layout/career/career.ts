@@ -232,7 +232,7 @@ export class Career {
     {
       id: 5,
       title: 'UI/UX Designer',
-      type: 'Candidates should have prior experience designing products in one or more of the following domains: Digital Lending, Education Lending ,Consumer Finance, NBFCs, Banking, FinTech, Loan Origination Systems (LOS), Loan Management Systems (LMS), Credit Platforms, Neo Banking, Financial Services Applications',
+      type: 'Should be passionate about creating intuitive and engaging user interfaces.',
       KeySkills: `<ul>
         <li>Customer-Centric Thinking, Strategic Problem Solving, Analytical Mindset, Innovation & Creativity, Attention to Detail, Ownership & Accountability.</li>
         <li>Proficiency in design software such as Adobe XD, Adobe Creative Suite, Figma, Sketch, and familiarity with prototyping tools.</li>
