@@ -119,6 +119,10 @@ h1 {
   background: #B3E4FD;
 }
 
+.modal-content{
+  margin-top: 60px;
+}
+
 
 @media (max-width: 992px) {
 
@@ -262,10 +266,10 @@ h1 {
 }
 
 .formdata {
-  padding: 30px;
+  /* padding: 30px; */
   border-radius: var(--border-radius-border-radius-xl, 24px);
   background: var(--system-background-bg, #FFF);
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.10);
+  /* box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.10); */
 }
 
 .modal-close-btn {
@@ -393,8 +397,3 @@ h1 {
 
 }
 
-
-.modal-dialog {
-  margin:auto ;
- 
-}

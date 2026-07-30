@@ -81,14 +81,14 @@ parseDate(dateStr: string): Date {
     }
   }
 
-  openNews1(url: string): void {
+  openNews(url: string): void {
   window.open(url, '_blank');
 }
 
 
 
 
-openNews(item: any) {
+openNews1(item: any) {
 
   const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
 
