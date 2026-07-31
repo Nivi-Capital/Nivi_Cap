@@ -114,7 +114,7 @@
 
                                             <div class="row gap-3">
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Full Name<sup>*</sup></div>
+                                                    <div class="nav-label label-text mb-2">Full Name<sup class="text-danger position-static">*</sup></div>
 
                                                     <input type="text" name="name" ngModel required
                                                         pattern="^[A-Za-z ]+$"
@@ -131,7 +131,7 @@
                                                 </div>
 
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Email Id<sup>*</sup></div>
+                                                    <div class="nav-label label-text mb-2">Email Id<sup class="text-danger position-static">*</sup></div>
 
                                                     <input type="text" name="email" ngModel required
                                                         pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
@@ -148,7 +148,7 @@
 
                                                 <div class="col-md-12 col-sm-12">
                                                     <div class="nav-label label-text mb-2">Phone number<sup
-                                                            class="position-static">*</sup></div>
+                                                            class="text-danger position-static">*</sup></div>
 
                                                     <div class="phone-wrapper d-flex align-items-center">
 
@@ -177,10 +177,10 @@
                                                 </div>
 
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Notice Period<sup>*</sup></div>
+                                                    <div class="nav-label label-text mb-2">Notice Period (days)<sup class="text-danger position-static">*</sup></div>
 
                                                     <input type="text" name="notice" ngModel required
-                                                        pattern="^(10|[1-9])$"
+                                                        pattern="^([1-9]|[1-8][0-9]|90)$"
                                                         (input)="main.restrictInput($event, 'number')" minlength="1" maxlength="2"
                                                         class="form-control form-control-lg feature-subtext"
                                                         placeholder="Your Notice Period" #notice="ngModel">
@@ -188,19 +188,19 @@
                                                     <div class="text-danger mt-1" *ngIf="notice.invalid && notice.touched">
                                                         <small *ngIf="notice.errors?.['required']">Notice period is
                                                             required.</small>
-                                                        <small *ngIf="notice.errors?.['pattern']">Only numbers 1-10 allowed.</small>
+                                                        <small *ngIf="notice.errors?.['pattern']">Only numbers 1-90 allowed.</small>
                                                     </div>
                                                 </div>
 
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Upload Resume<sup>*</sup>
+                                                    <div class="nav-label label-text mb-2">Upload Resume<sup class="text-danger position-static">*</sup>
                                                     </div>
 
                                                     <div>
 
-                                                        <input class="form-control form-control-md" id="formFileLg"
+                                                        <input name="file" ngModel class="form-control form-control-md" id="formFileLg"
                                                             required *ngIf="showFileInput" type="file"
-                                                            (change)="onFileSelected($event)">
+                                                            (change)="onFileSelected($event)" #file="ngModel">
                                                     </div>
 
 
