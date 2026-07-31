@@ -224,7 +224,7 @@ h1 {
 }
 
 .country-box {
-  padding: 16px 14px;
+  padding: 10px 16px;
   border-right: 1.5px solid #A4A5B0;
   gap: 6px;
 }
@@ -260,7 +260,7 @@ h1 {
 }
 
 .form-control {
-  padding: 16px;
+  padding: 10px 16px;
   border: 1px solid #A4A5B0;
   border-radius: 8px;
 }
