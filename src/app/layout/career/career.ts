@@ -346,6 +346,14 @@ export class Career {
 
         },
         error: (err) => {
+          const modalEl = document.getElementById('staticBackdrop');
+          if (modalEl) {
+            const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+            modal?.hide();
+          }
+
+          data.reset();
+
           this.msgtoshow =
             err.error?.message || 'Something went wrong. Please try again.';
           this.isSubmitting = false;
@@ -353,7 +361,7 @@ export class Career {
 
           setTimeout(() => {
             this.status = 'form';
-          }, 5000);
+          }, 1500);
 
         }
       });

@@ -76,13 +76,13 @@
   padding: 60px 0;
 }
 
-.news-list {
+.career-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.news-item {
+.career-item {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -98,7 +98,7 @@
     transform: translateY(-2px);
   }
 
-  .news-title {
+  .career-title {
     font-size: 18px;
     font-weight: 700;
     color: #25262F;
@@ -121,6 +121,14 @@ h1 {
 
 .modal-content{
   margin-top: 60px;
+}
+
+.success-title{
+  font-size: 48px;
+  color:  #0D4472;
+  font-weight: 700;
+  line-height: 52px; /* 120% */
+  letter-spacing: 0.48px;
 }
 
 
@@ -187,7 +195,7 @@ h1 {
 
 /* mobile view */
 @media(max-width: 768px) {
-  .news-item {
+  .career-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
@@ -324,18 +332,18 @@ h1 {
   gap: 20px;
 }
 
-.news-info {
+.career-info {
   max-width: 75%;
   flex: 0 0 75%;
 }
 
 
-.news-action {
+.career-action {
   flex: 0 0 auto;
   white-space: nowrap;
 }
 
-.news-source {
+.career-source {
   line-height: 1.5;
   word-wrap: break-word;
 }
@@ -359,18 +367,18 @@ h1 {
     gap: 12px;
   }
 
-  .news-info {
+  .career-info {
     max-width: 100%;
     flex: 0 0 100%;
   }
 
-  .news-action {
+  .career-action {
     width: 100%;
     display: flex;
     justify-content: flex-start;
   }
 
-  .news-action .btn-apply {
+  .career-action .btn-apply {
     width: 100%;
     text-align: center;
   }
