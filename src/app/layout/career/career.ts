@@ -328,7 +328,7 @@ export class Career {
             modal?.hide();
           }
 
-          data.resetForm();
+          data.reset();
           this.selectedFile.set(null);
           this.showFileInput = false;
 
