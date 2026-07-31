@@ -18,22 +18,22 @@
                     improvement, strong problem-solving abilities, and a commitment to delivering high-quality outcomes.
                 </p>
 
-                <div class="news-list ">
+                <div class="career-list ">
                     <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)">
                     @for (item of jobs(); track item.id) {
-                    <div class="news-item cursor-pointer" (click)="toggleExpand(item.id)">
+                    <div class="career-item cursor-pointer" (click)="toggleExpand(item.id)">
 
                         <div class="d-flex justify-content-between w-100 job-row">
 
-                            <div class="news-info">
-                                <h4 class="news-title feature-head">{{ item.title }}</h4>
-                                <div class="news-source feature-subtext" [innerHTML]="item.type"></div>
-                                <!-- <div class="news-source feature-subtext " >
+                            <div class="career-info">
+                                <h4 class="career-title feature-head">{{ item.title }}</h4>
+                                <div class="career-source feature-subtext" [innerHTML]="item.type"></div>
+                                <!-- <div class="career-source feature-subtext " >
                                     {{ item.type }}
                                 </div>  -->
                             </div>
 
-                            <div class="news-action">
+                            <div class="career-action">
                                 <button class="btn btn-apply rounded-pill align-items-center"
                                     (click)="openApplyModal(item);$event.stopPropagation()" data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop">
@@ -222,7 +222,7 @@
                     </div>
                 </div>
 
-                <div class="loader-overlay" *ngIf="isSubmitting">
+                <!-- <div class="loader-overlay" *ngIf="isSubmitting">
                     <div class="spinner-container">
                         <div class="spinner-border spinner-lg" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -230,7 +230,7 @@
 
                         <p class="loader-text mt-3">Processing your application...</p>
                     </div>
-                </div>
+                </div> -->
                 <div class=" contact-success-box text-center d-flex justify-content-center"
                     *ngIf="status === 'success'">
                     <div class="card  contact-card-success">
@@ -239,7 +239,7 @@
                                     width="117" alt="product1" class="success-tick-icon">
                             </div>
 
-                            <h4 class="loanhead">Application Received!</h4>
+                            <h4 class="success-title">Application Received!</h4>
                             <div class="product-info1">
                                 <p class="text-normal">{{msgtoshow}}</p>
                             </div>
