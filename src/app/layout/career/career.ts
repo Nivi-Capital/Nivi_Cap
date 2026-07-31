@@ -75,7 +75,7 @@ export class Career {
       <li>Own features end-to-end and drive continuous improvement.</li>   </ul>`,
 
       Qualifications: `<ul>
-      <li>Bachelor’s/Master’s in Computer Science or related field  </li> 
+      <li>Bachelor's/Master's in Computer Science or related field  </li> 
       <li>3+ years in full-stack / backend / frontend development  </li>
       <li>Familiarity with fintech or financial services systems, including payments, KYC/AML, lending platforms, or transaction processing. </li> 
       <li>Experience working in Agile/Scrum development environments. </li></ul>`,
@@ -96,47 +96,6 @@ export class Career {
     },
     {
       id: 2,
-      title: 'Engineering Manager',
-      type: `Lead engineering delivery with a hands-on approach, driving scalable fintech systems while building and  mentoring high-performing teams.`,
-      KeySkills: `<ul>
-<li>Java, MEAN Stack (MongoDB, Express, Angular, Node.js), Flutter</li>
-<li>System design, scalable architecture, cloud deployments </li>
-<li>Oracle DB & backend frameworks </li>
-<li>Code reviews, engineering best practices, CI/CD </li>
-<li>Team leadership, mentoring, performance management </li>
-<li>Agile/Scrum delivery & cross-functional collaboration </li>
-<li>BFSI/fintech (lending, loan pricing, repayments, regulations) </li>
-<li>Stakeholder management & leadership communication </li>
-</ul>`,
-
-      Responsibilities: `<ul>
-<li>Lead hands-on development for critical features and architecture. </li>
-<li>Drive system design for scalable, secure, high-performance applications. </li>
-<li>Enforce coding standards, testing, CI/CD, and documentation practices. </li>
-<li>Manage and mentor engineering teams; support hiring and growth.</li>
-<li>Own end-to-end delivery with high-quality, on-time releases.</li>
-<li>Collaborate with Product, Design, QA, and DevOps teams.</li>
-<li>Identify and mitigate technical risks and bottlenecks.</li>
-<li>Partner with CTO on technology roadmap and execution.</li>
-<li>Provide regular updates, insights, and leadership reporting.</li>
-</ul>`,
-      Qualifications: `<ul>
-<li>12–15 years of experience; 5+ years in Engineering Manager/Tech Lead role </li>
-<li>Strong hands-on expertise in Java, Angular, Node.js, Flutter </li>
-<li>Experience in scalable systems, cloud, and code reviews  </li>
-<li>Strong Agile experience and stakeholder management </li>
-<li>Proven experience in BFSI/fintech (lending domain preferred)</li>
-</ul>`,
-      Preferred: `<ul>
-<li>AWS/Azure/GCP </li>
-<li>DevOps, Docker, Kubernetes </li>
-<li>Experience working closely with CTO/leadership</li>
- <li>Immediate joiners preferred. </li>
-</ul>`,
-      description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work@nivicap.com'
-    },
-    {
-      id: 3,
       title: 'Program Manager',
       type: 'Drive large-scale fintech and lending programs end-to-end, ensuring alignment with business goals,  regulatory compliance, and high-quality execution.',
       KeySkills: `<ul>
@@ -180,157 +139,59 @@ export class Career {
 </ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     },
-
     {
+      id: 3,
+      title: 'Solution Architect',
+      type: 'Design scalable, secure, and high-performance fintech solutions, driving architecture for lending platforms aligned  with business and regulatory requirements.',
+      KeySkills: `<ul>
+<li>Solution architecture, system design, microservices & API architecture </li>
+<li>Cloud (OCI), distributed systems, event-driven architecture </li>
+<li>BFSI/fintech domain (lending, payments, core banking) </li>
+<li>Lending workflows (underwriting, KYC/AML, risk, collections) </li>
+<li> Databases (Oracle), caching, messaging systems </li>
+<li>Security & compliance (RBI, GDPR, SOC2, ISO 27001, IAM) </li>
+<li> DevOps, CI/CD, Docker, Kubernetes </li>
+<li> Stakeholder management & architecture governance </li>
+<li> TOGAF certified </li>
+</ul>`,
+      Responsibilities: `<ul>
+<li>Design end-to-end architecture for lending platforms (loans, payments, accounts). </li>
+<li>Define APIs, microservices, data flows, and integration patterns. </li>
+<li>Translate lending workflows into scalable technical solutions. </li>
+<li>Architect systems for underwriting, risk, KYC/AML, disbursement, and collections. </li>
+<li>Design and optimize cloud-native solutions on OCI. </li>
+<li>Lead cloud migration, modernization, and infrastructure optimization. </li>
+<li>Guide engineering teams on architecture, design standards, and best practices. </li>
+<li>Conduct design reviews and provide architectural approvals. </li>
+<li>Collaborate with business, product, engineering, and compliance teams. </li>
+<li>Ensure compliance with regulatory and security standards. </li>
+<li>Maintain architecture documentation, governance, and roadmaps. </li>
+</ul>`,
+
+      Qualifications: `<ul>
+<li>Bachelor's/Master's in Engineering (Computer Science preferred) </li>
+<li>6-10 years in solution architecture/system design </li>
+<li>2-3 years in BFSI/core banking domain </li>
+<li>Strong experience in fintech/lending platforms </li>
+<li>Hands-on experience with OCI and cloud architectures </li>
+<li>Expertise in microservices, APIs, distributed systems </li>
+<li>Strong knowledge of databases, data modeling, and messaging systems </li>
+<li>TOGAF certification (mandatory) </li>
+<li>Experience working in Agile environments </li>
+</ul>`,
+      Preferred: `<ul>
+<li>Experience with risk engines, rules engines, underwriting platforms </li>
+<li>Design thinking approach </li>
+<li>Knowledge of DevOps pipelines and cloud governance </li>
+<li>Experience with KYC, bureau APIs, payment gateways </li>
+<li>Strong communication and decision-making skills </li>
+ <li>Immediate joiners preferred. </li>
+</ul>`,
+      description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
+    },
+    {
+
       id: 4,
-      title: 'Oracle Cloud Infrastructure Specialist',
-      type: 'Deploy, migrate, and manage scalable, secure infrastructure on Oracle Cloud Infrastructure (OCI), ensuring high performance, automation, and reliability',
-      KeySkills: `<ul>
-<li>Oracle Cloud Infrastructure (OCI): Compute, Networking, Storage, IAM, Databases </li>
-<li>Cloud migration & hybrid architecture (on-prem → OCI) </li>
-<li>Networking: VCN, VPN, FastConnect, Load Balancers, WAF, Firewalls </li>
-<li>Infrastructure as Code: Terraform, Ansible </li>
-<li>Scripting: Python, Bash, PowerShell </li>
-<li>Monitoring: OCI Monitoring, Logging, Prometheus, Grafana, ELK </li>
-<li>CI/CD & DevOps: Jenkins, Git, Docker, Kubernetes </li>
-<li>Security & compliance (IAM, vulnerability management) </li>
-</ul>`,
-      Responsibilities: `<ul>
-<li>Deploy and manage OCI infrastructure (compute, storage, networking, databases). </li>
-<li>Execute cloud migrations and support multi-region deployments. </li>
-<li>Configure networking components (VCN, subnets, VPNs, FastConnect, load balancers). </li>
-<li>Implement security controls (IAM, NSGs, firewalls, WAF). </li>
-<li>Automate provisioning using Terraform, Ansible, and scripts. </li>
-<li>Monitor, troubleshoot, and optimize performance and cost. </li>
-<li>Provide L2/L3 support and participate in on-call rotations. </li>
-<li>Ensure security compliance, patching, and vulnerability remediation. </li>
-<li>Collaborate with DevOps, app, and DB teams; document SOPs and best practices. </li>
-<li>Mentor junior engineers and drive operational excellence. </li>
-</ul>`,
-
-      Qualifications: `<ul>
-<li>5–8 years of IT infrastructure experience; 3+ years in OCI </li>
-<li>Strong expertise in OCI services (Compute, Networking, Storage, IAM, DB) </li>
-<li>Hands-on with Terraform, Ansible, OCI CLI, and scripting </li>
-<li>Experience with monitoring, logging, and troubleshooting tools </li>
-<li> Knowledge of hybrid cloud environments and security best practices </li>
-</ul>`,
-
-      Preferred: `<ul>
-<li>AWS/Azure/GCP exposure </li>
-<li>OCI certifications (Architect, Operations, Security) </li>
-<li>Experience with Exadata / Autonomous Database</li>
- <li>Immediate joiners preferred. </li>
-</ul>`,
-      description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
-    },
-
-    {
-      id: 5,
-      title: 'Solution Architect',
-      type: 'Design scalable, secure, and high-performance fintech solutions, driving architecture for lending platforms aligned  with business and regulatory requirements.',
-      KeySkills: `<ul>
-<li>Solution architecture, system design, microservices & API architecture </li>
-<li>Cloud (OCI), distributed systems, event-driven architecture </li>
-<li>BFSI/fintech domain (lending, payments, core banking) </li>
-<li>Lending workflows (underwriting, KYC/AML, risk, collections) </li>
-<li> Databases (Oracle), caching, messaging systems </li>
-<li>Security & compliance (RBI, GDPR, SOC2, ISO 27001, IAM) </li>
-<li> DevOps, CI/CD, Docker, Kubernetes </li>
-<li> Stakeholder management & architecture governance </li>
-<li> TOGAF certified </li>
-</ul>`,
-      Responsibilities: `<ul>
-<li>Design end-to-end architecture for lending platforms (loans, payments, accounts). </li>
-<li>Define APIs, microservices, data flows, and integration patterns. </li>
-<li>Translate lending workflows into scalable technical solutions. </li>
-<li>Architect systems for underwriting, risk, KYC/AML, disbursement, and collections. </li>
-<li>Design and optimize cloud-native solutions on OCI. </li>
-<li>Lead cloud migration, modernization, and infrastructure optimization. </li>
-<li>Guide engineering teams on architecture, design standards, and best practices. </li>
-<li>Conduct design reviews and provide architectural approvals. </li>
-<li>Collaborate with business, product, engineering, and compliance teams. </li>
-<li>Ensure compliance with regulatory and security standards. </li>
-<li>Maintain architecture documentation, governance, and roadmaps. </li>
-</ul>`,
-
-      Qualifications: `<ul>
-<li>Bachelor’s/Master’s in Engineering (Computer Science preferred) </li>
-<li>6–10 years in solution architecture/system design </li>
-<li>2–3 years in BFSI/core banking domain </li>
-<li>Strong experience in fintech/lending platforms </li>
-<li>Hands-on experience with OCI and cloud architectures </li>
-<li>Expertise in microservices, APIs, distributed systems </li>
-<li>Strong knowledge of databases, data modeling, and messaging systems </li>
-<li>TOGAF certification (mandatory) </li>
-<li>Experience working in Agile environments </li>
-</ul>`,
-      Preferred: `<ul>
-<li>Experience with risk engines, rules engines, underwriting platforms </li>
-<li>Design thinking approach </li>
-<li>Knowledge of DevOps pipelines and cloud governance </li>
-<li>Experience with KYC, bureau APIs, payment gateways </li>
-<li>Strong communication and decision-making skills </li>
- <li>Immediate joiners preferred. </li>
-</ul>`,
-      description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
-    },
-
-    {
-      id: 6,
-      title: 'Solution Architect',
-      type: 'Design scalable, secure, and high-performance fintech solutions, driving architecture for lending platforms aligned  with business and regulatory requirements.',
-      KeySkills: `<ul>
-<li>Solution architecture, system design, microservices & API architecture </li>
-<li>Cloud (OCI), distributed systems, event-driven architecture </li>
-<li>BFSI/fintech domain (lending, payments, core banking) </li>
-<li>Lending workflows (underwriting, KYC/AML, risk, collections) </li>
-<li> Databases (Oracle), caching, messaging systems </li>
-<li>Security & compliance (RBI, GDPR, SOC2, ISO 27001, IAM) </li>
-<li> DevOps, CI/CD, Docker, Kubernetes </li>
-<li> Stakeholder management & architecture governance </li>
-<li> TOGAF certified </li>
-</ul>`,
-      Responsibilities: `<ul>
-<li>Design end-to-end architecture for lending platforms (loans, payments, accounts). </li>
-<li>Define APIs, microservices, data flows, and integration patterns. </li>
-<li>Translate lending workflows into scalable technical solutions. </li>
-<li>Architect systems for underwriting, risk, KYC/AML, disbursement, and collections. </li>
-<li>Design and optimize cloud-native solutions on OCI. </li>
-<li>Lead cloud migration, modernization, and infrastructure optimization. </li>
-<li>Guide engineering teams on architecture, design standards, and best practices. </li>
-<li>Conduct design reviews and provide architectural approvals. </li>
-<li>Collaborate with business, product, engineering, and compliance teams. </li>
-<li>Ensure compliance with regulatory and security standards. </li>
-<li>Maintain architecture documentation, governance, and roadmaps. </li>
-</ul>`,
-
-      Qualifications: `<ul>
-<li>Bachelor’s/Master’s in Engineering (Computer Science preferred) </li>
-<li>6–10 years in solution architecture/system design </li>
-<li>2–3 years in BFSI/core banking domain </li>
-<li>Strong experience in fintech/lending platforms </li>
-<li>Hands-on experience with OCI and cloud architectures </li>
-<li>Expertise in microservices, APIs, distributed systems </li>
-<li>Strong knowledge of databases, data modeling, and messaging systems </li>
-<li>TOGAF certification (mandatory) </li>
-<li>Experience working in Agile environments </li>
-</ul>`,
-
-      Preferred: `<ul>
-<li>Experience with risk engines, rules engines, underwriting platforms </li>
-<li>Design thinking approach </li>
-<li>Knowledge of DevOps pipelines and cloud governance </li>
-<li>Experience with KYC, bureau APIs, payment gateways </li>
-<li>Strong communication and decision-making skills </li>
- <li>Immediate joiners preferred. </li>
-</ul>`,
-      description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
-    },
-
-    {
-
-      id: 7,
       title: 'Sr. Software Test Engineer',
       type: 'Ensure high-quality, scalable fintech products through strong manual and automation testing, driving end-to-end quality ownership across systems.',
       KeySkills: `<ul>
@@ -358,7 +219,7 @@ export class Career {
 </ul>`,
 
       Qualifications: `<ul>
-<li>Bachelor’s/Master’s in Computer Science or related field </li>
+<li>Bachelor's/Master's in Computer Science or related field </li>
 <li>5–8 years in software testing (manual + automation) </li>
 <li>Strong knowledge of SDLC, STLC, and QA methodologies </li>
 <li>Hands-on experience with automation, API testing, SQL, and debugging </li>
@@ -366,6 +227,45 @@ export class Career {
 <li>Strong analytical, communication, and leadership skills </li>
 </ul>`,
       Preferred: `<ul> <li>Immediate joiners preferred. </li></ul>`,
+      description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
+    },
+    {
+      id: 5,
+      title: 'UI/UX Designer',
+      type: 'Should be passionate about creating intuitive and engaging user interfaces.',
+      KeySkills: `<ul>
+        <li>Customer-Centric Thinking, Strategic Problem Solving, Analytical Mindset, Innovation & Creativity, Attention to Detail, Ownership & Accountability.</li>
+        <li>Proficiency in design software such as Adobe XD, Adobe Creative Suite, Figma, Sketch, and familiarity with prototyping tools.</li>
+        <li>Knowledge/skills in front-end development using HTML, Javascript, CSS, Bootstrap, LESS/Sass, Angular, JQuery, etc.</li>
+        <li>Understanding of typography, color, layout, visual design, and user experience best practices.</li>
+        <li>High level of attention to detail and a keen aesthetic sense for high-quality visual.</li>
+      </ul>`,
+      Responsibilities: `<ul>
+        <li>Lead the UX vision for the company's lending ecosystem across web and mobile platforms.</li>
+        <li>Design seamless customer journeys covering but not limited to: Customer onboarding, eKYC, Loan application, Credit assessment, Document upload, Loan approval, Loan servicing, Collections and repayment.</li>
+        <li>Convert business requirements into intuitive user flows, wireframes, mockups, and interactive prototypes.</li>
+        <li>Simplify complex lending workflows into frictionless user experiences.</li>
+        <li>Create modern, responsive, and visually appealing user interfaces aligned with the company's design philosophy.</li>
+        <li>Establish and maintain a scalable Design System and UI Component Library.</li>
+        <li>Ensure consistency across products and platforms.</li>
+        <li>Design for accessibility, responsiveness, and usability.</li>
+        <li>Conduct user research, customer interviews, and usability testing.</li>
+        <li>Analyze customer behavior and continuously improve product usability.</li>
+        <li>Leverage analytics and customer feedback to optimize conversion and engagement.</li>
+        <li>Work closely with: Product Managers, Engineering Teams, Business Stakeholders, Risk & Compliance, QA Teams.</li>
+        <li>Participate actively in Agile ceremonies and product planning.</li>
+        <li>Translate business problems into effective design solutions.</li>
+        <li>Own the complete design lifecycle from concept to production.</li>
+        <li>Mentor junior designers and establish design best practices.</li>
+        <li>Drive design reviews and maintain quality standards.</li>
+        <li>Champion a customer-first design culture.</li>
+      </ul>`,
+
+      Qualifications: `<ul>
+<li>Bachelor's / Master's degree in Design, Visual Design, Graphic Design, Interaction Design, HCI, or a related field.</li>
+<li>Candidates should have prior experience designing products in one or more of the following domains: Digital Lending, Education Lending ,Consumer Finance, NBFCs, Banking, FinTech, Loan Origination Systems (LOS), Loan Management Systems (LMS), Credit Platforms, Neo Banking, Financial Services Applications.</li>
+</ul>`,
+      Preferred: `<ul> <li>Experience in building products from scratch (01) will be highly preferred.</li></ul>`,
       description: 'This is a full-time role is based in Andheri, Mumbai, with a 5-day work week (Work from office). Were looking for Immediate Joiners.Please feel free to share your resume at work @nivicap.com'
     }
   ]);
@@ -403,8 +303,10 @@ export class Career {
     this.status = 'loading';
     const fd = new FormData();
     fd.append('fullName', data.value.name);
+    fd.append('email', data.value.email);
     fd.append('mobileNumber', data.value.phone);
     fd.append('jobTitle', this.selectedJobTitle);
+    fd.append('notice', data.value.notice);
     fd.append('file', this.selectedFile() as File);
 
     this.main.submitResume(fd).pipe(
