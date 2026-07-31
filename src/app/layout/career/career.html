@@ -180,7 +180,7 @@
                                                     <div class="nav-label label-text mb-2">Notice Period<sup>*</sup></div>
 
                                                     <input type="text" name="notice" ngModel required
-                                                        pattern="^[0-9]{2}$"
+                                                        pattern="^(10|[1-9])$"
                                                         (input)="main.restrictInput($event, 'number')" minlength="1" maxlength="2"
                                                         class="form-control form-control-lg feature-subtext"
                                                         placeholder="Your Notice Period" #notice="ngModel">
@@ -188,7 +188,7 @@
                                                     <div class="text-danger mt-1" *ngIf="notice.invalid && notice.touched">
                                                         <small *ngIf="notice.errors?.['required']">Notice period is
                                                             required.</small>
-                                                        <small *ngIf="notice.errors?.['pattern']">Only numbers allowed.</small>
+                                                        <small *ngIf="notice.errors?.['pattern']">Only numbers 1-10 allowed.</small>
                                                     </div>
                                                 </div>
 
