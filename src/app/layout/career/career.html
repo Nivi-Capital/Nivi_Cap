@@ -8,12 +8,13 @@
 
                 <div class="text-center selected-tab  align-items-center d-flex flex-column gap-3">
                     <h3 class="selectedtab-head-text">
-                        Join Our<span style="color: #F8192A;font-weight: 700;"> Journey</span> 
+                        Join Our<span style="color: #F8192A;font-weight: 700;"> Journey</span>
                     </h3>
 
                 </div>
 
-                <p class="text-common pb-5">We are looking for a skilled and detail-oriented professional with relevant experience in their
+                <p class="text-common pb-5">We are looking for a skilled and detail-oriented professional with relevant
+                    experience in their
                     respective domain. The ideal candidate will have hands-on expertise in execution and process
                     improvement, strong problem-solving abilities, and a commitment to delivering high-quality outcomes.
                 </p>
@@ -114,7 +115,8 @@
 
                                             <div class="row gap-3">
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Full Name<sup class="text-danger position-static">*</sup></div>
+                                                    <div class="nav-label label-text mb-2">Full Name<sup
+                                                            class="text-danger position-static">*</sup></div>
 
                                                     <input type="text" name="name" ngModel required
                                                         pattern="^[A-Za-z ]+$"
@@ -131,7 +133,8 @@
                                                 </div>
 
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Email Id<sup class="text-danger position-static">*</sup></div>
+                                                    <div class="nav-label label-text mb-2">Email Id<sup
+                                                            class="text-danger position-static">*</sup></div>
 
                                                     <input type="text" name="email" ngModel required
                                                         pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
@@ -139,10 +142,12 @@
                                                         class="form-control form-control-lg feature-subtext"
                                                         placeholder="Your Email Id" #email="ngModel">
 
-                                                    <div class="text-danger mt-1" *ngIf="email.invalid && email.touched">
+                                                    <div class="text-danger mt-1"
+                                                        *ngIf="email.invalid && email.touched">
                                                         <small *ngIf="email.errors?.['required']">Email Id is
                                                             required.</small>
-                                                        <small *ngIf="email.errors?.['pattern']">Please enter valid Email Id.</small>
+                                                        <small *ngIf="email.errors?.['pattern']">Please enter valid
+                                                            Email Id.</small>
                                                     </div>
                                                 </div>
 
@@ -177,30 +182,41 @@
                                                 </div>
 
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Notice Period (days)<sup class="text-danger position-static">*</sup></div>
+                                                    <div class="nav-label label-text mb-2">Notice Period (days)<sup
+                                                            class="text-danger position-static">*</sup></div>
 
                                                     <input type="text" name="notice" ngModel required
                                                         pattern="^([1-9]|[1-8][0-9]|90)$"
-                                                        (input)="main.restrictInput($event, 'number')" minlength="1" maxlength="2"
+                                                        (input)="main.restrictInput($event, 'number')" minlength="1"
+                                                        maxlength="2"
                                                         class="form-control form-control-lg feature-subtext"
                                                         placeholder="Your Notice Period" #notice="ngModel">
 
-                                                    <div class="text-danger mt-1" *ngIf="notice.invalid && notice.touched">
+                                                    <div class="text-danger mt-1"
+                                                        *ngIf="notice.invalid && notice.touched">
                                                         <small *ngIf="notice.errors?.['required']">Notice period is
                                                             required.</small>
-                                                        <small *ngIf="notice.errors?.['pattern']">Only numbers 1-90 allowed.</small>
+                                                        <small *ngIf="notice.errors?.['pattern']">Only numbers 1-90
+                                                            allowed.</small>
                                                     </div>
                                                 </div>
 
                                                 <div class=" col-md-12 col-sm-12 ">
-                                                    <div class="nav-label label-text mb-2">Upload Resume<sup class="text-danger position-static">*</sup>
+                                                    <div class="nav-label label-text mb-2">Upload Resume<sup
+                                                            class="text-danger position-static">*</sup>
                                                     </div>
 
                                                     <div>
 
-                                                        <input name="file" ngModel class="form-control form-control-md" id="formFileLg"
-                                                            required *ngIf="showFileInput" type="file"
-                                                            (change)="onFileSelected($event)" #file="ngModel">
+                                                        <input name="file" ngModel class="form-control form-control-md"
+                                                            id="formFileLg" required *ngIf="showFileInput" type="file"
+                                                            accept=".pdf, .doc, .docx" (change)="onFileSelected($event)"
+                                                            #file="ngModel">
+                                                        <div *ngIf="errorMessage" class="text-danger">
+                                                            {{ errorMessage }}
+                                                        </div>
+
+                                                       
                                                     </div>
 
 
