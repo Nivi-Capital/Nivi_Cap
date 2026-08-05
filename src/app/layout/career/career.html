@@ -208,11 +208,11 @@
 
                                                     <div>
 
-                                                        <input name="file" ngModel class="form-control form-control-md"
+                                                        <input name="file" ngModel class="form-control form-control-md" #resumeInput
                                                             id="formFileLg" required *ngIf="showFileInput" type="file"
                                                             accept=".pdf, .doc, .docx" (change)="onFileSelected($event)"
                                                             #file="ngModel">
-                                                        <div *ngIf="errorMessage" class="text-danger">
+                                                        <div *ngIf="errorMessage" class="text-danger mt-1">
                                                             {{ errorMessage }}
                                                         </div>
 
