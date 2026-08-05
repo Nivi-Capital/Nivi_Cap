@@ -5,6 +5,8 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Main } from '../../service/main';
 import { finalize, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import * as pdfjsLib from 'pdfjs-dist';
+import JSZip from 'jszip';
 
 type FormStatusType = 'form' | 'loading' | 'success' | 'error';
 
@@ -29,6 +31,7 @@ export interface Job {
 export class Career {
   uploadedFileName = signal<any | null>(null);
   selectedFile = signal<File | null>(null);
+
   fileName = signal<string | null>(null);
   msgtoshow: string = '';
   status: FormStatusType = 'form';
@@ -59,7 +62,7 @@ export class Career {
       <li>Monitoring tools (ELK, Grafana, Prometheus)  </li>
       <li>Agile/Scrum; fintech/payments/KYC exposure preferred  </li>
       </ul>`,
-      
+
 
       Responsibilities: `<ul>
       <li>Develop end-to-end web applications (frontend + backend). </li> 
@@ -270,8 +273,12 @@ export class Career {
     }
   ]);
 
-  constructor(private http: HttpClient, public main: Main,private router:Router) {
-    }
+  private readonly MIN_SIZE_BYTES = 1 * 1024;        // 1 KB
+  private readonly MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+  private readonly ALLOWED_EXTENSIONS = ['pdf', 'doc', 'docx'];
+  errorMessage: string | null = null;
+  constructor(private http: HttpClient, public main: Main, private router: Router) {
+  }
   expandedJobId = signal<number | null>(null);
 
   toggleExpand(id: number) {
@@ -283,17 +290,90 @@ export class Career {
     this.selectedJobId = item.id;
   }
   // Handle file selection
-  onFileSelected(event: any) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.selectedFile.set(file);
-      // this.fileName.set(file.name);
+
+  async onFileSelected(event: Event): Promise<void> {
+    this.errorMessage = null;
+    this.selectedFile.set(null);
+
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+
+    if (!fileList || fileList.length === 0) {
+      return;
     }
 
+    const file = fileList[0];
+
+    // 1. Validate File Extension
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    if (!fileExtension || !this.ALLOWED_EXTENSIONS.includes(fileExtension)) {
+      this.errorMessage = 'Only PDF, DOC, and DOCX files are allowed.';
+      element.value = ''; // Reset input element
+      return;
+    }
+
+    // 2. Validate Minimum File Size (1 KB)
+    if (file.size < this.MIN_SIZE_BYTES) {
+      this.errorMessage = 'File is too small. Minimum required size is 1 KB.';
+      element.value = '';
+      return;
+    }
+
+    // 3. Validate Maximum File Size (5 MB)
+    if (file.size > this.MAX_SIZE_BYTES) {
+      this.errorMessage = 'The uploaded file exceeds the maximum size of 5 MB.';
+      element.value = '';
+      return;
+    }
+    // Password Protected Check
+    const isProtected = await this.isPasswordProtected(file);
+
+    if (isProtected) {
+      this.errorMessage =
+        'Password-protected documents are not supported. Please upload an unlocked file.';
+      element.value = '';
+      return;
+    }
+
+    // If all checks pass
+    this.selectedFile.set(file);
+  }
+
+  private async isPasswordProtected(file: File): Promise<boolean> {
+    const ext = file.name.split('.').pop()?.toLowerCase();
+
+    switch (ext) {
+      case 'pdf': {
+        const buffer = await file.arrayBuffer();
+        const text = new TextDecoder().decode(buffer.slice(0, 50000));
+        return text.includes('/Encrypt');
+      }
+
+      case 'docx':
+        return this.isDocxProtected(file);
+
+      case 'doc':
+        return false; // validate on backend
+
+      default:
+        return false;
+    }
   }
 
 
+  private async isDocxProtected(file: File): Promise<boolean> {
+    try {
+      const buffer = await file.arrayBuffer();
+      const zip = await JSZip.loadAsync(buffer);
+
+      return (
+        zip.file('EncryptionInfo') !== null ||
+        zip.file('EncryptedPackage') !== null
+      );
+    } catch {
+      return true;
+    }
+  }
   submitResumeForm(data: NgForm) {
 
     if (this.isSubmitting || data.invalid || !this.selectedFile()) {
@@ -310,61 +390,61 @@ export class Career {
     fd.append('file', this.selectedFile() as File);
 
     this.main.submitResume(fd).pipe(
-        take(1),
-        finalize(() => {
-          this.isSubmitting = false;
-        })
-      ).subscribe({
+      take(1),
+      finalize(() => {
+        this.isSubmitting = false;
+      })
+    ).subscribe({
 
 
-        next: (res) => {
-          this.msgtoshow = res.message;
-          this.status = 'success';
-          this.isSubmitting = false;
+      next: (res) => {
+        this.msgtoshow = res.message;
+        this.status = 'success';
+        this.isSubmitting = false;
 
-          const modalEl = document.getElementById('staticBackdrop');
-          if (modalEl) {
-            const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
-            modal?.hide();
-          }
-
-          data.reset();
-          this.selectedFile.set(null);
-          this.showFileInput = false;
-
-          setTimeout(() => {
-            this.showFileInput = true;
-          });
-
-          this.selectedJobTitle = '';
-          this.selectedJobId = null;
-
-          setTimeout(() => {
-            this.status = 'form';
-          }, 2000);
-
-
-        },
-        error: (err) => {
-          const modalEl = document.getElementById('staticBackdrop');
-          if (modalEl) {
-            const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
-            modal?.hide();
-          }
-
-          data.reset();
-
-          this.msgtoshow =
-            err.error?.message || 'Something went wrong. Please try again.';
-          this.isSubmitting = false;
-          this.status = 'error';
-
-          setTimeout(() => {
-            this.status = 'form';
-          }, 1500);
-
+        const modalEl = document.getElementById('staticBackdrop');
+        if (modalEl) {
+          const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+          modal?.hide();
         }
-      });
+
+        data.reset();
+        this.selectedFile.set(null);
+        this.showFileInput = false;
+
+        setTimeout(() => {
+          this.showFileInput = true;
+        });
+
+        this.selectedJobTitle = '';
+        this.selectedJobId = null;
+
+        setTimeout(() => {
+          this.status = 'form';
+        }, 2000);
+
+
+      },
+      error: (err) => {
+        const modalEl = document.getElementById('staticBackdrop');
+        if (modalEl) {
+          const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+          modal?.hide();
+        }
+
+        data.reset();
+
+        this.msgtoshow =
+          err.error?.message || 'Something went wrong. Please try again.';
+        this.isSubmitting = false;
+        this.status = 'error';
+
+        setTimeout(() => {
+          this.status = 'form';
+        }, 1500);
+
+      }
+    });
 
   }
 
