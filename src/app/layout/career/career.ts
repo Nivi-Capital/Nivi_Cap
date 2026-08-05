@@ -44,7 +44,8 @@ export class Career {
   @ViewChild('applicationForm') applicationForm!: NgForm;
 
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
-
+  @ViewChild('resumeInput')
+  resumeInput!: ElementRef<HTMLInputElement>;
 
   jobs = signal<Job[]>([
     {
@@ -426,22 +427,15 @@ export class Career {
 
       },
       error: (err) => {
-        const modalEl = document.getElementById('staticBackdrop');
-        if (modalEl) {
-          const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
-          modal?.hide();
+
+        this.selectedFile.set(null);
+        this.errorMessage = err.error?.message || 'Something went wrong. Please try again.';
+        if (this.resumeInput?.nativeElement) {
+          this.resumeInput.nativeElement.value = '';
         }
 
-        data.reset();
-
-        this.msgtoshow =
-          err.error?.message || 'Something went wrong. Please try again.';
         this.isSubmitting = false;
-        this.status = 'error';
-
-        setTimeout(() => {
-          this.status = 'form';
-        }, 1500);
+        // this.status = 'error';
 
       }
     });
@@ -468,7 +462,7 @@ export class Career {
     }
 
     this.selectedFile.set(null);
-
+    this.errorMessage = null;
     this.showFileInput = false;
 
     setTimeout(() => {
