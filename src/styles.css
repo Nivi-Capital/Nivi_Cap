@@ -83,7 +83,7 @@
 .nav-label {
   @extend .text-common;
   color: #25262F;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.18px;
 }
