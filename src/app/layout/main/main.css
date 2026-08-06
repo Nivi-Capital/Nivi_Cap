@@ -110,6 +110,7 @@ body {
   width: 84%;
   margin-left: auto;
   margin-right: auto;
+  flex-wrap: nowrap;
 }
 
 /* Show animation when fixed */
@@ -121,7 +122,7 @@ body {
 
 .navbar-nav {
   display: flex;
-  gap: 40px;
+  gap: 30px;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -354,7 +355,7 @@ body {
 }
 .quick-links-list-web{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;   
   
 }
@@ -534,6 +535,14 @@ body {
   line-height: 26px;
   letter-spacing: 0.2px;
 }
+.text-normal1 {
+  @extend .text-common;
+
+  color: #666771;
+  font-size:clamp(14px, 1.5vw, 20px);
+  line-height: 26px;
+  letter-spacing: 0.2px;
+}
 
 /* features */
 .feature-head {
@@ -570,6 +579,7 @@ body {
   @extend .text-common;
   color: #666771;
   font-size: 24px;
+  /* font-size:clamp(20px, 2.15vw, 24px); */
   font-weight: 500;
   line-height: 30px;
   letter-spacing: 0.24px;
@@ -665,7 +675,7 @@ body {
 
 
   .quick-links-list li {
-    width: 30%;
+    /* width: 30%; */
     white-space: nowrap;
   }
 
@@ -720,9 +730,9 @@ body {
   .right-bar {
     gap: 10px;
   }
-.fixed-top .container-fluid {
+/* .fixed-top .container-fluid {
     width: 100%;
-}
+} */
   /* ------------------------feature---------------- */
   .features-section-bg {
     background: linear-gradient(to bottom,
@@ -796,7 +806,7 @@ body {
 
 
   .quick-links-list li {
-    width: 30%;
+    /* width: 30%; */
     white-space: nowrap;
   }
 
@@ -1311,13 +1321,13 @@ body {
   }
 .quick-links-list-web{
    display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;   
   
 }
 
   .quick-links-list li {
-    width: 30%;
+    /* width: 30%; */
     white-space: nowrap;
   }
 
@@ -1696,7 +1706,10 @@ body {
   width: 100%;            
   height: auto;
 }
-
+ .quick-links-list,
+  .quick-links-list-web {
+    grid-template-columns: repeat(2, max-content);
+  }
 
 
 
@@ -1804,5 +1817,173 @@ body {
   width: 100%;             
   height: auto;
 }
+ .quick-links-list,
+  .quick-links-list-web {
+    grid-template-columns: repeat(2, max-content);
+  }
+}
+
+.footer-row1 {
+  height: auto;
+}
+
+/* Keep Quick Links in a stable three-column grid */
+.quick-links-list,
+.quick-links-list-web {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+ width: 100%;
+
 
 }
+
+.quick-links-list li {
+  width: auto;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.quick-links-list a {
+  display: block;
+  line-height: 1.3;
+}
+
+/* App buttons should not become oversized */
+.footer-app-buttons {
+  gap: clamp(8px, 1vw, 12px);
+  flex-wrap: nowrap;
+}
+
+.footer-app-buttons a {
+  flex: 0 1 clamp(130px, 12vw, 190px);
+  max-width: none;
+}
+
+.footer-link-img {
+  width: 100%;
+  max-width: clamp(130px, 12vw, 190px);
+  height: auto;
+}
+
+/* Footer bottom row spacing */
+.footer-bottom .row {
+  row-gap: 16px;
+}
+
+.footer-links {
+  gap: clamp(12px, 2vw, 40px);
+  flex-wrap: nowrap;
+}
+
+.selectedtab-label {
+  font-size: clamp(13px, 1vw, 16px);
+}
+
+/* Large laptop / desktop */
+/* Keep logo and navbar links in one row */
+.fixed-top .container-fluid {
+  flex-wrap: nowrap !important;
+}
+
+.fixed-top .navbar-collapse {
+  flex-basis: auto;
+  flex-grow: 1;
+}
+
+.fixed-top .navbar-nav {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.fixed-top .nav-logo,
+.fixed-top .navbar-brand {
+  flex-shrink: 0;
+}
+
+/* quicklink changes */
+/* Quick Links final fix */
+.quick-links-list.quick-links-list-web {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 16px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.quick-links-list.quick-links-list-web li {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+
+.quick-links-list.quick-links-list-web a {
+  display: block;
+  white-space: nowrap;
+  font-size: clamp(12px, 1vw, 16px);
+  line-height: 1.3;
+}
+/* Dell / 14-inch laptop footer fix */
+@media (min-width: 769px) and (max-width: 1450px) {
+  .quick-links-list.quick-links-list-web {
+    grid-template-columns: repeat(3, max-content);
+    column-gap: 40px;
+    row-gap: 14px;
+    justify-content: start;
+  }
+  .navbar-nav{
+    gap: 20px;
+  }
+}
+@media (min-width: 769px) and (max-width: 1200px) {
+
+ fixed-top .container-fluid {
+    width: 100%;
+  padding-inline: 24px;
+  }
+.quick-links-list,
+.quick-links-list-web {
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 14px 18px;
+}
+}
+
+@media (max-width: 768px) {
+  .quick-links-list,
+  .quick-links-list-web {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 20px;
+row-gap: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .quick-links-list,
+  .quick-links-list-web {
+    grid-template-columns: repeat(2, max-content);
+  }
+}
+
+
+.fixed-top .navbar-collapse {
+  flex-basis: auto;
+  flex-grow: 1;
+}
+
+.fixed-top .navbar-nav {
+  flex-direction: row;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.fixed-top .nav-logo {
+  flex-shrink: 0;
+}
+
+
+  
+
+ 

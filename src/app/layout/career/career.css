@@ -393,6 +393,7 @@ h1 {
  .modal-dialog {
     width: 90%;
     max-width: 450px;
+    margin: auto;
   }
 
   .modal-content {
