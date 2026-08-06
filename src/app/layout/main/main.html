@@ -1,5 +1,5 @@
 <div class="container1"
-  *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news' || router.url === '/career' || router.url.includes('/news-details')">
+  *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news' || router.url === '/careers' || router.url.includes('/news-details')">
   <nav class="navbar navbar-expand-lg navbar-light bg-white  bottom-nav fixed-top">
     <div class="container-fluid d-flex justify-content-between align-items-center ">
       <div class="nav-logo d-flex align-items-center" routerLink="/">
@@ -35,7 +35,7 @@
               <a class="nav-link nav-label" routerLink="/news">NEWS & MEDIA</a>
             </li>
             <li class="nav-item mx-2">
-              <a class="nav-link nav-label" routerLink="/career">CAREERS</a>
+              <a class="nav-link nav-label" routerLink="/careers">CAREERS</a>
             </li>
             <li class="nav-item mx-2">
               <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
@@ -54,7 +54,7 @@
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }">
   <a class="nav-link nav-label"
-     routerLink="/career"
+     routerLink="/careers"
      (click)="clearActiveSection()">
     CAREERS
   </a>
@@ -138,7 +138,7 @@
               <li><a class="text-normal" (click)="goToSection('features')">FEATURES</a></li>
               <li><a class="text-normal" (click)="goToSection('product')">PRODUCTS</a></li>
               <li><a class="text-normal" routerLink="/news">NEWS & MEDIA</a></li>
-              <li><a class="text-normal" routerLink="/career">CAREERS</a></li>
+              <li><a class="text-normal" routerLink="/careers">CAREERS</a></li>
               <li><a class="text-normal" routerLink="/contact">CONTACT US</a></li>
             </ul>
           </div>
