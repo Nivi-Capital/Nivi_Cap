@@ -81,17 +81,17 @@ parseDate(dateStr: string): Date {
     }
   }
 
-  openNews(url: string): void {
-  window.open(url, '_blank');
-}
+  openNews1(url: string): void {
+    window.open(url, '_blank');
+  }
 
 
 
 
-openNews1(item: any) {
+  openNews(item: any) {
+    console.log(item);
+    const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
 
-  const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
-
-  window.open(url, '_blank');
-}
+    window.open(url, '_blank');
+  }
 }
