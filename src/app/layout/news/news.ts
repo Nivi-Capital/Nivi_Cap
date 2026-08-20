@@ -15,7 +15,7 @@ export class News implements OnInit {
   newsList: any[] = [];
   currentPage = 1;
   pageSize = 10;
-  totalPages = 19;   
+  totalPages = 0;   
   visiblePages: (number | string)[] = [];
 selectedHtml = '';
 selectedNews:any
@@ -25,7 +25,8 @@ constructor(private http: HttpClient) {}
      this.newsList.sort((a, b) => {
     return this.parseDate(b.Date).getTime() - this.parseDate(a.Date).getTime();
   });
-    this.generateVisiblePages()
+    if(this.newsList?.length) this.totalPages = Math.floor(this.newsList.length/10);
+    this.generateVisiblePages();
   }
 get pagedNews() {
   const start = (this.currentPage - 1) * this.pageSize;
@@ -90,16 +91,13 @@ parseDate(dateStr: string): Date {
 
   openNews(item: any) {
     console.log(item);
-    const url1 = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
+    // const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
 
-    const url = `${window.location.origin}/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
-console.log(url);
-// window.open(url, '_blank');
+    // window.open(url, '_blank');
 
-  window.open(
+    window.open(
       `../testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`,
       '_blank'
     );
-
   }
 }
