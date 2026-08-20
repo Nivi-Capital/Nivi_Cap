@@ -95,9 +95,13 @@ parseDate(dateStr: string): Date {
 
     // window.open(url, '_blank');
 
-    window.open(
-      `../testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`,
-      '_blank'
-    );
+    // window.open(
+    //   `../testUAT/news-details?file=${item.htmlFile}`,
+    //   '_blank'
+    // );
+
+    const url = new URL('../testUAT/news-details', window.location.href);
+    url.searchParams.set('file', item.htmlFile);
+    window.open(url.toString(), '_blank');
   }
 }
