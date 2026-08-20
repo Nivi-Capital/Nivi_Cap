@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import newsData from '../../../assets/jsonData/publication.json'
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-news',
@@ -14,15 +15,18 @@ export class News implements OnInit {
   newsList: any[] = [];
   currentPage = 1;
   pageSize = 10;
-  totalPages = 19;   
+  totalPages = 0;   
   visiblePages: (number | string)[] = [];
-
+selectedHtml = '';
+selectedNews:any
+constructor(private http: HttpClient) {}
   ngOnInit() {
     this.newsList = newsData;
      this.newsList.sort((a, b) => {
     return this.parseDate(b.Date).getTime() - this.parseDate(a.Date).getTime();
   });
-    this.generateVisiblePages()
+    if(this.newsList?.length) this.totalPages = Math.floor(this.newsList.length/10);
+    this.generateVisiblePages();
   }
 get pagedNews() {
   const start = (this.currentPage - 1) * this.pageSize;
@@ -78,8 +82,22 @@ parseDate(dateStr: string): Date {
     }
   }
 
-  openNews(url: string): void {
-  window.open(url, '_blank');
-}
+  openNews1(url: string): void {
+    window.open(url, '_blank');
+  }
 
+
+
+
+  openNews(item: any) {
+    console.log(item);
+    // const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
+
+    // window.open(url, '_blank');
+
+    window.open(
+      `../news-details?file=${encodeURIComponent(item.htmlFile)}`,
+      '_blank'
+    );
+  }
 }
