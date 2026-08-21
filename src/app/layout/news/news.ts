@@ -91,13 +91,8 @@ parseDate(dateStr: string): Date {
 
   openNews(item: any) {
     console.log(item);
-    // const url = `/testUAT/news-details?file=${encodeURIComponent(item.htmlFile)}`;
+    const url = `/news-details?file=${encodeURIComponent(item.htmlFile)}`;
 
-    // window.open(url, '_blank');
-
-    window.open(
-      `../news-details?file=${encodeURIComponent(item.htmlFile)}`,
-      '_blank'
-    );
+    window.open(url, '_blank');
   }
 }

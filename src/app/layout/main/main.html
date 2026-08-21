@@ -40,7 +40,7 @@
             <li class="nav-item mx-2">
               <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
             </li> -->
-           <li class="nav-item mx-2"
+            <!-- <li class="nav-item mx-2"
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }">
   <a class="nav-link nav-label"
@@ -48,27 +48,26 @@
      (click)="clearActiveSection()">
     NEWS & MEDIA
   </a>
-</li>
+</li> -->
 
-<li class="nav-item mx-2"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
-  <a class="nav-link nav-label"
-     routerLink="/careers"
-     (click)="clearActiveSection()">
-    CAREERS
-  </a>
-</li>
+            <li class="nav-item mx-2"
+              [class.active]="router.url.startsWith('/news') || router.url.startsWith('/news-details')">
+              <a class="nav-link nav-label" routerLink="/news" (click)="clearActiveSection()">
+                NEWS & MEDIA
+              </a>
+            </li>
 
-<li class="nav-item mx-2"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
-  <a class="nav-link nav-label"
-     routerLink="/contact"
-     (click)="clearActiveSection()">
-    CONTACT
-  </a>
-</li>
+            <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link nav-label" routerLink="/careers" (click)="clearActiveSection()">
+                CAREERS
+              </a>
+            </li>
+
+            <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <a class="nav-link nav-label" routerLink="/contact" (click)="clearActiveSection()">
+                CONTACT
+              </a>
+            </li>
 
 
 
