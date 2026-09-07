@@ -88,3 +88,488 @@
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+.coming-soon-page {
+  position: relative;
+
+  width: 100%;
+  /* min-height: 100vh;
+  min-height: 100dvh; */
+
+  overflow: hidden;
+
+  background: #ffffff;
+
+  display: flex;
+  justify-content: center;
+}
+
+.heading-title{
+  font-weight: 500;
+  font-size: 80px;
+  line-height: 72px;
+  letter-spacing: 1%;
+  text-align: center;
+}
+
+.heading-subtitle {
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 34px;
+  letter-spacing: 1%;
+  text-align: center;
+  padding-top: 20px;
+}
+
+/* =====================================================
+   MAIN CONTENT
+===================================================== */
+
+.coming-soon-content {
+  position: relative;
+  z-index: 2;
+
+  margin-top: 100px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+
+/* =====================================================
+   SCOOTER / MAIN ILLUSTRATION
+===================================================== */
+
+.illustration {
+  width: min(100%, 770px);
+
+  margin-top: 15px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.illustration img {
+  display: block;
+
+  width: 100%;
+  max-width: 770px;
+  height: auto;
+
+  object-fit: contain;
+}
+
+/* =====================================================
+   SOCIAL SECTION
+===================================================== */
+
+.social-section {
+  margin-top: 137px;
+}
+
+.social-section p {
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 28px;
+  letter-spacing: 1%;
+  text-align: center;
+}
+
+.social-section p span {
+  display: inline;
+}
+
+.social-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+}
+
+.social-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.social-icons img {
+  display: block;
+
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+
+  object-fit: contain;
+}
+
+.social-icon {
+  color: white;
+  text-decoration: none;
+  /* transition: transform 0.2s, opacity 0.2s; */
+}
+
+/* =====================================================
+   DECORATIVE ELEMENTS
+===================================================== */
+
+.decorations {
+  position: absolute;
+  inset: 0;
+
+  z-index: 1;
+
+  pointer-events: none;
+}
+
+.decoration {
+  position: absolute;
+}
+
+/* Red triangle */
+
+.triangle {
+  top: 5.5%;
+  left: clamp(35px, 19.5vw, 185px);
+
+  width: 0;
+  height: 0;
+
+  /* border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 18px solid #f18b8f; */
+}
+
+/* Small pink circle */
+
+.pink-dot {
+  top: 22.5%;
+  left: clamp(50px, 19.3vw, 185px);
+
+  width: 12px;
+  height: 12px;
+
+  /* background: #fde0e5;
+  border-radius: 50%; */
+}
+
+/* Light blue hexagon */
+
+.hexagon {
+  top: 29%;
+  left: clamp(8px, 5.8vw, 55px);
+
+  width: 25px;
+  height: 27px;
+
+  /* background: #e3f1f7;
+
+  clip-path: polygon(
+    50% 0%,
+    93% 25%,
+    93% 75%,
+    50% 100%,
+    7% 75%,
+    7% 25%
+  ); */
+}
+
+/* Yellow arch */
+
+.yellow-arc {
+  /* top: 14%;
+  right: clamp(50px, 18.8vw, 180px); */
+  top: 9%;
+  right: clamp(50px, 18.8vw, 300px);
+
+  width: 35px;
+  height: 18px;
+
+  /* border: 4px solid #f5b625;
+  border-bottom: 0;
+
+  border-radius: 30px 30px 0 0; */
+}
+
+/* Blue zigzag */
+
+.zigzag {
+  top: 31%;
+  right: clamp(20px, 14.5vw, 140px);
+
+  width: 26px;
+  height: 28px;
+
+  /* border-left: 4px solid #91c4e1;
+  border-top: 4px solid #91c4e1;
+
+  transform: rotate(-15deg) skew(-20deg); */
+}
+
+/* Bottom left square */
+
+.blue-square {
+  left: clamp(25px, 10vw, 95px);
+  bottom: 20%;
+
+  width: 21px;
+  height: 21px;
+
+  background: #e4f1f6;
+}
+
+/* Bottom right red ring */
+
+.red-circle {
+  right: clamp(25px, 9vw, 85px);
+  bottom: 20%;
+
+  width: 28px;
+  height: 28px;
+
+  /* border: 4px solid #ef4851; */
+
+  /* border-radius: 50%; */
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (min-width: 820px) {
+  .coming-soon-content {
+    /* margin-top: 230px; */
+  }
+}
+
+
+@media (max-width: 768px) {
+
+  .coming-soon-content {
+    /* margin-top: 200px; */
+  }
+  
+
+  .illustration {
+    margin-top: 25px;
+    width: min(100%, 520px);
+  }
+
+  .social-section {
+    /* margin-top: 137px; */
+  }
+
+  .triangle {
+    left: 12%;
+  }
+
+  .pink-dot {
+    left: 17%;
+  }
+
+  .hexagon {
+    left: 3%;
+  }
+
+  .yellow-arc {
+    right: 15%;
+  }
+
+  .zigzag {
+    right: 6%;
+  }
+
+  .blue-square {
+    left: 10%;
+  }
+
+  .red-circle {
+    right: 8%;
+  }
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 480px) {
+
+  .coming-soon-content {
+    /* padding:
+      clamp(78px, 12vh, 100px)
+      20px
+      35px; */
+  }
+
+  /* Heading */
+
+  .heading-title{
+    text-align: center;
+
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 34px; /* 121.429% */
+    letter-spacing: 0.28px;
+  }
+
+  .heading-subtitle{
+    color: var(--system-text-neutral_text-primary, #25262F);
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 125% */
+    letter-spacing: 0.16px;
+  }
+
+  /* Illustration */
+
+  .illustration {
+    width: 100%;
+
+    margin-top: 31px;
+  }
+
+  .illustration img {
+    width: 100%;
+    max-width: 290px;
+
+    height: auto;
+  }
+
+  /* Social */
+
+  .social-section {
+    margin-top: clamp(65px, 10vh, 100px);
+  }
+
+  .social-section p {
+    max-width: 290px;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 18px;
+
+    font-size: 17px;
+    line-height: 1.25;
+  }
+
+  /*
+   Makes social media break to next line
+   like your mobile screenshot.
+  */
+
+  .social-section p span {
+    display: block;
+  }
+
+  .social-icons {
+    gap: 17px;
+  }
+
+  .social-icons img {
+    width: 35px;
+    height: 35px;
+  }
+
+  /* ==============================
+     Mobile decorations
+  ============================== */
+
+  .triangle {
+    top: 4%;
+    left: 16%;
+
+    img {
+      width: 15px;
+    }
+  }
+
+  .pink-dot {
+    top: 9%;
+    left: 24%;
+
+    img {
+      width: 10px;
+    }
+  }
+
+  .hexagon {
+    top: 19%;
+    left: 2%;
+    
+    /* width: 17px;
+    height: 18px; */
+
+    img {
+      width: 20.005px;
+      height: 20.005px; 
+    }
+  }
+
+  .yellow-arc {
+    top: 7.5%;
+    right: 15%;
+
+    img {
+    /* width: 20px;
+    height: 10px; */
+
+    width: 23.24px;
+    height: 6.583px;
+    }
+
+    border-width: 2px;
+    border-bottom: 0;
+  }
+
+  .zigzag {
+    top: 28%;
+    right: 5%;
+
+    /* transform: scale(0.65) rotate(-15deg) skew(-20deg); */
+
+    img {
+      width: 23.942px;
+      /* height: 7.558px; */
+      /* transform: rotate(-57.778deg); */
+    }
+  }
+
+  /*
+   Square moves next to the illustration on mobile
+   instead of staying at the bottom.
+  */
+
+  .blue-square {
+    top: 31%;
+    bottom: auto;
+    left: 11%;
+
+    img {
+      width: 15px;
+      height: 15px;
+    }
+  }
+
+  /*
+   Red ring stays beside/below illustration like screenshot.
+  */
+
+  .red-circle {
+    top: 53%;
+    right: 5%;
+    bottom: auto;
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* border-width: 3px; */
+  }
+}
