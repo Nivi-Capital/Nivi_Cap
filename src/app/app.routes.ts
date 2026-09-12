@@ -6,6 +6,7 @@ import { Main } from './layout/main/main';
 import { Contact } from './layout/contact/contact';
 import { News } from './layout/news/news';
 import { Career } from './layout/career/career';
+import { Newscontent } from './layout/news/newscontent/newscontent';
 
 export const routes: Routes = [
     {   path: '',
@@ -16,6 +17,7 @@ export const routes: Routes = [
       { path: 'privacy-policy', component: Privacypolicy },
        { path: 'contact', component: Contact },
        { path: 'news', component: News },
+      //  { path: 'news', component: Newscontent },
         { path: 'careers', component: Career },
     
 {
