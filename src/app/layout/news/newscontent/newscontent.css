@@ -1,22 +1,15 @@
-:host {
-  --ink: #25262f;
-  --muted: #666771;
-  --line: #e4e6f1;
-  --pale: #f4f6ff;
-  --red: #ff4157
-}
-
-html {
-  scroll-behavior: smooth
+:host ::ng-deep html {
+  scroll-behavior: smooth;
 }
 
 .container{
-  max-width: 100%;
+  max-width: 90%;
+  padding-top: 50px;
 }
 
 
 .page-shell {
-  padding: 60px 146.5px;
+  /* padding: 60px 146.5px; */
 }
 
 .article-heading {
@@ -46,7 +39,7 @@ html {
 }
 
 .article-actions {
-  color: var(--muted)
+  color: #666771
 }
 
 .stats {
@@ -69,15 +62,33 @@ html {
   height: 24px;
 }
 
-.hero-image {
-  display: block;
+.hero-image-div {
   width: 100%;
-  height: min(36vw, 692px);
-  min-height: 350px;
+  text-align: center;
+  height: min(50vw, 692px);
+  /* min-height: 350px; */
   margin: 30px 0;
   border-radius: 24px;
   background: var(--system-background-surface, #F5F5F5);
+  overflow: hidden;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+    border-radius: 24px;
+  }
+}
+
+.hero-image {
+  width: inherit;
+  height: inherit;
   object-fit: contain;
+}
+
+.article-copy {
+  white-space: pre-line;
 }
 
 .article-copy p {
@@ -188,10 +199,11 @@ html {
 .news-card>img {
   display: block;
   background: #d9d9d9;
-  height: 295.536px;
+  height: 300px;
   align-self: stretch;
-  aspect-ratio: 194/109;
+  aspect-ratio: 194 / 109;
   object-fit: contain;
+  width: -webkit-fill-available;
 }
 
 .card-content {
@@ -259,9 +271,25 @@ html {
   height: 60px;
 }
 
+.headline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub-heading {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media(max-width:800px) {
   .page-shell {
-    padding: 20px;
+    padding-top: 0px;
   }
 
   .article-heading{
@@ -339,22 +367,6 @@ html {
 
   .headline {
     font-size: 14px !important;
-  }
-
-  .headline {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .sub-heading {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .carousel-controls button{

@@ -111,17 +111,35 @@
                     (click)="changeSection('news')">ONLINE MEDIA</a><a (click)="changeSection('videos')"
                     [ngClass]="{'active': category === 'videos'}" aria-disabled="true">VIDEOS</a>
             </div>
-            <nav class="languages text-common" aria-label="Languages"><a class="active">English</a><i></i><a
-                    aria-disabled="true">Hindi</a><i></i><a aria-disabled="true">Marathi</a><i></i><a
-                    aria-disabled="true">Tamil</a><i></i><a aria-disabled="true">Telugu</a><i></i><a
-                    aria-disabled="true">Kannada</a><i></i><a aria-disabled="true">Punjabi</a><i></i><a
-                    aria-disabled="true">Bengali</a>
+            <nav class="languages text-common" aria-label="Languages">
+                <a [ngClass]="{'active': language === 'English'}" (click)="filterByLanguage('English')">English</a><i></i>
+                <a [ngClass]="{'active': language === 'Hindi'}" (click)="filterByLanguage('Hindi')">Hindi</a><i></i>
+                <a [ngClass]="{'active': language === 'Kannada'}" (click)="filterByLanguage('Kannada')">Kannada</a><i></i>
+                <a [ngClass]="{'active': language === 'Gujarati'}" (click)="filterByLanguage('Gujarati')">Gujarati</a><i></i>
+                <a [ngClass]="{'active': language === 'Malayalam'}" (click)="filterByLanguage('Malayalam')">Malayalam</a><i></i>
+                <a [ngClass]="{'active': language === 'Punjabi'}" (click)="filterByLanguage('Punjabi')">Punjabi</a>
             </nav>
         </section>
 
         <div *ngIf="category === 'news'">
             <section #newsGrid class="news-grid" id="news" aria-label="Online media stories" data-api="/api/news">
-                <article class="card"><img src="assets/images/news-pics/1.png" alt="NiviCap launch event">
+                <ng-container *ngFor="let news of newsList">
+                    <article class="card">
+                        <img [src]='news.htmlFile' alt="NiviCap launch event" (click)="openArticlePage(news)">
+                        <div class="card-content">
+                            <div class="meta consent-text" (click)="openArticlePage(news)"><span>{{news.Publication}}</span><span>{{news.Date}}</span></div>
+                            <span class="headline selectedtab-label" (click)="openArticlePage(news)">{{news.Link}}</span>
+                            <p class="sub-heading consent-text" (click)="openArticlePage(news)">{{news.smallDescription}}</p>
+                            <div class="border-line"></div>
+                            <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
+                                src="assets/images/like.svg" alt="">78</span><button type="button"
+                                (click)="shareStory($event)"><img src="assets/images/share-1.svg"
+                                alt="">Share</button></div>
+                        </div>
+                    </article>
+                </ng-container>
+
+                <!-- <article class="card"><img src="assets/images/news-pics/1.png" alt="NiviCap launch event">
                     <div class="card-content">
                         <div class="meta consent-text"><span>India Education Diary</span><span>19 Nov 2025</span></div>
                         <span class="headline selectedtab-label">Announcing Justin Langer as the Brand Ambassador of
@@ -132,11 +150,6 @@
                             dreams in
                             Australia without financial roadblocks”, NiviCap marks a new era in the education financing
                             ecosystem.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/2.png" alt="NiviCap media story">
@@ -147,11 +160,6 @@
                         <p class="consent-text">NiviCap brand ambassador Justin Langer helps the new platform frame
                             education finance for Indian students in Australia around wellbeing reassurance and family
                             trust.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
@@ -163,11 +171,6 @@
                             dreams in
                             Australia without financial roadblocks”, NiviCap marks a new era in the education financing
                             ecosystem. </p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/4.png" alt="NiviCap media story">
@@ -177,11 +180,6 @@
                         <p class="consent-text">Langer was in the City as an ambassador to NiviCap, a digital solution
                             for
                             Indian students heading to Australia for studies.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/2_3.png" alt="NiviCap media story">
@@ -192,11 +190,6 @@
                             Australia</span>
                         <p class="consent-text">NiviCap launches with Justin Langer as Brand Ambassador, offering
                             transparent, tech-driven education financing for Indian students in Australia.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/6.jpg" alt="NiviCap media story">
@@ -208,11 +201,6 @@
                             services covering student loan discovery, cross-border financial planning, forex guidance,
                             and
                             structured post arrival support.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/7.png" alt="NiviCap media story">
@@ -223,11 +211,6 @@
                         <p class="consent-text">NiviCap, a newly launched education–financing solutions platform, is set
                             to
                             redefine how Indian students pursue their academic aspirations in Australia.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/8.png" alt="NiviCap media story">
@@ -238,11 +221,6 @@
                         <p class="consent-text">India's First-of-its-Kind Digital Solutions Platform for Australian
                             Study
                             Elevates Education Financing Ecosystem</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/9.png" alt="NiviCap launch event">
@@ -255,11 +233,6 @@
                             dreams in
                             Australia without financial roadblocks”, NiviCap marks a new era in the education financing
                             ecosystem.</p>
-                        <!-- <div class="border-line"></div>
-                                <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                            src="assets/images/like.svg" alt="">78</span><button type="button"
-                                        (click)="shareStory($event)"><img src="assets/images/share-1.svg"
-                                            alt="">Share</button></div> -->
                     </div>
                 </article>
                 <article class="card"><img src="assets/images/news-pics/10.png" alt="NiviCap media story">
@@ -341,7 +314,7 @@
                             Australia without financial roadblocks”, NiviCap marks a new era in the education financing
                             ecosystem.</p>
                     </div>
-                </article>
+                </article> -->
             </section>
             <div class="loadmore-div"><button [disabled]="true" class="load-more legal-subhead" type="button">Load
                     More</button></div>
@@ -349,7 +322,21 @@
 
         <div *ngIf="category === 'videos'">
             <section #videoGrid class="video-grid" id="video" aria-label="Online media stories">
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap launch event">
+                <ng-container *ngFor="let news of videoList">
+                    <article class="video-card">
+                        <img [src]='news.htmlFile' alt="NiviCap launch event" (click)="openArticlePage(news)">
+                        <div class="card-content">
+                            <div class="meta consent-text" (click)="openArticlePage(news)"><span>{{news.Publication}}</span><span>{{news.Date}}</span></div>
+                            <span class="headline selectedtab-label" (click)="openArticlePage(news)">{{news.Link}}</span>
+                            <div class="border-line"></div>
+                            <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
+                                        src="assets/images/like.svg" alt="">78</span><button type="button"
+                                    (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
+                            </div>
+                        </div>
+                    </article>
+                </ng-container>
+                <!-- <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap launch event">
                     <div class="card-content">
                         <div class="meta consent-text"><span>India Education Diary</span><span>19 Nov 2025</span></div>
                         <span class="headline selectedtab-label">Announcing Justin Langer as the Brand Ambassador of
@@ -548,7 +535,7 @@
                                 (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
                         </div>
                     </div>
-                </article>
+                </article> -->
             </section>
         </div>
 

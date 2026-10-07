@@ -1,5 +1,5 @@
 <div class="container1"
-  *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news' || router.url === '/careers' || router.url.includes('/news-details')">
+  *ngIf="router.url === '/terms-condition' || router.url === '/privacy-policy' || router.url === '/contact' || router.url === '/news' || router.url === '/careers' || router.url.startsWith('/newscontent')">
   <nav class="navbar navbar-expand-lg navbar-light bg-white  bottom-nav fixed-top">
     <div class="container-fluid d-flex justify-content-between align-items-center ">
       <div class="nav-logo d-flex align-items-center" routerLink="/">
@@ -51,7 +51,7 @@
 </li> -->
 
             <li class="nav-item mx-2"
-              [class.active]="router.url.startsWith('/news') || router.url.startsWith('/news-details')">
+              [class.active]="router.url.startsWith('/news') || router.url.startsWith('/newscontent')">
               <a class="nav-link nav-label" routerLink="/news" (click)="clearActiveSection()">
                 NEWS & MEDIA
               </a>

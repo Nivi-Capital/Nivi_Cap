@@ -85,7 +85,7 @@ ngAfterViewInit123() {
       this.router.url === '/terms-condition' ||
       this.router.url === '/privacy-policy' ||
       this.router.url === '/news' ||
-      this.router.url === '/news-details'
+      this.router.url.startsWith('/newscontent/')
     );
   }
 

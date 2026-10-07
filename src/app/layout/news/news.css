@@ -170,6 +170,7 @@ a {
   align-items: center;
   gap: 10px;
   font-weight: 400;
+  cursor: pointer;
 }
 
 .switcher .active {
@@ -192,6 +193,7 @@ a {
 .languages a {
   padding: 6px 20px;
   color: var(--system-text-neutral_text-primary, #25262F);
+  cursor: pointer;
 }
 
 .languages i {
@@ -240,9 +242,7 @@ a {
 }
 
 .video-card>img {
-  /* width: 100%; */
   width: 100%;
-  height: 218px;
   flex-shrink: 0;
   aspect-ratio: 194/109;
   object-fit: fill;
@@ -361,9 +361,17 @@ marquee {
   color: var(--system-button-Primary-primary, #F05964);
 }
 
+.sub-heading {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 @media (max-width: 950px) {
 
-  .news-grid {
+  .news-grid, .video-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

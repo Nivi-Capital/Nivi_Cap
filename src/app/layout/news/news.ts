@@ -1,8 +1,10 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import newsData from '../../../assets/jsonData/publication.json'
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import newsData from '../../../assets/jsonData/publication.json';
+import videoData from '../../../assets/jsonData/videosList.json';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 interface NewsStory {
@@ -36,6 +38,8 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
   selectedHtml = '';
   selectedNews: any;
   category: any = 'news';
+  language: any = 'English';
+  videoList: any[] = [];
 
   private newsGridElement?: ElementRef<HTMLElement>;
 
@@ -54,14 +58,17 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
   private readonly ratioNames = new Set(['16-9', '2-3', '21-9', '1-1']);
   private readonly fallbackRatios = ['16-9', '2-3', '21-9', '1-1'];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router, private cdr: ChangeDetectorRef) { }
   ngOnInit() {
-    this.newsList = newsData;
-    this.newsList.sort((a, b) => {
-      return this.parseDate(b.Date).getTime() - this.parseDate(a.Date).getTime();
-    });
-    if (this.newsList?.length) this.totalPages = Math.floor(this.newsList.length / 10);
-    this.generateVisiblePages();
+    // this.newsList = newsData;
+    // this.newsList.sort((a, b) => {
+    //   return this.parseDate(b.Date).getTime() - this.parseDate(a.Date).getTime();
+    // });
+    // if (this.newsList?.length) this.totalPages = Math.floor(this.newsList.length / 10);
+    // this.generateVisiblePages();
+    this.filterByLanguage(this.language);
+    this.videoList = videoData;
+    
   }
 
   ngAfterViewInit(): void {
@@ -230,5 +237,26 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
 
         card.style.setProperty('--row-span', String(rowSpan));
       });
+  }
+
+  openArticlePage(item: any): void {
+    // sessionStorage.setItem('newsData', JSON.stringify(item));
+    this.router.navigate(['/newscontent', item.uid]);
+  }
+
+  filterByLanguage(lang: any){
+    this.language = lang;
+    this.newsList = newsData.filter((item: any) => item.Language === lang);
+    this.refreshGrid();
+  }
+
+  private refreshGrid(): void {
+    this.cdr.detectChanges();
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.initializeGrid();
+      });
+    });
   }
 }
