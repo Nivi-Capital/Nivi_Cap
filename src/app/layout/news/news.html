@@ -107,8 +107,10 @@
         <section class="hero" aria-labelledby="title">
             <span class="news-title selectedtab-head-text" id="title">News &amp; <span
                     class="news-media">Media</span></span>
-            <div class="switcher legal-subhead"><a [ngClass]="{'active': category === 'news'}"
-                    (click)="changeSection('news')">ONLINE MEDIA</a><a (click)="changeSection('videos')"
+            <div class="switcher legal-subhead">
+                <a [ngClass]="{'active': category === 'news'}"
+                    (click)="changeSection('news')">ONLINE MEDIA</a>
+                    <a (click)="changeSection('videos')"
                     [ngClass]="{'active': category === 'videos'}" aria-disabled="true">VIDEOS</a>
             </div>
             <nav class="languages text-common" aria-label="Languages">
@@ -121,422 +123,68 @@
             </nav>
         </section>
 
+         <div class="loadmore-div mb-2"><button  class="load-more legal-subhead" type="button" (click)="addnews()">Add News</button></div>
+
         <div *ngIf="category === 'news'">
             <section #newsGrid class="news-grid" id="news" aria-label="Online media stories" data-api="/api/news">
-                <ng-container *ngFor="let news of newsList">
+                <ng-container *ngFor="let news of displayedNews">
                     <article class="card">
-                        <img [src]='news.htmlFile' alt="NiviCap launch event" (click)="openArticlePage(news)">
+                        <img [src]="news.imageUrl" [alt]="news.title"  (click)="openArticlePage(news)">
                         <div class="card-content">
-                            <div class="meta consent-text" (click)="openArticlePage(news)"><span>{{news.Publication}}</span><span>{{news.Date}}</span></div>
-                            <span class="headline selectedtab-label" (click)="openArticlePage(news)">{{news.Link}}</span>
+                            <div class="meta consent-text" (click)="openArticlePage(news)"><span>{{news.publication}}</span><span>{{news.date}}</span></div>
+                            <span class="headline selectedtab-label" (click)="openArticlePage(news)">{{news.title}}</span>
                             <p class="sub-heading consent-text" (click)="openArticlePage(news)">{{news.smallDescription}}</p>
+                                <!-- <p class="sub-heading consent-text" (click)="openArticlePage(news)">{{news.title}}</p> -->
                             <div class="border-line"></div>
-                            <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                src="assets/images/like.svg" alt="">78</span><button type="button"
+                            <div class="stats"><span><img src="assets/images/eye.svg" alt="">{{ news.views || 0 }}</span><span><img
+                                src="assets/images/like.svg" alt="">{{ news.likes || 0 }}</span><button type="button"
                                 (click)="shareStory($event)"><img src="assets/images/share-1.svg"
                                 alt="">Share</button></div>
                         </div>
                     </article>
                 </ng-container>
 
-                <!-- <article class="card"><img src="assets/images/news-pics/1.png" alt="NiviCap launch event">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>India Education Diary</span><span>19 Nov 2025</span></div>
-                        <span class="headline selectedtab-label">Announcing Justin Langer as the Brand Ambassador of
-                            NiviCap
-                            — India's First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">Guided by its vision — “Fast. Fair. Family Approved. Your academic
-                            dreams in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/2.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Marketing Moves</span><time>19 Nov 2025</time></div>
-                        <span class="headline">NiviCap brand ambassador Justin Langer puts student wellbeing at the
-                            centre</span>
-                        <p class="consent-text">NiviCap brand ambassador Justin Langer helps the new platform frame
-                            education finance for Indian students in Australia around wellbeing reassurance and family
-                            trust.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>CXOToday.com</span><time>20 Nov 2025</time></div>
-                        <span class="headline">NiviCap Names Justin Langer as Brand Ambassador for Australian Study
-                            Platform</span>
-                        <p class="consent-text">Guided by its vision — “Fast. Fair. Family Approved. Your academic
-                            dreams in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem. </p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/4.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Central Chronicle</span><time>17 Nov 2025</time></div>
-                        <span class="headline">India's rise inevitable across sport & education: Langer</span>
-                        <p class="consent-text">Langer was in the City as an ambassador to NiviCap, a digital solution
-                            for
-                            Indian students heading to Australia for studies.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/2_3.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Mid-Day</span><time>24 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap - India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">NiviCap launches with Justin Langer as Brand Ambassador, offering
-                            transparent, tech-driven education financing for Indian students in Australia.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/6.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Sports Mint</span><time>20 Nov 2025</time></div>
-                        <span class="headline">NiviCap names Justin Langer brand ambassador as platform scales student
-                            support services</span>
-                        <p class="consent-text">Langer becomes the face of NiviCap as the platform prepares to launch
-                            services covering student loan discovery, cross-border financial planning, forex guidance,
-                            and
-                            structured post arrival support.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/7.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>TVW News India</span><time>20 Nov 2025</time></div>
-                        <span class="headline">NiviCap Launches to Transform Education Financing for Indian Students
-                            Pursuing Studies in Australia; Justin Langer Named Brand Ambassador</span>
-                        <p class="consent-text">NiviCap, a newly launched education–financing solutions platform, is set
-                            to
-                            redefine how Indian students pursue their academic aspirations in Australia.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/8.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>This Week India</span><time>18 Nov 2025</time></div>
-                        <span class="headline">NiviCap Launches: Justin Langer Champions India-Australia Education
-                            Dreams</span>
-                        <p class="consent-text">India's First-of-its-Kind Digital Solutions Platform for Australian
-                            Study
-                            Elevates Education Financing Ecosystem</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/9.png" alt="NiviCap launch event">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>News Mantra</span><time>20 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">Guided by its vision — “Fast. Fair. Family Approved. Your academic
-                            dreams in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/10.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Prittle Prattle News</span><time>20 Nov 2025</time></div>
-                        <span class="headline">India's Path to Australian Universities Just Became Clearer with the
-                            Launch
-                            of NiviCap and Support from Justin Langer</span>
-                        <p class="consent-text">As Australia welcomes over 130,000 Indian students this year, NiviCap
-                            steps
-                            in as a cross-border platform to make the journey financially seamless and emotionally
-                            secure,
-                            with Justin Langer lending his voice to the mission.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/11.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Media Prism Creative</span><time>24 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">Guided by its vision “Fast. Fair. Family Approved. Your academic dreams
-                            in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/12.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Marca Money</span><time>19 Nov 2025</time></div>
-                        <span class="headline">NiviCap onboards Justin Langer as brand ambassador</span>
-                        <p class="consent-text">Founded in 2025 by Karthik Srinivasan, NiviCap bridges India and
-                            Australia's
-                            education ecosystems through a comprehensive suite of non-banking solutions.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/13.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>The Sports Grail</span><time>25 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">Your academic dreams in Australia without financial roadblocks”, NiviCap
-                            marks a new era in the education financing ecosystem.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/14.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Press Network of India</span><time>24 Nov 2025</time></div>
-                        <span class="headline">India's First-of-its-Kind Digital Solutions Platform for Students
-                            Aspiring to
-                            Study in Australia</span>
-                        <p class="consent-text">Guided by its vision — “Fast. Fair. Family Approved. Your academic
-                            dreams in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/15.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Brandspedia</span><time>27 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">Guided by its vision — “Fast. Fair. Family Approved. Your academic
-                            dreams in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem.</p>
-                    </div>
-                </article>
-                <article class="card"><img src="assets/images/news-pics/16.png" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Your StartUp Story</span><time>27 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <p class="consent-text">Guided by its vision — “Fast. Fair. Family Approved. Your academic
-                            dreams in
-                            Australia without financial roadblocks”, NiviCap marks a new era in the education financing
-                            ecosystem.</p>
-                    </div>
-                </article> -->
-            </section>
-            <div class="loadmore-div"><button [disabled]="true" class="load-more legal-subhead" type="button">Load
-                    More</button></div>
+             </section>
+              <div class="loadmore-div mt-2">
+            <button
+    *ngIf="displayedNews.length < newsList.length"
+    class="loadmore-div load-more legal-subhead"
+    type="button"
+    (click)="loadMore()">
+
+    Load More
+</button></div>
         </div>
 
         <div *ngIf="category === 'videos'">
             <section #videoGrid class="video-grid" id="video" aria-label="Online media stories">
-                <ng-container *ngFor="let news of videoList">
+                <ng-container *ngFor="let video of videoList">
                     <article class="video-card">
-                        <img [src]='news.htmlFile' alt="NiviCap launch event" (click)="openArticlePage(news)">
-                        <div class="card-content">
-                            <div class="meta consent-text" (click)="openArticlePage(news)"><span>{{news.Publication}}</span><span>{{news.Date}}</span></div>
-                            <span class="headline selectedtab-label" (click)="openArticlePage(news)">{{news.Link}}</span>
+                        <!-- <img [src]='news.htmlFile' alt="NiviCap launch event" (click)="openVideo(news)"> -->
+
+                        <div class="video-wrapper" >
+                            <iframe width="100%" height="250" [src]="getYouTubeEmbedUrl(video.videoUrl)"
+                                title="YouTube video player" frameborder="0" allow="accelerometer;
+                               autoplay;
+                               clipboard-write;
+                               encrypted-media;
+                               gyroscope;
+                               picture-in-picture;
+                               web-share" allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="card-content" (click)="openArticlePage(video)">
+                            <div class="meta consent-text" (click)="openArticlePage(video)"><span>{{video.publication}}</span><span>{{video.date}}</span></div>
+                            <span class="headline selectedtab-label" (click)="openArticlePage(video)">{{video.title}}</span>
                             <div class="border-line"></div>
-                            <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                        src="assets/images/like.svg" alt="">78</span><button type="button"
+                            <div class="stats"><span><img src="assets/images/eye.svg" alt="">{{ video?.views || 0 }}</span><span><img
+                                        src="assets/images/like.svg" alt="">{{ video?.likes || 0 }}</span><button type="button"
                                     (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
                             </div>
                         </div>
                     </article>
                 </ng-container>
-                <!-- <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap launch event">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>India Education Diary</span><span>19 Nov 2025</span></div>
-                        <span class="headline selectedtab-label">Announcing Justin Langer as the Brand Ambassador of
-                            NiviCap
-                            — India's First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Marketing Moves</span><time>19 Nov 2025</time></div>
-                        <span class="headline">NiviCap brand ambassador Justin Langer puts student wellbeing at the
-                            centre</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>CXOToday.com</span><time>20 Nov 2025</time></div>
-                        <span class="headline">NiviCap Names Justin Langer as Brand Ambassador for Australian Study
-                            Platform</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Central Chronicle</span><time>17 Nov 2025</time></div>
-                        <span class="headline">India's rise inevitable across sport & education: Langer</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Mid-Day</span><time>24 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap - India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Sports Mint</span><time>20 Nov 2025</time></div>
-                        <span class="headline">NiviCap names Justin Langer brand ambassador as platform scales student
-                            support services</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>TVW News India</span><time>20 Nov 2025</time></div>
-                        <span class="headline">NiviCap Launches to Transform Education Financing for Indian Students
-                            Pursuing Studies in Australia; Justin Langer Named Brand Ambassador</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>This Week India</span><time>18 Nov 2025</time></div>
-                        <span class="headline">NiviCap Launches: Justin Langer Champions India-Australia Education
-                            Dreams</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap launch event">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>News Mantra</span><time>20 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Prittle Prattle News</span><time>20 Nov 2025</time></div>
-                        <span class="headline">India's Path to Australian Universities Just Became Clearer with the
-                            Launch
-                            of NiviCap and Support from Justin Langer</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Media Prism Creative</span><time>24 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Marca Money</span><time>19 Nov 2025</time></div>
-                        <span class="headline">NiviCap onboards Justin Langer as brand ambassador</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>The Sports Grail</span><time>25 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Press Network of India</span><time>24 Nov 2025</time></div>
-                        <span class="headline">India's First-of-its-Kind Digital Solutions Platform for Students
-                            Aspiring to
-                            Study in Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Brandspedia</span><time>27 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article>
-                <article class="video-card"><img src="assets/images/news-pics/3.jpg" alt="NiviCap media story">
-                    <div class="card-content">
-                        <div class="meta consent-text"><span>Your StartUp Story</span><time>27 Nov 2025</time></div>
-                        <span class="headline">Announcing Justin Langer as the Brand Ambassador of NiviCap — India's
-                            First-of-its-Kind Digital Solutions Platform for Students Aspiring to Study in
-                            Australia</span>
-                        <div class="border-line"></div>
-                        <div class="stats"><span><img src="assets/images/eye.svg" alt="">50</span><span><img
-                                    src="assets/images/like.svg" alt="">78</span><button type="button"
-                                (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
-                        </div>
-                    </div>
-                </article> -->
-            </section>
+             </section>
         </div>
 
     </div>

@@ -1,0 +1,346 @@
+<div class="container py-4 py-md-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-12 col-xl-10">
+
+            <!-- Heading -->
+            <div class="mb-4">
+                <h2 class="fw-bold mb-1">Add News</h2>
+                <p class="text-muted mb-0">
+                    Add a new article to News & Media.
+                </p>
+            </div>
+
+            <!-- Card -->
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-3 p-md-4 p-lg-5">
+
+                    <form [formGroup]="newsForm" (ngSubmit)="submit()">
+
+                        <div class="row g-4">
+
+                            <!-- Title -->
+                            <div class="col-12">
+                                <label for="title" class="form-label fw-semibold">
+
+                                    Title
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input id="title" type="text" class="form-control" formControlName="title"
+                                    placeholder="Enter news title" [class.is-invalid]="
+                                        newsForm.get('title')?.invalid &&
+                                        newsForm.get('title')?.touched
+                                    ">
+
+                                <div class="invalid-feedback">
+                                    Title is required.
+                                </div>
+                            </div>
+
+
+                            <!-- Publication -->
+                            <div class="col-12 col-md-6">
+                                <label for="publication" class="form-label fw-semibold">
+
+                                    Publication
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input id="publication" type="text" class="form-control" formControlName="publication"
+                                    placeholder="e.g. Times of India" [class.is-invalid]="
+                                        newsForm.get('publication')?.invalid &&
+                                        newsForm.get('publication')?.touched
+                                    ">
+
+                                <div class="invalid-feedback">
+                                    Publication is required.
+                                </div>
+                            </div>
+
+
+                            <!-- Date -->
+                            <div class="col-12 col-md-6">
+                                <label for="date" class="form-label fw-semibold">
+
+                                    Publication Date
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input id="date" type="date" class="form-control" formControlName="date"
+                                    [class.is-invalid]="
+                                        newsForm.get('date')?.invalid &&
+                                        newsForm.get('date')?.touched
+                                    ">
+
+                                <div class="invalid-feedback">
+                                    Publication date is required.
+                                </div>
+                            </div>
+
+
+                            <!-- Language -->
+                            <div class="col-12 col-md-6">
+                                <label for="language" class="form-label fw-semibold">
+
+                                    Language
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <select id="language" class="form-select" formControlName="language">
+
+                                    <option *ngFor="let language of languages" [value]="language">
+
+                                        {{ language }}
+
+                                    </option>
+
+                                </select>
+                            </div>
+
+
+                            <!-- Image -->
+                            <div class="col-12 col-md-6">
+
+                                <label for="thumbnail" class="form-label fw-semibold">
+
+                                    Thumbnail Image
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input #imageInput id="thumbnail" type="file" class="form-control"
+                                    accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml"
+                                    (change)="onImageSelected($event)">
+
+                                <div class="form-text">
+                                    PNG, JPG or WEBP
+                                </div>
+                                <div class="col-12" *ngIf="imageErrorMessage">
+
+                                    <div class="text-danger mb-0" role="alert">
+
+                                        {{ imageErrorMessage }}
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <!-- Image Preview -->
+                            <div class="col-12" *ngIf="imagePreview">
+
+                                <label class="form-label fw-semibold">
+                                    Image Preview
+                                </label>
+<div class="d-flex">
+                                <div class="image-preview-wrapper">
+
+                                    <img [src]="imagePreview" class="image-preview" alt="News image preview">
+
+                                </div>
+                                <span class="mx-2" (click)="removeImage(imageInput)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M18.8484 9.14014L18.1984 19.2101C18.0884 20.7801 17.9984 22.0001 15.2084 22.0001H8.78844C5.99844 22.0001 5.90844 20.7801 5.79844 19.2101L5.14844 9.14014" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M10.3281 16.5H13.6581" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9.5 12.5H14.5" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></span>
+                                <!-- <button type="button" class="btn btn-outline-danger btn-sm mt-2"
+                                    (click)="removeImage(imageInput)">
+                                    Remove Image
+                                </button> -->
+</div>
+                            </div>
+
+
+                            <!-- Small Description -->
+                            <div class="col-12">
+
+                                <label for="smallDescription" class="form-label fw-semibold">
+
+                                    Small Description
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <textarea id="smallDescription" rows="4" class="form-control"
+                                    formControlName="smallDescription"
+                                    placeholder="Enter a short description for the masonry news card"
+                                    [class.is-invalid]="
+                                        newsForm.get('smallDescription')?.invalid &&
+                                        newsForm.get('smallDescription')?.touched
+                                    "></textarea>
+
+                                <div class="invalid-feedback">
+                                    Small description is required.
+                                </div>
+
+                            </div>
+
+
+                            <!-- Full Description -->
+                            <div class="col-12">
+
+                                <label for="largeDescription" class="form-label fw-semibold">
+
+                                    Full News Description
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <textarea id="largeDescription" rows="8" class="form-control"
+                                    formControlName="largeDescription" placeholder="Enter the complete news article"
+                                    [class.is-invalid]="
+                                        newsForm.get('largeDescription')?.invalid &&
+                                        newsForm.get('largeDescription')?.touched
+                                    "></textarea>
+
+                                <div class="invalid-feedback">
+                                    Full description is required.
+                                </div>
+
+                            </div>
+
+
+                            <!-- Original URL -->
+                            <div class="col-12">
+
+                                <label for="originalNewsUrl" class="form-label fw-semibold">
+
+                                    Original News Link
+                                </label>
+
+                                <input id="originalNewsUrl" type="url" class="form-control"
+                                    formControlName="originalNewsUrl" placeholder="https://example.com/news/article">
+
+                            </div>
+
+
+                            <!-- Disclaimer Publication -->
+                            <div class="col-12 col-md-6">
+
+                                <label for="disclaimerPublication" class="form-label fw-semibold">
+
+                                    Disclaimer Publication
+                                </label>
+
+                                <input id="disclaimerPublication" type="text" class="form-control"
+                                    formControlName="disclaimerPublication" placeholder="e.g. Times of India">
+
+                            </div>
+
+
+                            <!-- Disclaimer URL -->
+                            <!-- <div class="col-12 col-md-6">
+
+                                <label for="disclaimerLink" class="form-label fw-semibold">
+
+                                    Disclaimer Link
+                                </label>
+
+                                <input id="disclaimerLink" type="url" class="form-control"
+                                    formControlName="disclaimerLink" placeholder="https://www.example.com">
+
+                            </div> -->
+
+
+                            <!-- PDF -->
+                            <div class="col-12 col-md-6">
+
+                                <label for="newsPdf" class="form-label fw-semibold">
+
+                                    Original News PDF
+                                </label>
+
+                                <input #pdfInput id="newsPdf" type="file" class="form-control" accept="application/pdf"
+                                    (change)="onPdfSelected($event)">
+
+                                <div class="form-text">
+                                    Upload the original publication PDF, if available.
+                                </div>
+
+                                <div class="col-12" *ngIf="pdfErrorMessage">
+
+                                    <div class="text-danger mb-0" role="alert">
+
+                                        {{ pdfErrorMessage }}
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <!-- Messages -->
+                            <div class="col-12" *ngIf="successMessage">
+
+                                <div class="alert alert-success mb-0" role="alert">
+
+                                    {{ successMessage }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-12" *ngIf="errorMessage">
+
+                                <div class="alert alert-danger mb-0" role="alert">
+
+                                    {{ errorMessage }}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Buttons -->
+                            <div class="col-12">
+
+                                <div class="
+                                        d-flex
+                                        flex-column
+                                        flex-sm-row
+                                        justify-content-end
+                                        gap-2
+                                        pt-2
+                                    ">
+
+                                    <button type="reset" class="btn btn-outline-secondary px-4" [disabled]="uploading">
+
+                                        Reset
+
+                                    </button>
+
+                                    <button type="submit" class="btn btn-danger px-4" [disabled]="uploading">
+
+                                        <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"
+                                            aria-hidden="true">
+                                        </span>
+
+                                        {{
+                                        uploading
+                                        ? 'Uploading...'
+                                        : 'Add News'
+                                        }}
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,102 @@
+:host {
+    display: block;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.form-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.form-control,
+.form-select {
+    min-height: 46px;
+    border-radius: 8px;
+}
+
+textarea.form-control {
+    min-height: auto;
+    resize: vertical;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #f33b48;
+    box-shadow: 0 0 0 0.2rem rgba(243, 59, 72, 0.1);
+}
+
+/* Image Preview */
+
+.image-preview-wrapper {
+    max-width: 420px;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.image-preview {
+    display: block;
+    width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+/* NiviCap style button */
+
+.btn-danger {
+    background-color: #f33b48;
+    border-color: #f33b48;
+}
+
+.btn-danger:hover {
+    background-color: #dc2936;
+    border-color: #dc2936;
+}
+
+.btn-danger:disabled {
+    background-color: #f33b48;
+    border-color: #f33b48;
+}
+
+/* Mobile */
+
+@media (max-width: 575.98px) {
+
+    :host {
+        background-color: #ffffff;
+    }
+
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .card {
+        box-shadow: none !important;
+    }
+
+    .card-body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .btn {
+        width: 100%;
+        min-height: 46px;
+    }
+
+    .image-preview-wrapper {
+        max-width: 100%;
+    }
+}

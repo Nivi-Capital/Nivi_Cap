@@ -1,10 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import newsData from '../../../assets/jsonData/publication.json';
-import videoData from '../../../assets/jsonData/videosList.json';
+// import newsData from '../../../assets/jsonData/publication.json';
+// import videoData from '../../../../newsdata/videosList.json';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { NewsService } from '../../service/news';
+import { NewsArticle } from '../../models/news.model';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 interface NewsStory {
@@ -31,6 +34,10 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
 
 
   newsList: any[] = [];
+displayedNews: any[] = [];
+itemsPerLoad = 16;
+currentCount = 16;
+
   currentPage = 1;
   pageSize = 10;
   totalPages = 0;
@@ -42,6 +49,7 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
   videoList: any[] = [];
 
   private newsGridElement?: ElementRef<HTMLElement>;
+video: any;
 
   @ViewChild('newsGrid')
   set newsGrid(value: ElementRef<HTMLElement> | undefined) {
@@ -58,16 +66,19 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
   private readonly ratioNames = new Set(['16-9', '2-3', '21-9', '1-1']);
   private readonly fallbackRatios = ['16-9', '2-3', '21-9', '1-1'];
 
-  constructor(private http: HttpClient, private router: Router, private cdr: ChangeDetectorRef) { }
+  @HostListener('window:focus')
+onWindowFocus(): void {
+  if (this.category === 'videos') {
+    this.loadVideos();
+  } else {
+    this.loadNews();
+  }
+}
+  constructor(private http: HttpClient, private router: Router, private cdr: ChangeDetectorRef,private newsService: NewsService, private sanitizer:DomSanitizer) { }
   ngOnInit() {
-    // this.newsList = newsData;
-    // this.newsList.sort((a, b) => {
-    //   return this.parseDate(b.Date).getTime() - this.parseDate(a.Date).getTime();
-    // });
-    // if (this.newsList?.length) this.totalPages = Math.floor(this.newsList.length / 10);
-    // this.generateVisiblePages();
+   
     this.filterByLanguage(this.language);
-    this.videoList = videoData;
+    // this.videoList = videoData;
     
   }
 
@@ -168,10 +179,44 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  changeSection(section: any) {
-    this.category = section;
+  changeSection(section: 'news' | 'videos'): void {
+  this.category = section;
+
+  if (section === 'videos') {
+    this.loadVideos();
+    return;
   }
 
+  this.loadNews();
+}
+private loadNews(): void {
+  this.newsService
+    .getNews(this.language)
+    .subscribe({
+      next: data => {
+        this.newsList = data;
+
+        this.currentCount = 16;
+
+        this.displayedNews = this.newsList.slice(
+          0,
+          this.currentCount
+        );
+
+        this.refreshGrid();
+      },
+
+      error: error => {
+        console.error(
+          'Error loading news',
+          error
+        );
+
+        this.newsList = [];
+        this.displayedNews = [];
+      }
+    });
+}
   shareStory(event: Event): void {
     const button = event.currentTarget as HTMLButtonElement;
     const card = button.closest('.card');
@@ -239,16 +284,59 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  openArticlePage(item: any): void {
+  openArticlePage(item: NewsArticle): void {
     // sessionStorage.setItem('newsData', JSON.stringify(item));
     this.router.navigate(['/newscontent', item.uid]);
   }
 
-  filterByLanguage(lang: any){
-    this.language = lang;
-    this.newsList = newsData.filter((item: any) => item.Language === lang);
-    this.refreshGrid();
+openVideo(item: any): void {
+  this.router.navigate(['/newscontent', item.uid]);
+  // window.open(item.uid, '_blank');
+}
+
+filterByLanguage(lang: string): void {
+
+  this.language = lang;
+ if (this.category === 'videos') {
+    this.loadVideos();
+    return;
   }
+
+  this.loadNews();
+
+//   this.newsService
+//     .getNews(lang)
+//     .subscribe({
+
+//       next: data => {
+
+//         this.newsList = data;
+// this.currentCount = 16;
+// this.displayedNews = this.newsList.slice(0, this.currentCount);
+
+//         this.refreshGrid();
+//       },
+
+//       error: error => {
+//         console.error(
+//           'Error loading news',
+//           error
+//         );
+//       }
+
+//     });
+}
+loadMore(): void {
+  this.currentCount += this.itemsPerLoad;
+
+  this.displayedNews = this.newsList.slice(
+    0,
+    this.currentCount
+  );
+
+  this.refreshGrid();
+}
+
 
   private refreshGrid(): void {
     this.cdr.detectChanges();
@@ -259,4 +347,51 @@ export class News implements OnInit, AfterViewInit, OnDestroy {
       });
     });
   }
+
+  addnews(){
+     this.router.navigate(['/newsform']);
+  }
+
+
+    getYouTubeVideoId(url: string): string {
+ 
+    if (!url) {
+      return '';
+    }
+ 
+    const match = url.match(
+      /(?:youtube\.com\/(?:.*v=|embed\/|shorts\/)|youtu\.be\/)([^&?\/]+)/
+    );
+ 
+    return match ? match[1] : '';
+  }
+ 
+  getYouTubeEmbedUrl(url: string): SafeResourceUrl {
+    const videoId = this.getYouTubeVideoId(url);
+ 
+    const embedUrl =
+      `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+ 
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+  }
+private loadVideos(): void {
+  this.newsService
+    .getVideos(this.language)
+    .subscribe({
+      next: videos => {
+        console.log('Videos from PHP:', videos);
+        this.videoList = videos;
+      },
+
+      error: error => {
+        console.error(
+          'Error loading videos',
+          error
+        );
+
+        this.videoList = [];
+      }
+    });
+}
+ 
 }

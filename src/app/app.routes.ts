@@ -7,6 +7,7 @@ import { Contact } from './layout/contact/contact';
 import { News } from './layout/news/news';
 import { Career } from './layout/career/career';
 import { Newscontent } from './layout/news/newscontent/newscontent';
+import { Newsform } from './layout/news/newsform/newsform';
 
 export const routes: Routes = [
     {   path: '',
@@ -18,6 +19,7 @@ export const routes: Routes = [
        { path: 'contact', component: Contact },
        { path: 'news', component: News },
        { path: 'newscontent/:id', component: Newscontent },
+       { path: 'newsform', component: Newsform },
       //  { path: 'news', component: Newscontent },
         { path: 'careers', component: Career },
     

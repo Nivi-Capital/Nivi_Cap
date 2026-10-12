@@ -460,3 +460,22 @@
     font-size: 6px
   }
 }
+
+.article-copy p {
+  line-height: 1.6;
+  text-align: justify;
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: 41px; /* 170.833% */
+letter-spacing: 0.24px;
+
+}
+
+.article-copy p:last-child {
+  margin-bottom: 0;
+}
+.download-link {
+  color:#666771!important;
+   text-decoration: none;
+}

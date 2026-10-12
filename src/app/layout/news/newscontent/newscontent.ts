@@ -12,8 +12,11 @@ import {
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import newsData from '../../../../assets/jsonData/publication.json';
-import videoData from '../../../../assets/jsonData/videosList.json';
+// import newsData from '../../../../assets/jsonData/publication.json';
+// import videoData from '../../../../assets/jsonData/videosList.json';
+import videoData from '../../../../../newsdata/videosList.json';
+import { NewsService } from '../../../service/news';
+import html2pdf from 'html2pdf.js';
 
 @Component({
   selector: 'app-newscontent',
@@ -39,8 +42,9 @@ export class Newscontent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private newsService: NewsService
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -57,41 +61,137 @@ export class Newscontent implements OnInit, AfterViewInit {
     this.cdr.detectChanges();
   }
 
+
+
   private loadContent(id: string): void {
-    // Reset video URL when changing content
-    this.trustedUrl = undefined;
 
-    // Check news
-    const article = newsData.find((item: any) => item.uid === id);
+    this.newsService
+      .getNewsById(id)
+      .subscribe({
 
-    if (article) {
-      this.newsArticle = article;
+        next: article => {
+          if (!article) {
+            console.error(
+              'News article not found:',
+              id
+            );
 
-      this.newsList = newsData.filter(
-        (item: any) =>
-          item.uid !== id &&
-          item.Language === article.Language
-      );
+            return;
+          }
+          console.log('Article response:', article);
+          this.newsArticle = article;
 
-      this.resetCarousel();
-      return;
-    }
+          if (article.type === 'video' && article.videoUrl) {
+            this.trustedUrl =
+              this.getSafeYouTubeUrl(
+                article.videoUrl
+              );
+          }
 
-    // Check video
-    const video = videoData.find((item: any) => item.uid === id);
+          this.newsService
+            .incrementView(id)
+            .subscribe({
 
-    if (video) {
-      this.newsArticle = video;
+              next: result => {
 
-      this.newsList = videoData.filter(
-        (item: any) => item.uid !== id
-      );
+                this.newsArticle.views =
+                  result.views;
 
-      this.trustedUrl = this.getSafeYouTubeUrl(video.URL);
+              },
 
-      this.resetCarousel();
-    }
+              error: error => {
+
+                console.error(
+                  'Unable to update views',
+                  error
+                );
+
+              }
+
+            });
+
+          this.loadLatestContent(article.language);
+
+        },
+
+        error: error => {
+
+          console.error(
+            'News not found',
+            error
+          );
+
+        }
+      });
   }
+
+
+private loadLatestContent(language: string): void {
+
+  if (this.newsArticle?.type === 'video') {
+
+    this.newsService
+      .getVideos(language)
+      .subscribe({
+        next: videos => {
+
+          console.log(
+            'Latest videos response:',
+            videos
+          );
+
+          this.newsList = videos.filter(
+            video =>
+              video.uid !== this.newsArticle.uid &&
+              video.type === 'video'
+          );
+
+          this.resetCarousel();
+        },
+
+        error: error => {
+          console.error(
+            'Unable to load latest videos',
+            error
+          );
+
+          this.newsList = [];
+        }
+      });
+
+    return;
+  }
+
+  this.newsService
+    .getNews(language)
+    .subscribe({
+      next: articles => {
+
+        console.log(
+          'Latest news response:',
+          articles
+        );
+
+        this.newsList = articles.filter(
+          article =>
+            article.uid !== this.newsArticle.uid &&
+            article.type === 'text'
+        );
+
+        this.resetCarousel();
+      },
+
+      error: error => {
+        console.error(
+          'Unable to load latest news',
+          error
+        );
+
+        this.newsList = [];
+      }
+    });
+}
+
 
   nextNews(): void {
     this.moveCarousel(1);
@@ -201,5 +301,116 @@ export class Newscontent implements OnInit, AfterViewInit {
 
   openArticlePage(item: any): void {
     this.router.navigate(['/newscontent', item.uid]);
+  }
+
+  getDescriptionParagraphs(description: string): string[] {
+
+    if (!description) {
+      return [];
+    }
+
+    return description
+      .split(/\\n|\n/)
+      .map(paragraph => paragraph.trim())
+      .filter(paragraph => paragraph.length > 0);
+  }
+  async downloadPage(): Promise<void> {
+
+    const element =
+      document.getElementById('article-pdf');
+
+    if (!element) {
+      console.error('Article PDF content not found');
+      return;
+    }
+
+    const fileName =
+      this.getPdfFileName();
+
+    const options = {
+
+      margin: [
+        10,
+        10,
+        10,
+        10
+      ] as [number, number, number, number],
+
+      filename: fileName,
+
+      image: {
+        type: 'jpeg' as const,
+        quality: 0.98
+      },
+
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      },
+
+      jsPDF: {
+        unit: 'mm' as const,
+        format: 'a4' as const,
+        orientation: 'portrait' as const
+      },
+
+      pagebreak: {
+        mode: [
+          'css',
+          'legacy'
+        ]
+      }
+
+    };
+
+    await html2pdf()
+      .set(options)
+      .from(element)
+      .save();
+  }
+  private getPdfFileName(): string {
+
+    const title =
+      this.newsArticle?.title ||
+      'NiviCap-News';
+
+    const safeTitle =
+      title
+        .replace(/[^a-zA-Z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+
+    return `${safeTitle}.pdf`;
+  }
+  likeArticle(): void {
+
+    if (!this.newsArticle?.uid) {
+      return;
+    }
+
+    this.newsService
+      .incrementLike(
+        this.newsArticle.uid
+      )
+      .subscribe({
+
+        next: result => {
+
+          this.newsArticle.likes =
+            result.likes;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to update like',
+            error
+          );
+
+        }
+
+      });
   }
 }
