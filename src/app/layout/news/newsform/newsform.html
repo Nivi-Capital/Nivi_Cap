@@ -5,12 +5,12 @@
         <div class="col-12 col-xl-10">
 
             <!-- Heading -->
-            <div class="mb-4">
+            <!-- <div class="mb-4">
                 <h2 class="fw-bold mb-1">Add News</h2>
                 <p class="text-muted mb-0">
                     Add a new article to News & Media.
                 </p>
-            </div>
+            </div> -->
 
             <!-- Card -->
             <div class="card border-0 shadow-sm">
@@ -20,6 +20,27 @@
                     <form [formGroup]="newsForm" (ngSubmit)="submit()">
 
                         <div class="row g-4">
+
+                            <!-- contentType -->
+                            <div class="col-12 col-md-6">
+                                <label for="contentType" class="form-label fw-semibold">
+
+                                    Content Type
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <select id="contentType" class="form-select" formControlName="contentType"
+                                    (change)="onContentTypeChange()">
+
+                                    <option value="onlinemedia">
+                                        Online Media
+                                    </option>
+
+                                    <option value="video">
+                                        Video
+                                    </option>
+                                </select>
+                            </div>
 
                             <!-- Title -->
                             <div class="col-12">
@@ -69,14 +90,20 @@
                                     <span class="text-danger">*</span>
                                 </label>
 
-                                <input id="date" type="date" class="form-control" formControlName="date"
-                                    [class.is-invalid]="
+                                <input id="date" type="date" class="form-control" formControlName="date" [max]="today"
+                                    min="2000-01-01" [class.is-invalid]="
                                         newsForm.get('date')?.invalid &&
                                         newsForm.get('date')?.touched
                                     ">
 
-                                <div class="invalid-feedback">
+                                <div class="invalid-feedback" *ngIf="newsForm.get('date')?.hasError('required')">
                                     Publication date is required.
+                                </div>
+                                <div class="invalid-feedback" *ngIf="newsForm.get('date')?.hasError('minimumDate')">
+                                    Publication date cannot be earlier than 1 January 2000.
+                                </div>
+                                <div class="invalid-feedback" *ngIf="newsForm.get('date')?.hasError('futureDate')">
+                                    Future publication dates are not allowed.
                                 </div>
                             </div>
 
@@ -99,10 +126,33 @@
 
                                 </select>
                             </div>
+                            <!-- video link -->
+                            <div class="col-12" *ngIf="contentType === 'video'">
+
+                                <label for="videoUrl" class="form-label fw-semibold">
+
+                                    YouTube Video URL
+                                    <span class="text-danger">*</span>
+                                </label>
+
+                                <input id="videoUrl" type="url" class="form-control" formControlName="videoUrl"
+                                    placeholder="https://www.youtube.com/watch?v=VIDEO_ID" [class.is-invalid]="
+      newsForm.get('videoUrl')?.invalid &&
+      newsForm.get('videoUrl')?.touched
+    ">
+
+                                <div class="form-text">
+                                    You can paste a YouTube video, Shorts, embed, or youtu.be link.
+                                </div>
+
+                                <div class="invalid-feedback">
+                                    Enter a valid YouTube URL.
+                                </div>
+                            </div>
 
 
                             <!-- Image -->
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-6" *ngIf="contentType === 'onlinemedia'">
 
                                 <label for="thumbnail" class="form-label fw-semibold">
 
@@ -115,7 +165,7 @@
                                     (change)="onImageSelected($event)">
 
                                 <div class="form-text">
-                                    PNG, JPG or WEBP
+                                    PNG, JPG ,JPEG,SVG
                                 </div>
                                 <div class="col-12" *ngIf="imageErrorMessage">
 
@@ -126,38 +176,60 @@
                                     </div>
 
                                 </div>
+                                <div class="col-12" *ngIf="noImageErrorMessage && !imageErrorMessage">
+
+                                    <div class="text-danger mb-0" role="alert">
+
+                                        {{ noImageErrorMessage }}
+
+                                    </div>
+
+                                </div>
                             </div>
 
 
                             <!-- Image Preview -->
-                            <div class="col-12" *ngIf="imagePreview">
+                            <div class="col-12" *ngIf="imagePreview && contentType === 'onlinemedia'">
 
                                 <label class="form-label fw-semibold">
                                     Image Preview
                                 </label>
-<div class="d-flex">
-                                <div class="image-preview-wrapper">
+                                <div class="d-flex">
+                                    <div class="image-preview-wrapper">
 
-                                    <img [src]="imagePreview" class="image-preview" alt="News image preview">
+                                        <img [src]="imagePreview" class="image-preview" alt="News image preview">
 
-                                </div>
-                                <span class="mx-2" (click)="removeImage(imageInput)"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M18.8484 9.14014L18.1984 19.2101C18.0884 20.7801 17.9984 22.0001 15.2084 22.0001H8.78844C5.99844 22.0001 5.90844 20.7801 5.79844 19.2101L5.14844 9.14014" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M10.3281 16.5H13.6581" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M9.5 12.5H14.5" stroke="#25262F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg></span>
-                                <!-- <button type="button" class="btn btn-outline-danger btn-sm mt-2"
+                                    </div>
+                                    <span class="mx-2" (click)="removeImage(imageInput.nativeElement)"><svg
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <path
+                                                d="M21 5.97998C17.67 5.64998 14.32 5.47998 10.98 5.47998C9 5.47998 7.02 5.57998 5.04 5.77998L3 5.97998"
+                                                stroke="#25262F" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M8.5 4.97L8.72 3.66C8.88 2.71 9 2 10.69 2H13.31C15 2 15.13 2.75 15.28 3.67L15.5 4.97"
+                                                stroke="#25262F" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path
+                                                d="M18.8484 9.14014L18.1984 19.2101C18.0884 20.7801 17.9984 22.0001 15.2084 22.0001H8.78844C5.99844 22.0001 5.90844 20.7801 5.79844 19.2101L5.14844 9.14014"
+                                                stroke="#25262F" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                            <path d="M10.3281 16.5H13.6581" stroke="#25262F" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                            <path d="M9.5 12.5H14.5" stroke="#25262F" stroke-width="1.5"
+                                                stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg></span>
+                                    <!-- <button type="button" class="btn btn-outline-danger btn-sm mt-2"
                                     (click)="removeImage(imageInput)">
                                     Remove Image
                                 </button> -->
-</div>
+                                </div>
                             </div>
 
 
                             <!-- Small Description -->
-                            <div class="col-12">
+                            <div class="col-12" *ngIf="contentType === 'onlinemedia'">
 
                                 <label for="smallDescription" class="form-label fw-semibold">
 
@@ -181,7 +253,7 @@
 
 
                             <!-- Full Description -->
-                            <div class="col-12">
+                            <div class="col-12" *ngIf="contentType === 'onlinemedia'">
 
                                 <label for="largeDescription" class="form-label fw-semibold">
 
@@ -204,7 +276,7 @@
 
 
                             <!-- Original URL -->
-                            <div class="col-12">
+                            <div class="col-12" *ngIf="contentType === 'onlinemedia'">
 
                                 <label for="originalNewsUrl" class="form-label fw-semibold">
 
@@ -212,7 +284,14 @@
                                 </label>
 
                                 <input id="originalNewsUrl" type="url" class="form-control"
-                                    formControlName="originalNewsUrl" placeholder="https://example.com/news/article">
+                                    formControlName="originalNewsUrl" placeholder="https://example.com/news/article"
+                                    [class.is-invalid]="
+                                        newsForm.get('originalNewsUrl')?.invalid &&
+                                        newsForm.get('originalNewsUrl')?.touched
+                                    ">
+                                <div class="invalid-feedback">
+                                    original New URL is required.
+                                </div>
 
                             </div>
 
@@ -226,27 +305,26 @@
                                 </label>
 
                                 <input id="disclaimerPublication" type="text" class="form-control"
-                                    formControlName="disclaimerPublication" placeholder="e.g. Times of India">
+                                    formControlName="disclaimerPublication" placeholder="e.g. Times of India"
+                                    [class.is-invalid]="
+                                        newsForm.get('disclaimerPublication')?.invalid &&
+                                        newsForm.get('disclaimerPublication')?.touched
+                                    ">
+
+
+
+                                <div class="invalid-feedback">
+                                    Disclaimer Publication is required.
+                                </div>
 
                             </div>
 
 
-                            <!-- Disclaimer URL -->
-                            <!-- <div class="col-12 col-md-6">
 
-                                <label for="disclaimerLink" class="form-label fw-semibold">
-
-                                    Disclaimer Link
-                                </label>
-
-                                <input id="disclaimerLink" type="url" class="form-control"
-                                    formControlName="disclaimerLink" placeholder="https://www.example.com">
-
-                            </div> -->
 
 
                             <!-- PDF -->
-                            <div class="col-12 col-md-6">
+                            <div class="col-12 col-md-6" *ngIf="contentType === 'onlinemedia'">
 
                                 <label for="newsPdf" class="form-label fw-semibold">
 
@@ -283,7 +361,7 @@
 
                             </div>
 
-
+                            <!-- 
                             <div class="col-12" *ngIf="errorMessage">
 
                                 <div class="alert alert-danger mb-0" role="alert">
@@ -292,7 +370,7 @@
 
                                 </div>
 
-                            </div>
+                            </div> -->
 
 
                             <!-- Buttons -->
@@ -307,23 +385,20 @@
                                         pt-2
                                     ">
 
-                                    <button type="reset" class="btn btn-outline-secondary px-4" [disabled]="uploading">
 
-                                        Reset
-
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary" (click)="preview()">
+                                        Preview
                                     </button>
 
-                                    <button type="submit" class="btn btn-danger px-4" [disabled]="uploading">
+                                    <button type="submit" class="btn btn-danger px-4" *ngIf="hasPreviewed"
+                                        [disabled]="uploading ">
 
                                         <span *ngIf="uploading" class="spinner-border spinner-border-sm me-2"
                                             aria-hidden="true">
                                         </span>
 
-                                        {{
-                                        uploading
-                                        ? 'Uploading...'
-                                        : 'Add News'
-                                        }}
+                                        {{ uploading ? 'Uploading...' : 'Submit' }}
 
                                     </button>
 
@@ -343,4 +418,139 @@
 
     </div>
 
+</div>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    News Preview
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <article class="preview-article" *ngIf="previewArticle">
+
+
+                    <div class="article-heading">
+                        <div class="article-heading-title">{{previewArticle?.title}}</div>
+                        <div class="article-meta text-normal">
+                            <span>{{previewArticle?.publication}}</span><span>{{(previewArticle?.date | date:'dd MMM
+                                yyyy' )}}</span>
+                        </div>
+                        <div class="article-actions">
+                            <div class="stats text-normal">
+                                <span><img src="assets/images/eye.svg" alt="">{{ 0 }}</span>
+
+                                <button type="button" class="like-btn"><img src="assets/images/like.svg" alt="">
+                                    {{ 0 }}</button>
+                            </div>
+                            <div class="stats text-normal">
+                                <button><img src="assets/images/share-1.svg" alt="">Share</button>
+                                <button><img src="assets/images/download.svg" alt="download">Download</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Selected image -->
+                    <div class="hero-image-div" *ngIf="
+    previewArticle?.type === 'onlinemedia' &&
+    previewArticle?.imageUrl
+  ">
+                        <img class="hero-image" [src]="previewArticle.imageUrl" [alt]="previewArticle.title">
+                    </div>
+
+                    <!-- YouTube video -->
+                    <div class="preview-video-wrapper" *ngIf="
+    previewArticle?.type === 'video' &&
+    previewVideoUrl
+  ">
+
+                        <iframe [src]="previewVideoUrl" [title]="previewArticle?.title || 'YouTube video preview'"
+                            allow="
+      accelerometer;
+      autoplay;
+      clipboard-write;
+      encrypted-media;
+      gyroscope;
+      picture-in-picture
+    " allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <!-- Full description -->
+                    <div class="article-copy" *ngIf="previewArticle.largeDescription">
+
+                        <p *ngFor="
+                let paragraph of getPreviewParagraphs(
+                  previewArticle.largeDescription
+                )
+              ">
+                            {{ paragraph }}
+                        </p>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <div class="disclaimer article-copy">
+
+                        <strong>Disclaimer: </strong>
+
+                        <span>
+                            This article was originally published by
+
+                            <a *ngIf="previewArticle.originalNewsUrl" [href]="previewArticle.originalNewsUrl"
+                                target="_blank" rel="noopener noreferrer" class="original-link">
+
+                                {{ previewArticle.disclaimerPublication }}
+                            </a>
+
+
+
+                            <span *ngIf="!previewArticle.originalNewsUrl">
+
+                                {{ previewArticle.disclaimerPublication }}
+                            </span>
+
+                            <a [href]="previewArticle.pdfUrl" target="_blank" class="download-link mx-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <path d="M9.32031 11.6802L11.8803 14.2402L14.4403 11.6802" fill="#666771" />
+                                    <path d="M9.32031 11.6802L11.8803 14.2402L14.4403 11.6802" stroke="#666771"
+                                        stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M11.8789 4V14.17" stroke="#666771" stroke-width="1.5"
+                                        stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M20 12.1799C20 16.5999 17 20.1799 12 20.1799C7 20.1799 4 16.5999 4 12.1799"
+                                        stroke="#666771" stroke-width="1.5" stroke-miterlimit="10"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg> Download
+
+
+                            </a>
+                        </span>
+                    </div>
+
+                </article>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
 </div>

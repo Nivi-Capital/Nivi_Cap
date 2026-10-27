@@ -6,7 +6,8 @@ export interface NewsArticle {
   publication: string;
   date: string;
   language: string;
-  type: 'text' | 'video';
+  type: 'onlinemedia' | 'video';
+  slug: string;
 
   imageUrl: string;
 

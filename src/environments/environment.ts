@@ -3,3 +3,4 @@ export const environment = {
   apiBaseUrl: 'https://nivione-uat.nivicap.com/nivicapstage/api/public/leads',
    checkenv:'CAMPAIGN'
 };
+

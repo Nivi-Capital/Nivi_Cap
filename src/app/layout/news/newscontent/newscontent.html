@@ -6,7 +6,7 @@
         <div class="article-heading">
           <div class="article-heading-title">{{newsArticle?.title}}</div>
           <div class="article-meta text-normal">
-            <span>{{newsArticle?.publication}}</span><span>{{newsArticle?.date}}</span>
+            <span>{{newsArticle?.publication}}</span><span>{{formatDate(newsArticle?.date)}}</span>
           </div>
           <div class="article-actions">
             <div class="stats text-normal">
@@ -16,14 +16,16 @@
                 {{ newsArticle?.likes || 0 }}</button>
             </div>
             <div class="stats text-normal">
-              <button (click)="shareStory($event)"><img src="assets/images/share-1.svg" alt="">Share</button>
+              <button (click)="shareStory(newsArticle)"><img src="assets/images/share-1.svg" alt="">Share</button>
               <button (click)="downloadPage()"><img src="assets/images/download.svg" alt="download">Download</button>
             </div>
           </div>
         </div>
 
-        <div class="hero-image-div" *ngIf="newsArticle?.type === 'text'">
-          <img class="hero-image" [src]="newsArticle?.imageUrl" [alt]="newsArticle?.title">
+        <div class="hero-image-div" *ngIf="newsArticle?.type === 'onlinemedia'">
+          <img class="hero-image"
+            [src]="newsArticle?.imageUrl ? newsArticle.imageUrl : 'assets/images/news-pics/news-default.png'"
+            [alt]="newsArticle?.title">
         </div>
 
         <div class="hero-image-div" *ngIf="newsArticle?.type === 'video'">
@@ -33,7 +35,7 @@
           </iframe>
         </div>
 
-        <div class="article-copy" *ngIf="newsArticle?.type === 'text'">
+        <div class="article-copy" *ngIf="newsArticle?.type === 'onlinemedia'">
 
           <!-- {{newsArticle.largeDescription}} -->
           <p *ngFor="let paragraph of getDescriptionParagraphs(newsArticle?.largeDescription)">
@@ -42,14 +44,9 @@
 
           </p>
         </div>
-        <div class="disclaimer article-copy" *ngIf="newsArticle?.disclaimerPublication">
+        <div class="disclaimer article-copy" *ngIf="newsArticle?.type === 'onlinemedia' && newsArticle?.disclaimerPublication">
           <strong>Disclaimer :-</strong><span> This article was originally published by
-            <a *ngIf="newsArticle?.originalNewsUrl" [href]="newsArticle?.originalNewsUrl" target="_blank"
-              rel="noopener noreferrer">
-               
-              {{ newsArticle.disclaimerPublication }}
-               
-            </a>
+
 
 
             <a *ngIf="newsArticle?.originalNewsUrl" [href]="newsArticle?.originalNewsUrl" target="_blank"
@@ -67,8 +64,8 @@
                   stroke-linecap="round" stroke-linejoin="round" />
                 <path d="M20 12.1799C20 16.5999 17 20.1799 12 20.1799C7 20.1799 4 16.5999 4 12.1799" stroke="#666771"
                   stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              Download
+              </svg> Download
+
 
             </a>
           </span>
@@ -77,7 +74,7 @@
 
       <section id="latest-news" class="latest-news">
         <div class="section-heading">
-          <div class="section-heading-title">Latest <span *ngIf="newsArticle?.type === 'text'">News</span><span
+          <div class="section-heading-title">Latest <span *ngIf="newsArticle?.type === 'onlinemedia'">News</span><span
               *ngIf="newsArticle?.type === 'video'">Videos</span></div>
           <div class="carousel-controls"><button type="button" aria-label="Previous" [disabled]="isAtStart || isSliding"
               (click)="previousNews()">
@@ -94,41 +91,60 @@
           </div>
         </div>
         <div #newsGrid class="news-grid" (scroll)="updateCarouselState()">
+
+
           <ng-container *ngFor="let items of newsList">
-            <article class="news-card">
+            <article class="news-card" [ngClass]="{'news-card-video':  items.type === 'video'}">
               @if(items.type === 'video'){
-                   <div class="video-wrapper" >
-                            <iframe width="100%" height="250"  [src]="getSafeYouTubeUrl(items.videoUrl)"
-                                title="YouTube video player" frameborder="0" allow="accelerometer;
-                               autoplay;
-                               clipboard-write;
-                               encrypted-media;
-                               gyroscope;
-                               picture-in-picture;
-                               web-share" allowfullscreen>
-                            </iframe>
-                        </div>
+              <div class="video-wrapper" (click)="openArticlePage(items)">
+                <img [src]="getYouTubeThumbnail(items.videoUrl)" class="youtube-thumbnail" alt="Video thumbnail"
+                  loading="lazy">
+                <div class="play-button">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34" fill="none">
+                    <path
+                      d="M5.66699 17V11.9567C5.66699 5.69499 10.1012 3.13083 15.527 6.26166L19.9045 8.78333L24.282 11.305C29.7078 14.4358 29.7078 19.5642 24.282 22.695L19.9045 25.2167L15.527 27.7383C10.1012 30.8692 5.66699 28.305 5.66699 22.0433L5.66699 17Z"
+                      stroke="#F4F6FF" stroke-width="2.25" stroke-miterlimit="10" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                </div>
+              </div>
               }
-              @else if (items.type === 'text') {
-                <img [src]='items.imageUrl' [alt]="items.title" (keydown)="openArticlePage(items)" (click)="openArticlePage(items)">
+              @else if (items.type === 'onlinemedia') {
+              <img [src]='items.imageUrl' [alt]="items.title" (keydown)="openArticlePage(items)"
+                (click)="openArticlePage(items)">
               }
-              <!-- <img [src]='news.imageUrl' alt="NiviCap launch event" (click)="openArticlePage(items)"> -->
-          
+
               <div class="card-content">
                 <div class="meta consent-text" (keydown)="openArticlePage(items)" (click)="openArticlePage(items)">
-                  <span>{{items.publication}}</span><span>{{items.date}}</span>
+                  <span>{{items.publication}}</span><span>{{formatDate(items.date)}}</span>
                 </div>
-                <span class="headline selectedtab-label" (keydown)="openArticlePage(items)"
-                  (click)="openArticlePage(items)">{{items.smallDescription}}</span>
-                <p class="consent-text sub-heading" (click)="openArticlePage(items)" (keydown)="openArticlePage(items)">{{items.largeDescription}}</p>
+                <span class="headline selectedtab-label" [ngClass]="{'video-headline': items.type === 'video'}" (keydown)="openArticlePage(items)"
+                  (click)="openArticlePage(items)">{{items.title}}</span>
+                <p class="consent-text sub-heading" *ngIf="items.type !== 'video'" (click)="openArticlePage(items)" (keydown)="openArticlePage(items)">
+                  {{items.largeDescription}}</p>
                 <div class="border-line"></div>
-                <div class="card-stats consent-text"><span><img src="assets/images/eye.svg" alt="">{{ items.views || 0 }}</span><span><img
-                      src="assets/images/like.svg" alt="">{{ items.likes || 0 }}</span><button type="button"><img
-                      src="assets/images/share-1.svg" alt="">Share</button></div>
+                <div class="card-stats consent-text"><span><img src="assets/images/eye.svg" alt="">{{ items.views || 0
+                    }}</span>
+                  <span>
+                    <!-- <img (click)="likeArticle()" src="assets/images/like.svg" alt="">{{ items.likes || 0 }} -->
+                    <button type="button" class="latest-like-btn" [class.liked]="isLatestLiked(items.uid)"
+                      [disabled]="isLatestLiked(items.uid)" [attr.aria-label]="
+    isLatestLiked(items.uid)
+      ? 'Already liked'
+      : 'Like this article'
+  " (click)="likeLatestArticle(items, $event)">
+
+                      <img src="assets/images/like.svg" alt="">
+
+                      {{ items.likes || 0 }}
+                    </button>
+                  </span>
+                  <button type="button" (click)="shareStory(items)"><img src="assets/images/share-1.svg"
+                      alt="">Share</button>
+                </div>
               </div>
             </article>
           </ng-container>
-
 
         </div>
       </section>

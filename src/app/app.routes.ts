@@ -18,7 +18,11 @@ export const routes: Routes = [
       { path: 'privacy-policy', component: Privacypolicy },
        { path: 'contact', component: Contact },
        { path: 'news', component: News },
-       { path: 'newscontent/:id', component: Newscontent },
+      //  { path: 'newscontent/:id', component: Newscontent },
+      {
+  path: 'newscontent/:language/:type/:slug',
+  component: Newscontent
+},
        { path: 'newsform', component: Newsform },
       //  { path: 'news', component: Newscontent },
         { path: 'careers', component: Career },

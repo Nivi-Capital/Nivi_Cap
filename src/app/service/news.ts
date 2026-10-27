@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import {
-  Observable,
-  map,
-  of
-} from 'rxjs';
+  Observable,map,of} from 'rxjs';
 
 import { NewsArticle } from '../models/news.model';
 
@@ -30,24 +27,6 @@ export class NewsService {
   // GET ALL NEWS
   // =====================================================
 
-  //  getNews(
-  //   language?: string
-  // ): Observable<NewsArticle[]> {
-
-  //   let params = new HttpParams();
-
-  //   if (language) {
-  //     params = params.set(
-  //       'language',
-  //       language
-  //     );
-  //   }
-
-  //   return this.http.get<NewsArticle[]>(
-  //     this.jsonUrl,
-  //     { params }
-  //   );
-  // }
 
 getNews(
   language?: string
@@ -55,7 +34,7 @@ getNews(
 
   let params =
     new HttpParams()
-      .set('type', 'text');
+      .set('type', 'onlinemedia');
 
   if (language) {
     params = params.set(
@@ -77,9 +56,6 @@ getNews(
     id: string
   ): Observable<NewsArticle> {
 
-    // return this.http.get<NewsArticle>(
-    //   `${this.jsonUrl}/${id}`
-    // );
      const params =
       new HttpParams()
         .set(
@@ -105,10 +81,6 @@ getNews(
     data: FormData
   ): Observable<NewsArticle> {
 
-    // return this.http.post<NewsArticle>(
-    //   this.jsonUrl,
-    //   data
-    // );
     const params =
       new HttpParams()
         .set(
@@ -124,33 +96,54 @@ getNews(
       }
     );
   }
+ // =====================================================
+  // News Slug
+  // =====================================================
+getNewsBySlug(
+  language: string,
+  type: string,
+  slug: string
+): Observable<NewsArticle> {
 
+  const params = new HttpParams()
+   .set('language', language)
+    .set('type', type)
+    .set('slug', slug);
 
+  return this.http.get<NewsArticle>(
+    this.jsonUrl,
+    {
+      params
+    }
+  );
+}
   // =====================================================
   // READ LOCAL STORAGE
   // =====================================================
 
  incrementView(
-  id: string
-): Observable<{ views: number }> {
+  id: string,language: string,
+  type: string
+): Observable<{ views: number; type: string }> {
 
-  // return this.http.post<{ views: number }>(
-  //   `${this.jsonUrl}/${id}/view`,
-  //   {}
-  // );
+ const normalizedType =
+    type === 'video'
+      ? 'video'
+      : 'onlinemedia';
 
-   const params =
-      new HttpParams()
-        .set(
-          'action',
-          'view'
-        )
-        .set(
-          'id',
-          id
-        );
+   const params = new HttpParams()
+    .set('action', 'view')
+    .set('id', id)
+    .set(
+      'language',
+      language.trim().toLowerCase()
+    )
+    .set(
+      'type',
+      normalizedType
+    );
 
-    return this.http.post<{ views: number }>(
+    return this.http.post<{ views: number;type: string; }>(
       this.jsonUrl,
       {},
       {
@@ -161,26 +154,31 @@ getNews(
 
 
 incrementLike(
-  id: string
-): Observable<{ likes: number }> {
+  id: string,language: string,
+  type: string
+): Observable<{ likes: number;type: string; }> {
 
-  // return this.http.post<{ likes: number }>(
-  //   `${this.jsonUrl}/${id}/like`,
-  //   {}
-  // );
-
+   const normalizedType =
+    type === 'video'
+      ? 'video'
+      : 'onlinemedia';
+      
    const params =
       new HttpParams()
-        .set(
-          'action',
-          'like'
+        .set('action', 'like'
         )
-        .set(
-          'id',
-          id
-        );
+        .set( 'id', id
+        )
+          .set(
+      'language',
+      language.trim().toLowerCase()
+    )
+    .set(
+      'type',
+      normalizedType
+    );
 
-    return this.http.post<{ likes: number }>(
+    return this.http.post<{ likes: number;type: string; }>(
       this.jsonUrl,
       {},
       {

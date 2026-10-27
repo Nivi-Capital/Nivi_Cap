@@ -9,7 +9,7 @@
       </div>
       <!-- Toggle Button (for mobile) -->
 
-      <button class="navbar-toggler" routerLink="/" type="button" (click)="toggleNavbar()"
+      <button class="navbar-toggler" type="button" (click)="toggleNavbar()"
         [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="navbarNav3" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,51 +20,33 @@
 
           <ul class="navbar-nav align-items-center justify-content-center mb-2 mb-lg-0 ">
             <li class="nav-item mx-2" [class.active]=" activeSection === 'home'">
-              <a class="nav-link nav-label " (click)="goToSection('home')">HOME</a>
+              <a class="nav-link nav-label " (click)="goToSection('home'); isNavbarCollapsed = true">HOME</a>
             </li>
             <li class="nav-item mx-2" [class.active]=" activeSection === 'about'">
-              <a class="nav-link nav-label" (click)="goToSection('about')">ABOUT US</a>
+              <a class="nav-link nav-label" (click)="goToSection('about'); isNavbarCollapsed = true">ABOUT US</a>
             </li>
             <li class="nav-item mx-2" [class.active]=" activeSection === 'features'">
-              <a class="nav-link nav-label" (click)="goToSection('features')">FEATURES</a>
+              <a class="nav-link nav-label" (click)="goToSection('features'); isNavbarCollapsed = true">FEATURES</a>
             </li>
             <li class="nav-item mx-2" [class.active]=" activeSection === 'product'">
-              <a class="nav-link nav-label" (click)="goToSection('product')">PRODUCT</a>
+              <a class="nav-link nav-label" (click)="goToSection('product'); isNavbarCollapsed = true">PRODUCT</a>
             </li>
-            <!-- <li class="nav-item mx-2">
-              <a class="nav-link nav-label" routerLink="/news">NEWS & MEDIA</a>
-            </li>
-            <li class="nav-item mx-2">
-              <a class="nav-link nav-label" routerLink="/careers">CAREERS</a>
-            </li>
-            <li class="nav-item mx-2">
-              <a class="nav-link nav-label" routerLink="/contact">CONTACT</a>
-            </li> -->
-            <!-- <li class="nav-item mx-2"
-    routerLinkActive="active"
-    [routerLinkActiveOptions]="{ exact: true }">
-  <a class="nav-link nav-label"
-     routerLink="/news"
-     (click)="clearActiveSection()">
-    NEWS & MEDIA
-  </a>
-</li> -->
 
             <li class="nav-item mx-2"
               [class.active]="router.url.startsWith('/news') || router.url.startsWith('/newscontent')">
-              <a class="nav-link nav-label" routerLink="/news" (click)="clearActiveSection()">
+              <a class="nav-link nav-label" routerLink="/news" (click)="clearActiveSection(); isNavbarCollapsed = true">
                 NEWS & MEDIA
               </a>
             </li>
 
             <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-              <a class="nav-link nav-label" routerLink="/careers" (click)="clearActiveSection()">
+              <a class="nav-link nav-label" routerLink="/careers" (click)="clearActiveSection(); isNavbarCollapsed = true">
                 CAREERS
               </a>
             </li>
 
             <li class="nav-item mx-2" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-              <a class="nav-link nav-label" routerLink="/contact" (click)="clearActiveSection()">
+              <a class="nav-link nav-label" routerLink="/contact" (click)="clearActiveSection(); isNavbarCollapsed = true">
                 CONTACT
               </a>
             </li>

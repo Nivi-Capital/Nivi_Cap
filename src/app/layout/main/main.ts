@@ -26,6 +26,7 @@ constructor(private http:HttpClient,public router: Router,private ngZone: NgZone
     this.router.events
   .pipe(filter(event => event instanceof NavigationEnd))
   .subscribe(() => {
+    this.isNavbarCollapsed = true;
 
     // If on home page → enable smooth scroll
     if (this.router.url === '/') {

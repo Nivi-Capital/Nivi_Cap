@@ -1,18 +1,23 @@
 
-  import { CommonModule } from '@angular/common';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, ViewChild ,OnInit} from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 
 import { NewsService } from '../../../service/news';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-newsform',
- standalone: true,
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule
@@ -20,9 +25,7 @@ import { NewsService } from '../../../service/news';
   templateUrl: './newsform.html',
   styleUrl: './newsform.css',
 })
-export class Newsform {
-
-  newsForm: FormGroup;
+export class Newsform implements OnInit {
 
   selectedImage?: File;
   selectedPdf?: File;
@@ -32,9 +35,10 @@ export class Newsform {
   uploading = false;
   successMessage = '';
   errorMessage = '';
-
+  noImageErrorMessage = '';
   languages = [
     'English',
+    'Marathi',
     'Hindi',
     'Kannada',
     'Gujarati',
@@ -43,25 +47,49 @@ export class Newsform {
   ];
 
   @ViewChild('imageInput')
-imageInput!: ElementRef<HTMLInputElement>;
+  imageInput!: ElementRef<HTMLInputElement>;
 
-@ViewChild('pdfInput')
-pdfInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('pdfInput')
+  pdfInput!: ElementRef<HTMLInputElement>;
 
-imageErrorMessage = '';
-pdfErrorMessage = '';
-  constructor(
+  imageErrorMessage = '';
+  pdfErrorMessage = '';
+  today: string = new Date().toISOString().split('T')[0];
+
+  previewArticle: {
+  title: string;
+  publication: string;
+  date: string;
+  language: string;
+  smallDescription: string;
+  largeDescription: string;
+  originalNewsUrl: string;
+  disclaimerPublication: string;
+  imageUrl: string;
+    pdfUrl: string;
+    type: 'onlinemedia' | 'video';
+  videoUrl: string;
+} | null = null;
+
+hasPreviewed  : boolean = false;
+previewVideoUrl?: SafeResourceUrl;
+
+newsForm!: FormGroup;
+
+constructor(
     private fb: FormBuilder,
-    private newsService: NewsService
-  ) {
+    private newsService: NewsService,private sanitizer: DomSanitizer
+  ) {}
+
+  ngOnInit(): void {
 
     this.newsForm = this.fb.group({
-
+      contentType: ['onlinemedia', Validators.required],
       title: ['', Validators.required],
 
       publication: ['', Validators.required],
 
-      date: ['', Validators.required],
+      date: ['', [Validators.required, this.publicationDateValidator()]],
 
       language: ['English', Validators.required],
 
@@ -69,254 +97,642 @@ pdfErrorMessage = '';
 
       largeDescription: ['', Validators.required],
 
-      originalNewsUrl: [''],
+      originalNewsUrl: ['', Validators.required],
 
-      disclaimerPublication: [''],
+      disclaimerPublication: ['', Validators.required],
 
-      // disclaimerLink: ['']
+     videoUrl: [''],
 
     });
+
+     this.newsForm.valueChanges.subscribe(() => {
+    this.hasPreviewed = false;
+  });
   }
 
-onImageSelected(event: Event): void {
+  
+ get contentType(): 'onlinemedia' | 'video' {
+  return this.newsForm.get('contentType')?.value;
+}
 
-  const input = event.target as HTMLInputElement;
-
-  if (!input.files?.length) {
-    return;
+get canPreview(): boolean {
+  if (this.newsForm.invalid) {
+    return false;
   }
 
-  const file = input.files[0];
+  if (this.contentType === 'onlinemedia') {
+    return !!this.selectedImage;
+  }
 
-  const allowedTypes = [
-    'image/png',
-    'image/jpeg',
-    'image/svg+xml'
-  ];
+  if (this.contentType === 'video') {
+    const videoUrl =
+      this.newsForm.get('videoUrl')?.value || '';
 
-  const allowedExtensions = [
-    'png',
-    'jpg',
-    'jpeg',
-    'svg'
-  ];
+    return !!this.getYouTubeVideoId(videoUrl);
+  }
 
-  const extension =
-    file.name
-      .split('.')
-      .pop()
-      ?.toLowerCase() || '';
+  return false;
+}
 
-  if (
-    !allowedTypes.includes(file.type) ||
-    !allowedExtensions.includes(extension)
-  ) {
+  onImageSelected(event: Event): void {
+this.hasPreviewed = false;
+    const input = event.target as HTMLInputElement;
+    this.noImageErrorMessage = '';
 
-    this.imageErrorMessage =
-      'Only PNG, JPG, JPEG and SVG images are allowed.';
+    if (!input.files?.length) {
+      return;
+    }
 
+    const file = input.files[0];
+
+    const allowedTypes = [
+      'image/png',
+      'image/jpeg',
+      'image/jpg',
+      'image/webp'
+    ];
+
+    const allowedExtensions = [
+      'png',
+      'jpg',
+      'jpeg',
+      'webp'
+    ];
+
+    const extension =
+      file.name
+        .split('.')
+        .pop()
+        ?.toLowerCase() || '';
+
+    if (
+      !allowedTypes.includes(file.type) ||
+      !allowedExtensions.includes(extension)
+    ) {
+
+      this.imageErrorMessage =
+        'Only PNG, JPG, JPEG and WEBP images are allowed.';
+
+      this.selectedImage = undefined;
+      this.imagePreview = undefined;
+
+      // Clear selected invalid file
+      input.value = '';
+      return;
+    }
+
+    this.selectedImage = file;
+    this.imageErrorMessage = '';
+    this.noImageErrorMessage = '';
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.imagePreview =
+        reader.result as string;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+
+  removeImage(input: HTMLInputElement): void {
+    this.hasPreviewed = false;
     this.selectedImage = undefined;
     this.imagePreview = undefined;
+    this.imageErrorMessage = '';
+    this.noImageErrorMessage = 'Please select an image.';
 
-    // Clear selected invalid file
+    // Clear file input
     input.value = '';
-
-    // setTimeout(() => {
-    //   this.imageErrorMessage = '';
-    // }, 2000);
-
-    return;
   }
 
-  this.selectedImage = file;
-  this.imageErrorMessage = '';
+  onPdfSelected(event: Event): void {
+    this.hasPreviewed = false;
+    const input = event.target as HTMLInputElement;
 
-  const reader = new FileReader();
+    if (!input.files?.length) {
+      return;
+    }
 
-  reader.onload = () => {
-    this.imagePreview =
-      reader.result as string;
+    const file = input.files[0];
+
+    // Allow only PDF
+    if (file.type !== 'application/pdf') {
+      this.pdfErrorMessage = "Only PDF files are allowed"
+      input.value = ''; // Clear selected file
+      this.selectedPdf = undefined;
+      setTimeout(() => {
+        this.pdfErrorMessage = '';
+      }, 2000);
+      return;
+    }
+
+    this.selectedPdf = file;
+  }
+
+  onContentTypeChange(): void {
+  const videoUrlControl =
+    this.newsForm.get('videoUrl');
+
+  const smallDescriptionControl =
+    this.newsForm.get('smallDescription');
+
+  const largeDescriptionControl =
+    this.newsForm.get('largeDescription');
+
+  const originalNewsUrlControl =
+    this.newsForm.get('originalNewsUrl');
+
+  if (this.contentType === 'video') {
+    // Video URL is required for Video
+    videoUrlControl?.setValidators([
+      Validators.required,
+      this.youtubeUrlValidator()
+    ]);
+
+    // These fields are hidden for Video,
+    // so they must not remain required
+    smallDescriptionControl?.clearValidators();
+    largeDescriptionControl?.clearValidators();
+    originalNewsUrlControl?.clearValidators();
+
+    // Clear the hidden values
+    smallDescriptionControl?.setValue(
+      '',
+      { emitEvent: false }
+    );
+
+    largeDescriptionControl?.setValue(
+      '',
+      { emitEvent: false }
+    );
+
+    originalNewsUrlControl?.setValue(
+      '',
+      { emitEvent: false }
+    );
+
+    // Video does not require an image
+    this.selectedImage = undefined;
+    this.imagePreview = undefined;
+    this.noImageErrorMessage = '';
+
+    if (this.imageInput) {
+      this.imageInput.nativeElement.value = '';
+    }
+  } else {
+    // Online Media does not require video URL
+    videoUrlControl?.clearValidators();
+
+    videoUrlControl?.setValue(
+      '',
+      { emitEvent: false }
+    );
+
+    // Restore Online Media validation
+    smallDescriptionControl?.setValidators([
+      Validators.required
+    ]);
+
+    largeDescriptionControl?.setValidators([
+      Validators.required
+    ]);
+
+    originalNewsUrlControl?.setValidators([
+      Validators.required
+    ]);
+  }
+
+  videoUrlControl?.updateValueAndValidity({
+    emitEvent: false
+  });
+
+  smallDescriptionControl?.updateValueAndValidity({
+    emitEvent: false
+  });
+
+  largeDescriptionControl?.updateValueAndValidity({
+    emitEvent: false
+  });
+
+  originalNewsUrlControl?.updateValueAndValidity({
+    emitEvent: false
+  });
+
+  this.hasPreviewed = false;
+  this.previewArticle = null;
+  this.previewVideoUrl = undefined;
+}
+
+youtubeUrlValidator(): ValidatorFn {
+  return (
+    control: AbstractControl
+  ): ValidationErrors | null => {
+
+    if (!control.value) {
+      return null;
+    }
+
+    const videoId =
+      this.getYouTubeVideoId(control.value);
+
+    return videoId
+      ? null
+      : { invalidYouTubeUrl: true };
   };
-
-  reader.readAsDataURL(file);
 }
-
-
-removeImage(input: HTMLInputElement): void {
-  this.selectedImage = undefined;
-  this.imagePreview = undefined;
-  this.imageErrorMessage = '';
-
-  // Clear file input
-  input.value = '';
-}
-
-onPdfSelected(event: Event): void {
-  const input = event.target as HTMLInputElement;
-
-  if (!input.files?.length) {
-    return;
+getYouTubeVideoId(url: string): string {
+  if (!url) {
+    return '';
   }
 
-  const file = input.files[0];
-
-  // Allow only PDF
-  if (file.type !== 'application/pdf') {
-    this.pdfErrorMessage ="Only PDF files are allowed"
-    input.value = ''; // Clear selected file
-    this.selectedPdf = undefined;
-       setTimeout(() => {
-    this.pdfErrorMessage = '';
-  }, 2000);
-    return;
-  }
-
-  this.selectedPdf = file;
-}
-
-submit(): void {
-
-  if (
-    this.newsForm.invalid ||
-    !this.selectedImage
-  ) {
-    this.newsForm.markAllAsTouched();
-
-    this.errorMessage =
-      'Please fill the required fields and select an image.';
-
-    return;
-  }
-
-  const formData = new FormData();
-
-  formData.append(
-    'title',
-    this.newsForm.value.title
-  );
-
-  formData.append(
-    'publication',
-    this.newsForm.value.publication
-  );
-
-  formData.append(
-    'date',
-    this.newsForm.value.date
-  );
-
-  formData.append(
-    'language',
-    this.newsForm.value.language
-  );
-
-  formData.append(
-    'type',
-    'text'
-  );
-
-  formData.append(
-    'smallDescription',
-    this.newsForm.value.smallDescription
-  );
-
-  formData.append(
-    'largeDescription',
-    this.newsForm.value.largeDescription
-  );
-
-  formData.append(
-    'originalNewsUrl',
-    this.newsForm.value.originalNewsUrl || ''
-  );
-
-  formData.append(
-    'disclaimerPublication',
-    this.newsForm.value.disclaimerPublication || ''
-  );
-
-  // formData.append(
-  //   'disclaimerLink',
-  //   this.newsForm.value.disclaimerLink || ''
+  // const match = url.match(
+  //   /(?:youtube\.com\/(?:watch\?.*v=|embed\/|shorts\/)|youtu\.be\/)([^&?/]+)/
   // );
 
-  // Image file
+  const value = url.trim();
+
+  const match = value.match(
+    /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+
+  return match ? match[1] : '';
+}
+  submit(): void {
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.newsForm.markAllAsTouched();
+
+    if (!this.hasPreviewed) {
+      this.errorMessage =
+        'Please preview the content before submitting.';
+      return;
+    }
+
+    if (
+      this.contentType === 'onlinemedia' &&
+      !this.selectedImage
+    ) {
+      this.noImageErrorMessage =
+        'Please select an image.';
+      this.errorMessage =
+        'Please select an image.';
+      return;
+    }
+
+    if (
+      this.contentType === 'video' &&
+      !this.getYouTubeVideoId(
+        this.newsForm.value.videoUrl
+      )
+    ) {
+      this.newsForm
+        .get('videoUrl')
+        ?.setErrors({
+          invalidYouTubeUrl: true
+        });
+      this.errorMessage =
+        'Please enter a valid YouTube URL.';
+      return;
+    }
+
+    if (this.newsForm.invalid) {
+      this.errorMessage =
+        'Please fill all required fields.';
+      return;
+    }
+
+
+
+    this.imageErrorMessage = '';
+    this.noImageErrorMessage = '';
+
+    const formData = new FormData();
+
+    formData.append(
+      'title',
+      this.newsForm.value.title
+    );
+
+    formData.append(
+      'publication',
+      this.newsForm.value.publication
+    );
+
+    formData.append(
+      'date',
+      this.newsForm.value.date
+    );
+
+    formData.append(
+      'language',
+      this.newsForm.value.language
+    );
+
+    formData.append(
+      'type',
+      this.contentType
+    );
+
+    formData.append(
+      'smallDescription',
+      this.newsForm.value.smallDescription
+    );
+
+    formData.append(
+      'largeDescription',
+      this.newsForm.value.largeDescription
+    );
+
+    formData.append(
+      'originalNewsUrl',
+      this.newsForm.value.originalNewsUrl || ''
+    );
+
+    formData.append(
+      'disclaimerPublication',
+      this.newsForm.value.disclaimerPublication || ''
+    );
+
+    // formData.append(
+    //   'disclaimerLink',
+    //   this.newsForm.value.disclaimerLink || ''
+    // );
+
+    // Image file
+  if (
+  this.contentType === 'onlinemedia' &&
+  this.selectedImage
+) {
   formData.append(
     'image',
     this.selectedImage,
     this.selectedImage.name
   );
+}
+    if (this.contentType === 'video') {
+  formData.append(
+    'videoUrl',
+    this.newsForm.value.videoUrl
+  );
+}
 
-  // PDF file
-  if (this.selectedPdf) {
-    formData.append(
-      'pdf',
-      this.selectedPdf,
-      this.selectedPdf.name
-    );
+
+    // PDF file
+    if (
+  this.contentType === 'onlinemedia' &&
+  this.selectedPdf
+) {
+    if (this.selectedPdf) {
+      formData.append(
+        'pdf',
+        this.selectedPdf,
+        this.selectedPdf.name
+      );
+    }
   }
 
-  this.uploading = true;
-  this.successMessage = '';
-  this.errorMessage = '';
+    this.uploading = true;
+    this.successMessage = '';
+    this.errorMessage = '';
 
-  this.newsService
-    .createNews(formData)
-    .subscribe({
+    this.newsService
+      .createNews(formData)
+      .subscribe({
 
-      next: response => {
+        next: response => {
 
-        console.log(
-          'Article created:',
-          response
-        );
+          console.log(
+            'Article created:',
+            response
+          );
 
-        this.uploading = false;
+          this.uploading = false;
 
-        this.successMessage =
-          'News article added successfully.';
+          this.successMessage =
+            'News article added successfully.';
 
-        this.errorMessage = '';
+          this.errorMessage = '';
 
-        this.resetForm();
+          this.resetForm();
 
           setTimeout(() => {
-    this.successMessage = '';
-  }, 3000);
-      },
+            this.successMessage = '';
+          }, 3000);
+        },
 
-      error: error => {
+        error: error => {
 
-        console.error(
-          'Error creating article:',
-          error
-        );
+          console.error(
+            'Error creating article:',
+            error
+          );
 
-        this.uploading = false;
+          this.uploading = false;
 
-        this.errorMessage =
-          'Unable to add news article.';
-      }
+          this.errorMessage =
+            'Unable to add news article.';
+        }
 
-    });
-}
+      });
+  }
   private resetForm(): void {
 
     this.newsForm.reset({
-      language: 'English'
+      language: 'English',
+      contentType : 'onlinemedia',
+      title: '',
+  publication: '',
+  date: '',
+  smallDescription: '',
+  largeDescription: '',
+  originalNewsUrl: '',
+  disclaimerPublication: '',
+  videoUrl: ''
     });
 
     this.selectedImage = undefined;
     this.selectedPdf = undefined;
     this.imagePreview = undefined;
+this.hasPreviewed = false;
+this.previewArticle = null;
+    this.imageErrorMessage = '';
+    this.noImageErrorMessage = '';
+    this.pdfErrorMessage = '';
+    this.errorMessage = '';
+   
+    if (this.imageInput) {
+      this.imageInput.nativeElement.value = '';
+    }
 
-      if (this.imageInput) {
-    this.imageInput.nativeElement.value = '';
+    if (this.pdfInput) {
+      this.pdfInput.nativeElement.value = '';
+    }
+  }
+  // noFutureDateValidator(): ValidatorFn {
+  //   return (control: AbstractControl): ValidationErrors | null => {
+  //     if (!control.value) {
+  //       return null;
+  //     }
+
+  //     const selectedDate = new Date(control.value + 'T00:00:00');
+
+  //     const today = new Date();
+  //     today.setHours(0, 0, 0, 0);
+
+  //     return selectedDate > today
+  //       ? { futureDate: true }
+  //       : null;
+  //   }
+  // }
+
+  publicationDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) {
+      return null;
+    }
+
+    const value = String(control.value);
+
+    // Must strictly match yyyy-MM-dd
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+
+    if (!match) {
+      return { invalidDate: true };
+    }
+
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+
+    // Prevent years such as 0000, 1111, etc.
+    if (year < 2000) {
+      return { minimumDate: true };
+    }
+
+    const selectedDate = new Date(year, month - 1, day);
+
+    // Reject impossible dates such as 31 February
+    const isValidDate =
+      selectedDate.getFullYear() === year &&
+      selectedDate.getMonth() === month - 1 &&
+      selectedDate.getDate() === day;
+
+    if (!isValidDate) {
+      return { invalidDate: true };
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate > today) {
+      return { futureDate: true };
+    }
+
+    return null;
+  };
+}
+
+  preview(): void {
+    this.successMessage = '';
+    this.errorMessage = '';
+    this.newsForm.markAllAsTouched();
+
+    let hasCustomError = false;
+
+    if (this.contentType === 'onlinemedia' && !this.selectedImage) {
+      this.noImageErrorMessage = 'Please select an image.';
+      hasCustomError = true;
+    } else {
+      this.noImageErrorMessage = '';
+    }
+
+    if (this.contentType === 'video') {
+      const videoUrlControl = this.newsForm.get('videoUrl');
+      const videoId = this.getYouTubeVideoId(videoUrlControl?.value);
+      if (!videoId) {
+        videoUrlControl?.setErrors({ invalidYouTubeUrl: true });
+        hasCustomError = true;
+      }
+    }
+
+    if (this.newsForm.invalid || hasCustomError) {
+      this.hasPreviewed = false;
+      this.errorMessage = 'Please fill all required fields before previewing.';
+      return;
+    } 
+  
+  this.noImageErrorMessage = '';
+  const formValue = this.newsForm.getRawValue();
+
+  this.previewArticle = {
+    title: formValue.title || 'News title',
+    publication: formValue.publication || 'Publication',
+    date: formValue.date || '',
+    language: formValue.language || 'English',
+    smallDescription: formValue.smallDescription || '',
+    largeDescription: formValue.largeDescription || '',
+    originalNewsUrl: formValue.originalNewsUrl || '',
+    disclaimerPublication:
+      formValue.disclaimerPublication || '',
+    imageUrl: this.contentType === 'onlinemedia' ?
+      this.imagePreview || '' : '',
+      pdfUrl: formValue.pdfUrl || '',
+       type:
+      formValue.contentType,
+
+    videoUrl:
+      formValue.videoUrl || ''
+  };
+
+  if (this.contentType === 'video') {
+    const videoId =
+      this.getYouTubeVideoId(
+        formValue.videoUrl
+      );
+
+    this.previewVideoUrl =  this.sanitizer.bypassSecurityTrustResourceUrl(
+          `https://www.youtube.com/embed/${videoId}`
+        );
+  } else {
+    this.previewVideoUrl = undefined;
   }
 
-  if (this.pdfInput) {
-    this.pdfInput.nativeElement.value = '';
+  this.hasPreviewed = true;
+
+  const modalEl = document.getElementById('exampleModalLong');
+  if (modalEl) {
+    const modal = (window as any).bootstrap?.Modal?.getOrCreateInstance(modalEl)
+      || new (window as any).bootstrap.Modal(modalEl);
+    modal?.show();
   }
+}
+
+getPreviewParagraphs(
+  description: string | null | undefined
+): string[] {
+  if (!description) {
+    return [];
   }
 
+  return description
+    .split(/\r?\n/)
+    .map(paragraph => paragraph.trim())
+    .filter(paragraph => paragraph.length > 0);
+}
+  formatDate(dateStr: string): string {
+    if (!dateStr) {
+      return '';
+    }
+
+    const [year, month, day] = dateStr.split('-').map(Number);
+
+    const date = new Date(year, month - 1, day);
+
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }).replace(' ', ' ').replace(' ', ' ');
+  }
 }

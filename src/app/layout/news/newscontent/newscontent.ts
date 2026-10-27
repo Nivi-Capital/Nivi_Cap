@@ -26,7 +26,18 @@ import html2pdf from 'html2pdf.js';
 })
 export class Newscontent implements OnInit, AfterViewInit {
 
-  @ViewChild('newsGrid') newsGrid!: ElementRef<HTMLDivElement>;
+  // @ViewChild('newsGrid') newsGrid!: ElementRef<HTMLDivElement>;
+  private newsGrid?: ElementRef<HTMLDivElement>;
+  @ViewChild('newsGrid')
+  set newsGridElement(element: ElementRef<HTMLDivElement> | undefined) {
+    if (element) {
+      this.newsGrid = element;
+
+      setTimeout(() => {
+        this.updateCarouselState();
+      });
+    }
+  }
 
   newsArticle: any;
   newsList: any[] = [];
@@ -37,6 +48,7 @@ export class Newscontent implements OnInit, AfterViewInit {
   isSliding = false;
 
   private readonly cardsPerMove = 1;
+  hasLiked = false;
 
   constructor(
     private router: Router,
@@ -46,24 +58,117 @@ export class Newscontent implements OnInit, AfterViewInit {
     private newsService: NewsService
   ) { }
 
-  ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
+  // ngOnInit(): void {
+  //   this.route.paramMap.subscribe(params => {
+  //     const id = params.get('id');
 
-      if (id) {
-        this.loadContent(id);
-      }
-    });
-  }
+  //     if (id) {
+  //       this.loadContent(id);
+  //     }
+  //   });
+  // }
+ngOnInit(): void {
 
+  this.route.paramMap.subscribe(params => {
+
+    const slug = params.get('slug');
+    const language = params.get('language');
+   const type = params.get('type');
+
+   
+    if (!language || !type || !slug) {
+      console.error('Missi*g article route parameters');
+     return;
+    }
+
+
+      this.newsService
+        .getNewsBySlug(language, type, slug)
+        .subscribe({
+
+          next: article => {
+
+            this.newsArticle = article;
+            const id = article.uid;
+            if (
+              article.type === 'video' &&
+              article.videoUrl
+            ) {
+              this.trustedUrl =
+                this.getYouTubeEmbedUrl(
+                  article.videoUrl
+                );
+            }
+
+             if (id) {
+           this.initializeArticleInteractions(id);
+          }
+            this.loadLatestContent(
+              article.language
+            );
+          },
+
+          error: err => {
+            console.error(err);
+          }
+
+        });
+
+    
+
+  });
+
+}
   ngAfterViewInit(): void {
-    this.updateCarouselState();
+    // this.updateCarouselState();
     this.cdr.detectChanges();
   }
 
+private initializeArticleInteractions(id: string): void{
+  const viewStorageKey =
+    this.getViewStorageKey(id);
 
+  const likeStorageKey =
+    this.getLikeStorageKey(id);
+
+    const language =
+  this.newsArticle?.language;
+
+const type =
+  this.newsArticle?.type;
+
+  this.hasLiked =
+   sessionStorage.getItem(likeStorageKey) === 'true';
+
+  if (!sessionStorage.getItem(viewStorageKey)) {
+   this.newsService
+      .incrementView(id,language,
+    type)
+      .subscribe({
+        next: result => {
+          this.newsArticle.views = result.views;
+
+        sessionStorage.setItem(
+           viewStorageKey,
+           'true'
+          );
+        },
+
+       error: error => {
+          console.error(
+            'Unable *o update views',
+            error          );
+        }
+      });
+ }
+}
 
   private loadContent(id: string): void {
+const language =
+  this.newsArticle?.language;
+
+const type =
+  this.newsArticle?.type;
 
     this.newsService
       .getNewsById(id)
@@ -83,32 +188,42 @@ export class Newscontent implements OnInit, AfterViewInit {
 
           if (article.type === 'video' && article.videoUrl) {
             this.trustedUrl =
-              this.getSafeYouTubeUrl(
+              this.getYouTubeEmbedUrl(
                 article.videoUrl
               );
           }
 
-          this.newsService
-            .incrementView(id)
-            .subscribe({
+          const viewStorageKey = this.getViewStorageKey(id);
+          const likeStorageKey = this.getLikeStorageKey(id);
 
-              next: result => {
+          this.hasLiked =
+            sessionStorage.getItem(likeStorageKey) === 'true';
 
-                this.newsArticle.views =
-                  result.views;
+          if (!sessionStorage.getItem(viewStorageKey)) {
 
-              },
+            this.newsService
+              .incrementView(id,language,type)
+              .subscribe({
+                next: result => {
 
-              error: error => {
+                  this.newsArticle.views = result.views;
 
-                console.error(
-                  'Unable to update views',
-                  error
-                );
+                  // Prevent view increment after refresh
+                  sessionStorage.setItem(
+                    viewStorageKey,
+                    'true'
+                  );
+                },
 
-              }
+                error: error => {
+                  console.error(
+                    'Unable to update views',
+                    error
+                  );
+                }
+              });
+          }
 
-            });
 
           this.loadLatestContent(article.language);
 
@@ -126,24 +241,56 @@ export class Newscontent implements OnInit, AfterViewInit {
   }
 
 
-private loadLatestContent(language: string): void {
+  private loadLatestContent(language: string): void {
 
-  if (this.newsArticle?.type === 'video') {
+    if (this.newsArticle?.type === 'video') {
+
+      this.newsService
+        .getVideos(language)
+        .subscribe({
+          next: videos => {
+
+            console.log(
+              'Latest videos response:',
+              videos
+            );
+
+            this.newsList = videos.filter(
+              video =>
+                video.uid !== this.newsArticle.uid &&
+                video.type === 'video'
+            );
+
+            this.resetCarousel();
+          },
+
+          error: error => {
+            console.error(
+              'Unable to load latest videos',
+              error
+            );
+
+            this.newsList = [];
+          }
+        });
+
+      return;
+    }
 
     this.newsService
-      .getVideos(language)
+      .getNews(language)
       .subscribe({
-        next: videos => {
+        next: articles => {
 
           console.log(
-            'Latest videos response:',
-            videos
+            'Latest news response:',
+            articles
           );
 
-          this.newsList = videos.filter(
-            video =>
-              video.uid !== this.newsArticle.uid &&
-              video.type === 'video'
+          this.newsList = articles.filter(
+            article =>
+              article.uid !== this.newsArticle.uid &&
+              article.type === 'onlinemedia'
           );
 
           this.resetCarousel();
@@ -151,46 +298,14 @@ private loadLatestContent(language: string): void {
 
         error: error => {
           console.error(
-            'Unable to load latest videos',
+            'Unable to load latest news',
             error
           );
 
           this.newsList = [];
         }
       });
-
-    return;
   }
-
-  this.newsService
-    .getNews(language)
-    .subscribe({
-      next: articles => {
-
-        console.log(
-          'Latest news response:',
-          articles
-        );
-
-        this.newsList = articles.filter(
-          article =>
-            article.uid !== this.newsArticle.uid &&
-            article.type === 'text'
-        );
-
-        this.resetCarousel();
-      },
-
-      error: error => {
-        console.error(
-          'Unable to load latest news',
-          error
-        );
-
-        this.newsList = [];
-      }
-    });
-}
 
 
   nextNews(): void {
@@ -258,18 +373,45 @@ private loadLatestContent(language: string): void {
     this.updateCarouselState();
   }
 
-  shareStory(event: Event): void {
-    const button = event.currentTarget as HTMLButtonElement;
-    const card = button.closest('.card');
+  shareStory(news: any): void {
 
-    const title =
-      card?.querySelector('.headline')?.textContent?.trim() ||
-      document.title;
+    if (!news?.uid) {
+      return;
+    }
+    const title = news.title;
+    // const newsLink = `${window.location.href}/newscontent/${news.uid}`
 
+    const routeUrl1 = this.router.serializeUrl(
+      this.router.createUrlTree([
+        '/newscontent',
+        news.uid
+      ])
+    )
+
+    const routeUrl = this.router.serializeUrl(
+  this.router.createUrlTree([
+    '/newscontent',
+    news.language.toLowerCase(),
+    news.type,
+    news.slug
+  ])
+);
+
+
+    // Remove starting slash so document.baseURI is preserved
+    const relativeRoute = routeUrl.replace(/^\//, '');
+
+    // Example:
+    // document.baseURI = http://localhost:4200/testUAT/test/
+    // relativeRoute = newscontent/123
+    const newsLink = new URL(
+      relativeRoute,
+      document.baseURI
+    ).href;
     const url = window.location.href;
 
     if (navigator.share) {
-      void navigator.share({ title, url });
+      void navigator.share({ title, url: newsLink });
     } else {
       void navigator.clipboard.writeText(url);
     }
@@ -283,33 +425,32 @@ private loadLatestContent(language: string): void {
     );
   }
 
-  private getYouTubeVideoId(url: string): string {
-    if (url.includes('watch?v=')) {
-      return url.split('watch?v=')[1].split('&')[0];
-    }
 
-    if (url.includes('youtu.be/')) {
-      return url.split('youtu.be/')[1].split('?')[0];
-    }
 
-    if (url.includes('embed/')) {
-      return url.split('embed/')[1].split('?')[0];
-    }
-
-    return '';
-  }
-
-  openArticlePage(item: any): void {
+  openArticlePage1(item: any): void {
     this.router.navigate(['/newscontent', item.uid]);
   }
+openArticlePage(item: any): void {
 
+  this.router.navigate([
+    '/newscontent',
+    item.language.toLowerCase(),
+    item.type,
+    item.slug
+  ]);
+
+}
   getDescriptionParagraphs(description: string): string[] {
 
     if (!description) {
       return [];
     }
 
-    return description
+    const cleaned = description
+      .replace(/\\r|\r/g, '')
+      .replace(/\\"/g, '"');
+
+    return cleaned
       .split(/\\n|\n/)
       .map(paragraph => paragraph.trim())
       .filter(paragraph => paragraph.length > 0);
@@ -385,21 +526,29 @@ private loadLatestContent(language: string): void {
   }
   likeArticle(): void {
 
-    if (!this.newsArticle?.uid) {
+    const id = this.newsArticle?.uid;
+const language =this.newsArticle?.language;
+
+const type = this.newsArticle?.type;
+    if (!id || this.hasLiked) {
       return;
     }
 
+    const likeStorageKey = this.getLikeStorageKey(id);
+
     this.newsService
-      .incrementLike(
-        this.newsArticle.uid
-      )
+      .incrementLike(id,language,type)
       .subscribe({
 
         next: result => {
 
-          this.newsArticle.likes =
-            result.likes;
+          this.newsArticle.likes = result.likes;
+          this.hasLiked = true;
 
+          sessionStorage.setItem(
+            likeStorageKey,
+            'true'
+          );
         },
 
         error: error => {
@@ -412,5 +561,104 @@ private loadLatestContent(language: string): void {
         }
 
       });
+  }
+
+  getYouTubeVideoId(url: string): string {
+
+    if (!url) {
+      return '';
+    }
+
+    const match = url.match(
+      /(?:youtube\.com\/(?:.*v=|embed\/|shorts\/)|youtu\.be\/)([^&?\/]+)/
+    );
+
+    return match ? match[1] : '';
+  }
+
+  getYouTubeEmbedUrl(url: string): SafeResourceUrl {
+    const videoId = this.getYouTubeVideoId(url);
+
+    const embedUrl =
+      `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+  }
+
+  getYouTubeThumbnail(url: string): string {
+    const videoId = this.getYouTubeVideoId(url);
+
+     if (!videoId) {
+    return 'assets/images/video-placeholder.jpg';
+  }
+  
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
+
+  private getViewStorageKey(id: string): string {
+    return `viewed_${id}`;
+  }
+
+  private getLikeStorageKey(id: string): string {
+    return `liked_${id}`;
+  }
+  formatDate(dateStr: string): string {
+    if (!dateStr) {
+      return '';
+    }
+
+    const [year, month, day] = dateStr.split('-').map(Number);
+
+    const date = new Date(year, month - 1, day);
+
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    }).replace(' ', ' ').replace(' ', ' ');
+  }
+
+  likeLatestArticle(item: any, event: Event): void {
+    event.stopPropagation();
+
+    const id = item?.uid;
+const language = this.newsArticle?.language;
+
+const type = this.newsArticle?.type;
+
+    if (!id || this.isLatestLiked(id)) {
+      return;
+    }
+
+    this.newsService
+      .incrementLike(id,language,type)
+      .subscribe({
+        next: result => {
+          // Update only the clicked Latest News card
+          item.likes = result.likes;
+
+          sessionStorage.setItem(
+            this.getLikeStorageKey(id),
+            'true'
+          );
+        },
+
+        error: error => {
+          console.error(
+            'Unable to update Latest News like',
+            error
+          );
+        }
+      });
+  }
+  isLatestLiked(id: string): boolean {
+    if (!id) {
+      return false;
+    }
+
+    return sessionStorage.getItem(
+      this.getLikeStorageKey(id)
+    ) === 'true';
   }
 }
