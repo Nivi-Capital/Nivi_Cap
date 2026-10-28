@@ -190,7 +190,7 @@
                                     <span class="text-danger">*</span>
                                 </label>
 
-                                <input #imageInput id="thumbnail" type="file" class="form-control"
+                                <input #imageInput id="thumbnail" type="file" class="form-control form-control-md"
                                     accept=".png,.jpg,.jpeg,.svg,image/png,image/jpeg,image/svg+xml"
                                     (change)="onImageSelected($event)">
 
@@ -310,7 +310,7 @@
 
                                 <label for="originalNewsUrl" class="form-label fw-semibold">
 
-                                    Original News Link
+                                    Original News Link <span class="text-danger">*</span>
                                 </label>
 
                                 <input id="originalNewsUrl" type="url" class="form-control"
@@ -331,7 +331,7 @@
 
                                 <label for="disclaimerPublication" class="form-label fw-semibold">
 
-                                    Disclaimer Publication
+                                    Disclaimer Publication <span class="text-danger">*</span>
                                 </label>
 
                                 <input id="disclaimerPublication" type="text" class="form-control"

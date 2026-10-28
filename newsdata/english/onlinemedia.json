@@ -15,7 +15,7 @@
         "disclaimerPublication": "CXOToday.com",
         "pdfUrl": "",
         "createdAt": "2026-10-27T07:34:55+00:00",
-        "views": 0,
+        "views": 1,
         "likes": 0
     },
     {
@@ -34,8 +34,8 @@
         "disclaimerPublication": "Central Chronicle",
         "pdfUrl": "http://localhost:8080/uploads/pdfs/1793080202-4b061630cf7629d2.pdf",
         "createdAt": "2026-10-27T05:50:02+00:00",
-        "views": 2,
-        "likes": 0
+        "views": 3,
+        "likes": 1
     },
     {
         "uid": "0387bd715d9f567052ed61edf537ae3a",
@@ -53,7 +53,7 @@
         "disclaimerPublication": "BW Marketing World",
         "pdfUrl": "http://localhost:8080/uploads/pdfs/1793005689-7f879f3f60c535d1.pdf",
         "createdAt": "2026-10-26T09:08:09+00:00",
-        "views": 3,
+        "views": 4,
         "likes": 1
     },
     {

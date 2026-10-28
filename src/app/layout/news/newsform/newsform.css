@@ -15,6 +15,7 @@
 
 .form-control,
 .form-select {
+      padding: 10px 16px;
     min-height: 46px;
     border-radius: 8px;
 }
