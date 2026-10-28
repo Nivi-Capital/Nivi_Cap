@@ -265,8 +265,8 @@ this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
       pinCodeMasterId: this.pincodeID?? '',
       pinCode: data.value.pincodeInput,
 
-        source: "WEBSITE"   //live
-        // source: "CAMPAIGN"      //testUAT
+        // source: "WEBSITE"   //live
+        source: "CAMPAIGN"      //testUAT
       // source: environment.checkenv   
     };
 
