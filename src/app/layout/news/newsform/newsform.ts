@@ -75,6 +75,7 @@ hasPreviewed  : boolean = false;
 previewVideoUrl?: SafeResourceUrl;
 
 newsForm!: FormGroup;
+invalidDateInput = false;
 
 constructor(
     private fb: FormBuilder,
@@ -85,21 +86,21 @@ constructor(
 
     this.newsForm = this.fb.group({
       contentType: ['onlinemedia', Validators.required],
-      title: ['', Validators.required],
+      title: ['', [Validators.required, this.noWhitespaceValidator()]],
 
-      publication: ['', Validators.required],
+      publication: ['', [Validators.required, this.noWhitespaceValidator()]],
 
       date: ['', [Validators.required, this.publicationDateValidator()]],
 
       language: ['English', Validators.required],
 
-      smallDescription: ['', Validators.required],
+      smallDescription: ['', [Validators.required, this.noWhitespaceValidator()]],
 
-      largeDescription: ['', Validators.required],
+      largeDescription: ['', [Validators.required, this.noWhitespaceValidator()]],
 
-      originalNewsUrl: ['', Validators.required],
+      originalNewsUrl: ['', [Validators.required, this.noWhitespaceValidator()]],
 
-      disclaimerPublication: ['', Validators.required],
+      disclaimerPublication: ['', [Validators.required, this.noWhitespaceValidator()]],
 
      videoUrl: [''],
 
@@ -396,7 +397,7 @@ getYouTubeVideoId(url: string): string {
       return;
     }
 
-    if (this.newsForm.invalid) {
+    if (this.newsForm.invalid || this.invalidDateInput) {
       this.errorMessage =
         'Please fill all required fields.';
       return;
@@ -560,6 +561,7 @@ this.previewArticle = null;
     this.noImageErrorMessage = '';
     this.pdfErrorMessage = '';
     this.errorMessage = '';
+    this.invalidDateInput = false;
    
     if (this.imageInput) {
       this.imageInput.nativeElement.value = '';
@@ -569,22 +571,21 @@ this.previewArticle = null;
       this.pdfInput.nativeElement.value = '';
     }
   }
-  // noFutureDateValidator(): ValidatorFn {
-  //   return (control: AbstractControl): ValidationErrors | null => {
-  //     if (!control.value) {
-  //       return null;
-  //     }
 
-  //     const selectedDate = new Date(control.value + 'T00:00:00');
 
-  //     const today = new Date();
-  //     today.setHours(0, 0, 0, 0);
+  noWhitespaceValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
 
-  //     return selectedDate > today
-  //       ? { futureDate: true }
-  //       : null;
-  //   }
-  // }
+    if (value === null || value === undefined) {
+      return null;
+    }
+
+    return String(value).trim().length === 0
+      ? { whitespace: true }
+      : null;
+  };
+}
 
   publicationDateValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -633,6 +634,18 @@ this.previewArticle = null;
   };
 }
 
+onDateInput(input: HTMLInputElement): void {
+  this.invalidDateInput = input.validity.badInput;
+
+  const dateControl = this.newsForm.get('date');
+
+  if (!dateControl) {
+    return;
+  }
+
+  dateControl.markAsTouched();
+}
+
   preview(): void {
     this.successMessage = '';
     this.errorMessage = '';
@@ -656,7 +669,7 @@ this.previewArticle = null;
       }
     }
 
-    if (this.newsForm.invalid || hasCustomError) {
+    if (this.newsForm.invalid ||  this.invalidDateInput || hasCustomError) {
       this.hasPreviewed = false;
       this.errorMessage = 'Please fill all required fields before previewing.';
       return;
