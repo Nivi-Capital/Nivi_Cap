@@ -634,16 +634,23 @@ this.previewArticle = null;
   };
 }
 
-onDateInput(input: HTMLInputElement): void {
-  this.invalidDateInput = input.validity.badInput;
-
+onDateInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
   const dateControl = this.newsForm.get('date');
 
   if (!dateControl) {
     return;
   }
 
+ 
+  this.invalidDateInput =
+    input.validity.badInput ||
+    input.validity.typeMismatch;
+
   dateControl.markAsTouched();
+  dateControl.updateValueAndValidity({
+    emitEvent: false
+  });
 }
 
   preview(): void {

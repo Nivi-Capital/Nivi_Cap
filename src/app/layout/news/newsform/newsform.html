@@ -91,9 +91,8 @@
                                 </label>
 
                                 <input id="date" type="date" class="form-control" formControlName="date" [max]="today"
-                                    min="2000-01-01" #publicationDateInput (input)="onDateInput(publicationDateInput)"
-                                    [class.is-invalid]="(newsForm.get('date')?.invalid || invalidDateInput) &&
-                                        newsForm.get('date')?.touched
+                                    min="2000-01-01" (input)="onDateInput($event)" (blur)="onDateInput($event)"
+                                    [class.is-invalid]=" newsForm.get('date')?.touched  && (newsForm.get('date')?.invalid || invalidDateInput)
                                     ">
 
                                 <div class="invalid-feedback" *ngIf="
@@ -104,25 +103,25 @@
                                 </div>
 
                                 <div class="invalid-feedback" *ngIf="
-    newsForm.get('date')?.touched &&
-    newsForm.get('date')?.hasError('required') &&
-    !invalidDateInput
+    newsForm.get('date')?.touched &&  !invalidDateInput &&
+    newsForm.get('date')?.hasError('required')
+   
   ">
                                     Publication date is required.
                                 </div>
 
 
                                 <div class="invalid-feedback" *ngIf="
-    newsForm.get('date')?.touched &&
-    newsForm.get('date')?.hasError('invalidDate') &&
-    !invalidDateInput
+    newsForm.get('date')?.touched && !invalidDateInput &&
+    newsForm.get('date')?.hasError('invalidDate')
+    
   ">
                                     Enter a valid publication date.
                                 </div>
 
                                 <!-- Date before 1 January 2000 -->
                                 <div class="invalid-feedback" *ngIf="
-    newsForm.get('date')?.touched &&
+    newsForm.get('date')?.touched && !invalidDateInput &&
     newsForm.get('date')?.hasError('minimumDate')
   ">
                                     Publication date cannot be earlier than 1 January 2000.
@@ -130,7 +129,7 @@
 
                                 <!-- Future date -->
                                 <div class="invalid-feedback" *ngIf="
-    newsForm.get('date')?.touched &&
+    newsForm.get('date')?.touched && !invalidDateInput &&
     newsForm.get('date')?.hasError('futureDate')
   ">
                                     Future publication dates are not allowed.
